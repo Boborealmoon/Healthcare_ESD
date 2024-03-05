@@ -33,6 +33,7 @@ DROP TABLE IF EXISTS employees;
 CREATE TABLE IF NOT EXISTS employees (
   EmployeeID CHAR(2) NOT NULL,
   Name VARCHAR(50) NOT NULL,
+  Email VarChar(50) NOT NULL,
   PRIMARY KEY (EmployeeID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -40,9 +41,9 @@ CREATE TABLE IF NOT EXISTS employees (
 -- Dumping data for table employees
 --
 
-INSERT INTO employees (EmployeeID, Name) VALUES 
+INSERT INTO employees (EmployeeID, Name, Email) VALUES 
 
-(21,`Mike Coxlong`);
+(21,`Bruh`,bruh@smuclinic.com);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

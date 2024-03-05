@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS patients (
   PatientID CHAR(3) NOT NULL,
   PatientName VarChar(50) NOT NULL,
   ContactNo CHAR(8) NOT NULL,
-  Email VarChar(50) DEFAULT NULL,
+  Email VarChar(50) NOT NULL,
   NRIC CHAR(9) NOT NULL,
   PRIMARY KEY (PatientID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
