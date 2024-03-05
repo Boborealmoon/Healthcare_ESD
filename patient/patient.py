@@ -15,53 +15,59 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #assigning connection to db -> Storing it in variable db
 db = SQLAlchemy(app)
 
-# mapping class to database
 class Patient(db.Model):
-    __tablename__ = 'book'
-    isbn13 = db.Column(db.String(13), primary_key=True)
-    title = db.Column(db.String(64), nullable=False)
-    price = db.Column(db.Float(precision=2), nullable=False)
-    availability = db.Column(db.Integer)
+    __tablename__ = 'patients'
+    PatientID = db.Column(db.String(3), primary_key=True)
+    PatientName = db.Column(db.String(50), nullable=False)
+    ContactNo = db.Column(db.String(8), nullable=False)
+    Email = db.Column(db.String(50), nullable=False)
+    NRIC = db.Column(db.String(9), nullable=False)
 
-# We specify the properties of a Book when it is created. 
-    def __init__(self, isbn13, title, price, availability):
-        self.isbn13 = isbn13
-        self.title = title
-        self.price = price
-        self.availability = availability
+    # Initialize Patient object
+    def __init__(self, PatientID, PatientName, ContactNo, Email, NRIC):
+        self.PatientID = PatientID
+        self.PatientName = PatientName
+        self.ContactNo = ContactNo
+        self.Email = Email
+        self.NRIC = NRIC
 
-# We specify how to represent our book object as a JSON string.
+    # Represent Patient object as a dictionary
     def json(self):
-        return {"isbn13": self.isbn13, "title": self.title, "price": self.price, "availability": self.availability}
+        return {
+            "PatientID": self.PatientID,
+            "PatientName": self.PatientName,
+            "ContactNo": self.ContactNo,
+            "Email": self.Email,
+            "NRIC": self.NRIC
+        }
 
-
-@app.route("/book")
+@app.route("/patient")
 def get_all():
 
     #retrive all records
-    booklist = db.session.scalars(db.select(Book)).all()
+    patientList = db.session.scalars(db.select(patients)).all()
 
-    if len(booklist):
+    if len(patientList):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "books": [book.json() for book in booklist]
+                    "patients": [patients.json() for patient in patientList]
                 }
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "There are no books."
+            "message": "There are no patients."
         }
     ), 404
 
 
-@app.route("/book/<string:isbn13>")
-def find_by_isbn13(isbn13):
-    book = db.session.scalars(
-    db.select(Book).filter_by(isbn13=isbn13).
+@app.route("/patient/<string:PatientID>")
+def find_by_ID(PatientID):
+    patient = db.session.scalars(
+    db.select(patients).filter_by(PatientID=PatientID).
     limit(1)
     ).first()
 
@@ -69,62 +75,80 @@ def find_by_isbn13(isbn13):
         return jsonify(
             {
                 "code": 200,
-                "data": book.json()
+                "data": patients.json()
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "Book not found."
+            "message": " {PatientID} not found."
         }
     ), 404
 
+def getPatientEmail(PatientID):
+    patient = db.session.scalars(
+    db.select(patients).filter_by(PatientID=PatientID).
+    limit(1)
+    ).first()
 
-
-@app.route("/book/<string:isbn13>", methods=['POST'])
-def create_book(isbn13):
-
-    if (db.session.scalars(
-        db.select(Book).filter_by(isbn13=isbn13).
-        limit(1)
-        ).first()
-        ):
+    if book:
         return jsonify(
             {
-                "code": 400,
-                "data": {
-                    "isbn13": isbn13
-                },
-                "message": "Book already exists."
+                "code": 200,
+                "data": patients.Email.json()
             }
-        ), 400
-
-
-    data = request.get_json()
-    book = Book(isbn13, **data)
-
-
-    try:
-        db.session.add(book)
-        db.session.commit()
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-                    "isbn13": isbn13
-                },
-                "message": "An error occurred creating the book."
-            }
-        ), 500
-
-
+        )
     return jsonify(
         {
-            "code": 201,
-            "data": book.json()
+            "code": 404,
+            "message": " Patient not found."
         }
-    ), 201
+    ), 404
+
+# @app.route("/patient/<string:PatientID>", methods=['POST'])
+# def new_patient():
+
+#     if (db.session.scalars(
+#         db.select(Book).filter_by(isbn13=isbn13).
+#         limit(1)
+#         ).first()
+#         ):
+#         return jsonify(
+#             {
+#                 "code": 400,
+#                 "data": {
+#                     "isbn13": isbn13
+#                 },
+#                 "message": "Patient already exists."
+#             }
+#         ), 400
+
+
+#     data = request.get_json()
+#     book = Book(isbn13, **data)
+
+
+#     try:
+#         db.session.add(book)
+#         db.session.commit()
+#     except:
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "data": {
+#                     "isbn13": isbn13
+#                 },
+#                 "message": "An error occurred creating the book."
+#             }
+#         ), 500
+
+
+#     return jsonify(
+#         {
+#             "code": 201,
+#             "data": patients.json()
+#         }
+#     ), 201
 
 #run
 if __name__ == '__main__':
