@@ -1,45 +1,34 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 
-from flasgger import Swagger
-
-#constructor
 app = Flask(__name__)
-
-#conncecting to SQLAlchemy: 
-#The SQLAlchemy Database URI format is: dialect+driver://username:password@host:port/database
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#assigning connection to db -> Storing it in variable db
 db = SQLAlchemy(app)
 
-# mapping class to database
-class Patient(db.Model):
+class Book(db.Model):
     __tablename__ = 'book'
+
     isbn13 = db.Column(db.String(13), primary_key=True)
     title = db.Column(db.String(64), nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
     availability = db.Column(db.Integer)
 
-# We specify the properties of a Book when it is created. 
     def __init__(self, isbn13, title, price, availability):
         self.isbn13 = isbn13
         self.title = title
         self.price = price
         self.availability = availability
 
-# We specify how to represent our book object as a JSON string.
     def json(self):
         return {"isbn13": self.isbn13, "title": self.title, "price": self.price, "availability": self.availability}
-
-
+    
 @app.route("/book")
 def get_all():
-
-    #retrive all records
     booklist = db.session.scalars(db.select(Book)).all()
+
 
     if len(booklist):
         return jsonify(
@@ -61,9 +50,10 @@ def get_all():
 @app.route("/book/<string:isbn13>")
 def find_by_isbn13(isbn13):
     book = db.session.scalars(
-    db.select(Book).filter_by(isbn13=isbn13).
-    limit(1)
-    ).first()
+    	db.select(Book).filter_by(isbn13=isbn13).
+    	limit(1)
+).first()
+
 
     if book:
         return jsonify(
@@ -80,15 +70,13 @@ def find_by_isbn13(isbn13):
     ), 404
 
 
-
 @app.route("/book/<string:isbn13>", methods=['POST'])
 def create_book(isbn13):
-
     if (db.session.scalars(
-        db.select(Book).filter_by(isbn13=isbn13).
-        limit(1)
-        ).first()
-        ):
+    	db.select(Book).filter_by(isbn13=isbn13).
+    	limit(1)
+).first()
+):
         return jsonify(
             {
                 "code": 400,
@@ -126,6 +114,6 @@ def create_book(isbn13):
         }
     ), 201
 
-#run
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
