@@ -43,7 +43,6 @@ class Patient(db.Model):
 
 @app.route("/patient")
 def get_all():
-
     #retrive all records
     patientList = db.session.scalars(db.select(patients)).all()
 
@@ -91,7 +90,7 @@ def getPatientEmail(PatientID):
     limit(1)
     ).first()
 
-    if book:
+    if patient:
         return jsonify(
             {
                 "code": 200,
