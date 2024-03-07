@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: smuclinic
 --
-CREATE DATABASE IF NOT EXISTS smuclinic DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE smuclinic;
+CREATE DATABASE IF NOT EXISTS claims DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE claims;
 
 -- --------------------------------------------------------
 
