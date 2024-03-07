@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: smuclinic
 --
-CREATE DATABASE IF NOT EXISTS smuclinic DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE smuclinic;
+CREATE DATABASE IF NOT EXISTS appointments DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE appointments;
 
 -- --------------------------------------------------------
 
@@ -38,7 +38,11 @@ CREATE TABLE IF NOT EXISTS appointments (
   PatientID CHAR(3) NOT NULL,
   PatientName VARCHAR(50) NOT NULL,
   Claimed BOOLEAN NOT NULL,
+<<<<<<< HEAD
   CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
+=======
+  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID),
+>>>>>>> origin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

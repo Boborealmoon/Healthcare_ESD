@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: smuclinic
 --
-CREATE DATABASE IF NOT EXISTS smuclinic DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE smuclinic;
+CREATE DATABASE IF NOT EXISTS orders DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE orders;
 
 -- --------------------------------------------------------
 
@@ -39,7 +39,11 @@ CREATE TABLE IF NOT EXISTS orders (
   OrderDate DATE NOT NULL,
   SupplierID INT NOT NULL,
   SupplierContactEmail VARCHAR(100),
+<<<<<<< HEAD
   CONSTRAINT orders_pk PRIMARY KEY (OrderID)
+=======
+  CONSTRAINT orders_pk PRIMARY KEY (OrderID),
+>>>>>>> origin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
