@@ -38,10 +38,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   PatientID CHAR(3) NOT NULL,
   PatientName VARCHAR(50) NOT NULL,
   Claimed BOOLEAN NOT NULL,
-  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID, TimeslotID, EmployeeID, PatientID),
-  CONSTRAINT appointments_fk_employee FOREIGN KEY (EmployeeID) REFERENCES employees(EmployeeID),
-  CONSTRAINT appointments_fk_patients FOREIGN KEY (PatientID) REFERENCES patients(PatientID),
-  CONSTRAINT appointments_fk_timeslot FOREIGN KEY (TimeslotID) REFERENCES calendar(TimeslotID)
+  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -51,7 +48,9 @@ CREATE TABLE IF NOT EXISTS appointments (
 INSERT INTO appointments (AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed) VALUES 
 
 (1, '2024-03-16', 2, 21, 100, 'John Doe', TRUE),
-(2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE);
+(2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE),
+(3, '2024-03-30',3,21,101,'John Snow',FALSE),
+(4, '2024-03-07',3,21,100,'John Doe',FALSE),
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
