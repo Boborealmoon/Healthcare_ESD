@@ -7,6 +7,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments1
+
 db = SQLAlchemy(app)
 
 class appointments(db.Model):
@@ -117,7 +119,13 @@ def create_appointment(PatientID):
     #         ), 400
 
     data = request.get_json()
-    new_appointment = appointments(PatientID, **data)
+    new_appointment = appointments(AppointmentID=data['AppointmentID'],
+        AppointmentDate=data['AppointmentDate'],
+        TimeslotID=data['TimeslotID'],
+        EmployeeID=data['EmployeeID'],
+        PatientID=PatientID,  # PatientID from URL parameter
+        PatientName=data['PatientName'],
+        Claimed=data['Claimed'])
 
     try:
         db.session.add(new_appointment)
@@ -127,7 +135,7 @@ def create_appointment(PatientID):
             {
                 "code": 500,
                 "data": {
-                    "appointment": data
+                    "appointment": "ok"
                 },
                 "message": "An error occurred creating the appointment."
             }
