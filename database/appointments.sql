@@ -38,10 +38,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   PatientID CHAR(3) NOT NULL,
   PatientName VARCHAR(50) NOT NULL,
   Claimed BOOLEAN NOT NULL,
-  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID, TimeslotID, EmployeeID, PatientID),
-  CONSTRAINT appointments_fk_employee FOREIGN KEY (EmployeeID) REFERENCES employees(EmployeeID),
-  CONSTRAINT appointments_fk_patients FOREIGN KEY (PatientID) REFERENCES patients(PatientID),
-  CONSTRAINT appointments_fk_timeslot FOREIGN KEY (TimeslotID) REFERENCES calendar(TimeslotID)
+  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

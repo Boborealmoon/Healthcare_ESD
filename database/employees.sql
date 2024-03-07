@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS employees (
 
 INSERT INTO employees (EmployeeID, Name, Email) VALUES 
 
-(21,`Bruh`,bruh@smuclinic.com);
+('21','Bruh','bruh@smuclinic.com');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
