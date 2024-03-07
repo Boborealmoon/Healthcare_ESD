@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: smuclinic
+-- Database: employees
 --
 CREATE DATABASE IF NOT EXISTS employees DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE employees;
@@ -32,7 +32,7 @@ USE employees;
 DROP TABLE IF EXISTS employees;
 CREATE TABLE IF NOT EXISTS employees (
   EmployeeID CHAR(2) NOT NULL,
-  Name VARCHAR(50) NOT NULL,
+  EmployeeName VARCHAR(50) NOT NULL,
   Email VarChar(50) NOT NULL,
   PRIMARY KEY (EmployeeID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS employees (
 -- Dumping data for table employees
 --
 
-INSERT INTO employees (EmployeeID, Name, Email) VALUES 
+INSERT INTO employees (EmployeeID, EmployeeName, Email) VALUES 
 
-(21,`Bruh`,bruh@smuclinic.com);
+(21,'Bruce Wayne', 'brucewayne@gmail.com');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
