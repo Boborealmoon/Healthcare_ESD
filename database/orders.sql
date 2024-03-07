@@ -39,8 +39,7 @@ CREATE TABLE IF NOT EXISTS orders (
   OrderDate DATE NOT NULL,
   SupplierID INT NOT NULL,
   SupplierContactEmail VARCHAR(100),
-  CONSTRAINT orders_pk PRIMARY KEY (OrderID,ProductID,SupplierID),
-  CONSTRAINT orders_fk FOREIGN KEY (ProductID,SupplierID) REFERENCES inventory(ProductID,SupplierID)
+  CONSTRAINT orders_pk PRIMARY KEY (OrderID),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
