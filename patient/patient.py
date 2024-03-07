@@ -14,7 +14,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/patients
 
-
 #assigning connection to db -> Storing it in variable db
 db = SQLAlchemy(app)
 
