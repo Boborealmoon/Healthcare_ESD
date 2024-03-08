@@ -1,14 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from os import environ
 
 app = Flask(__name__)
 
-# Configure the database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://your_username:your_password@localhost/smuclinic'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/orders')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Define the Order model
+
 class Order(db.Model):
     __tablename__ = 'orders'
     OrderID = db.Column(db.Integer, primary_key=True)
@@ -20,15 +20,38 @@ class Order(db.Model):
     SupplierID = db.Column(db.Integer, nullable=False)
     SupplierContactEmail = db.Column(db.String(100))
 
-# API route to create an order
+    def __init__(self, OrderID, ProductID, ProductName, ProductQty, UnitsOrdered, OrderDate, SupplierID, SupplierContactEmail):
+        self.OrderID = OrderID
+        self.ProductID = ProductID
+        self.ProductName = ProductName
+        self.ProductQty = ProductQty
+        self.UnitsOrdered = UnitsOrdered
+        self.OrderDate = OrderDate
+        self.SupplierID = SupplierID
+        self.SupplierContactEmail = SupplierContactEmail
+
+    def json(self):
+        return {
+            "OrderID": self.OrderID,
+            "ProductID": self.ProductID,
+            "ProductName": self.ProductName,
+            "ProductQty": self.ProductQty,
+            "UnitsOrdered": self.UnitsOrdered,
+            "OrderDate": str(self.OrderDate),
+            "SupplierID": self.SupplierID,
+            "SupplierContactEmail": self.SupplierContactEmail
+        }
+
+
 @app.route('/create_order', methods=['POST'])
 def create_order():
     data = request.get_json()
 
-    if not all(key in data for key in ['ProductID', 'ProductName', 'ProductQty', 'UnitsOrdered', 'OrderDate', 'SupplierID']):
+    if not all(key in data for key in ['OrderID', 'ProductID', 'ProductName', 'ProductQty', 'UnitsOrdered', 'OrderDate', 'SupplierID']):
         return jsonify({'error': 'Missing required fields'}), 400
 
     new_order = Order(
+        OrderID=data['OrderID'],
         ProductID=data['ProductID'],
         ProductName=data['ProductName'],
         ProductQty=data['ProductQty'],
@@ -44,6 +67,4 @@ def create_order():
     return jsonify({'message': 'Order created successfully'}), 201
 
 if __name__ == '__main__':
-    # Create the database tables before running the app
-    db.create_all()
     app.run(debug=True)
