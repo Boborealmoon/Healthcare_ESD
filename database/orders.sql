@@ -39,11 +39,7 @@ CREATE TABLE IF NOT EXISTS orders (
   OrderDate DATE NOT NULL,
   SupplierID INT NOT NULL,
   SupplierContactEmail VARCHAR(100),
-<<<<<<< HEAD
   CONSTRAINT orders_pk PRIMARY KEY (OrderID)
-=======
-  CONSTRAINT orders_pk PRIMARY KEY (OrderID),
->>>>>>> origin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
