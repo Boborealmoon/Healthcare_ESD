@@ -50,7 +50,7 @@ INSERT INTO appointments (AppointmentID, AppointmentDate, TimeslotID, EmployeeID
 (1, '2024-03-16', 2, 21, 100, 'John Doe', TRUE),
 (2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE),
 (3, '2024-03-30',3,21,101,'John Snow',FALSE),
-(4, '2024-03-07',3,21,100,'John Doe',FALSE),
+(4, '2024-03-07',3,21,100,'John Doe',FALSE);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

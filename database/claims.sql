@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS claims (
   ClaimID CHAR(3) NOT NULL,
   StatusOfClaims VARCHAR(50) NOT NULL,
   AppointmentID INT NOT NULL,
-  CONSTRAINT calendars_pk PRIMARY KEY (ClaimID),
+  CONSTRAINT calendars_pk PRIMARY KEY (ClaimID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
