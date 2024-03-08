@@ -8,4 +8,4 @@ RUN python -m pip install --no-cache-dir -r requirements.txt
 #copy book.py to the current directory
 COPY ./book.py .
 #run file
-CMD [ "python", "./book.py" ]
+CMD [ "python", "./appointments.py" ]
