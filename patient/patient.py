@@ -12,6 +12,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/patients
+
 #assigning connection to db -> Storing it in variable db
 db = SQLAlchemy(app)
 
@@ -44,14 +46,14 @@ class Patient(db.Model):
 @app.route("/patient")
 def get_all():
     #retrive all records
-    patientList = db.session.scalars(db.select(patients)).all()
+    patientList = Patient.query.all()
 
     if len(patientList):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "patients": [patients.json() for patient in patientList]
+                    "patients": [patient.json() for patient in patientList]
                 }
             }
         )
@@ -63,18 +65,16 @@ def get_all():
     ), 404
 
 
-@app.route("/patient/<string:PatientID>")
+@app.route("/patient/ID/<string:PatientID>")
 def find_by_ID(PatientID):
-    patient = db.session.scalars(
-    db.select(patients).filter_by(PatientID=PatientID).
-    limit(1)
-    ).first()
 
-    if book:
+    patient = Patient.query.filter_by(PatientID=PatientID).first()
+
+    if patient:
         return jsonify(
             {
                 "code": 200,
-                "data": patients.json()
+                "data": patient.json()
             }
         )
     return jsonify(
@@ -84,70 +84,59 @@ def find_by_ID(PatientID):
         }
     ), 404
 
+@app.route("/patient/email/<string:PatientID>")
 def getPatientEmail(PatientID):
-    patient = db.session.scalars(
-    db.select(patients).filter_by(PatientID=PatientID).
-    limit(1)
-    ).first()
+    patient = Patient.query.filter_by(PatientID=PatientID).first()
 
     if patient:
-        return jsonify(
-            {
-                "code": 200,
-                "data": patients.Email.json()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": " Patient not found."
-        }
-    ), 404
+        return jsonify({
+            "code": 200,
+            "data": {"Email": patient.Email}
+        })
+    return jsonify({
+        "code": 404,
+        "message": "Patient not found."
+    }), 404
 
-# @app.route("/patient/<string:PatientID>", methods=['POST'])
+
+# @app.route("/patient/new_patient", methods=['POST'])
 # def new_patient():
-
-#     if (db.session.scalars(
-#         db.select(Book).filter_by(isbn13=isbn13).
-#         limit(1)
-#         ).first()
-#         ):
-#         return jsonify(
-#             {
-#                 "code": 400,
-#                 "data": {
-#                     "isbn13": isbn13
-#                 },
-#                 "message": "Patient already exists."
-#             }
-#         ), 400
-
-
 #     data = request.get_json()
-#     book = Book(isbn13, **data)
 
+#     # Check if the Patient with the given ID already exists
+#     existing_patient = Patient.query.filter_by(PatientID=data.get('PatientID')).first()
+
+#     if existing_patient:
+#         return jsonify({
+#             "code": 400,
+#             "data": {"PatientID": data.get('PatientID')},
+#             "message": "Patient already exists."
+#         }), 400
+
+#     # Create a new Patient object
+#     new_patient = Patient(
+#         PatientID=data.get('PatientID'),
+#         PatientName=data.get('PatientName'),
+#         ContactNo=data.get('ContactNo'),
+#         Email=data.get('Email'),
+#         NRIC=data.get('NRIC')
+#     )
 
 #     try:
-#         db.session.add(book)
+#         # Add the new patient to the database
+#         db.session.add(new_patient)
 #         db.session.commit()
-#     except:
-#         return jsonify(
-#             {
-#                 "code": 500,
-#                 "data": {
-#                     "isbn13": isbn13
-#                 },
-#                 "message": "An error occurred creating the book."
-#             }
-#         ), 500
 
-
-#     return jsonify(
-#         {
+#         return jsonify({
 #             "code": 201,
-#             "data": patients.json()
-#         }
-#     ), 201
+#             "data": new_patient.json()
+#         }), 201
+#     except Exception as e:
+#         return jsonify({
+#             "code": 500,
+#             "data": {"PatientID": data.get('PatientID')},
+#             "message": "An error occurred creating the patient."
+#         }), 500
 
 #run
 if __name__ == '__main__':
