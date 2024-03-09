@@ -46,6 +46,17 @@ class Order(db.Model):
 @app.route('/create_order', methods=['POST'])
 def create_order():
     data = request.get_json()
+    if Order.query.filter_by(OrderID=data['OrderID']).first() is not None:
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "OrderID": data['OrderID']
+                },
+                "message": "Order already exists."
+            }
+        ), 400
+    
 
     if not all(key in data for key in ['OrderID', 'ProductID', 'ProductName', 'ProductQty', 'UnitsOrdered', 'OrderDate', 'SupplierID']):
         return jsonify({'error': 'Missing required fields'}), 400
@@ -61,8 +72,17 @@ def create_order():
         SupplierContactEmail=data.get('SupplierContactEmail', None)
     )
 
-    db.session.add(new_order)
-    db.session.commit()
+    try:
+        db.session.add(new_order)
+        db.session.commit()
+    
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the order."
+            }
+        ), 500
 
     return jsonify({'message': 'Order created successfully'}), 201
 
