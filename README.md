@@ -11,7 +11,22 @@ type this into command line to set DB URL:
     export dbURL=mysql+mysqlconnector://root:root@localhost:yourMAMPSQLPort/Path
 
 2) [For Windows]
-    export dbURL=mysql+mysqlconnector://root@localhost:yourWAMPSQLPort/Path
+    set dbURL=mysql://root:root@localhost/path 
+
+<!-- to check list of dependencies -->
+python -m pip freeze
+
+<!-- Docker Build Image -->
+docker build -t <your_dockerid>/filename:version ./
+<!-- example -->
+docker build -t <dockerid>/book:1.0 ./
+
+
+<!-- View Images on Docker -->
+docker images
+
+<!-- Remove Images -->
+docker rmi <image id>
 
 
 To run the service, type in cmd line: 
