@@ -27,7 +27,7 @@ def book_appointment():
 
             # do the actual work
             # 1. Send appointment info
-            result = processPlaceOrder(appointment)
+            result = processAppointmentbooking(appointment)
             return jsonify(result), result["code"]
 
         except Exception as e:
@@ -48,12 +48,12 @@ def book_appointment():
         "message": "Invalid JSON input: " + str(request.get_data())
     }), 400
 
-def processPlaceOrder(order):
+def processAppointmentbooking(appointment):
     # 2. Send the order info {cart items}
     # Invoke the order microservice
     print('\n-----Invoking order microservice-----')
-    order_result = invoke_http(order_URL, method='POST', json=order)
-    print('order_result:', order_result)
+    appointment_result = invoke_http(appointments_url, method='POST', json=appointment)
+    print('appointment_result:', appointment_result)
 
     # 4. Record new order
     # record the activity log anyway
