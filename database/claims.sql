@@ -20,37 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: smuclinic
 --
-CREATE DATABASE IF NOT EXISTS appointments DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE appointments;
+CREATE DATABASE IF NOT EXISTS claims DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE claims;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table orders
+-- Table structure for table claims
 --
 
-DROP TABLE IF EXISTS appointments;
-CREATE TABLE IF NOT EXISTS appointments (
+DROP TABLE IF EXISTS claims;
+CREATE TABLE IF NOT EXISTS claims (
+  ClaimID CHAR(3) NOT NULL,
+  StatusOfClaims VARCHAR(50) NOT NULL,
   AppointmentID INT NOT NULL,
-  AppointmentDate DATE NOT NULL,
-  TimeslotID INT NOT NULL,
-  EmployeeID CHAR(2) NOT NULL,
-  PatientID CHAR(3) NOT NULL,
-  PatientName VARCHAR(50) NOT NULL,
-  Claimed BOOLEAN NOT NULL,
-  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
+  CONSTRAINT calendars_pk PRIMARY KEY (ClaimID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table orders
+-- Dumping data for table claims
 --
 
-INSERT INTO appointments (AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed) VALUES 
+INSERT INTO claims (ClaimID, StatusOfClaims, AppointmentID) VALUES 
 
-(1, '2024-03-16', 2, 21, 100, 'John Doe', TRUE),
-(2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE),
-(3, '2024-03-30',3,21,101,'John Snow',FALSE),
-(4, '2024-03-07',3,21,100,'John Doe',FALSE);
+(901,'Approved',1);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: smuclinic
 --
-CREATE DATABASE IF NOT EXISTS appointments DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE appointments;
+CREATE DATABASE IF NOT EXISTS orders DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE orders;
 
 -- --------------------------------------------------------
 
@@ -29,28 +29,27 @@ USE appointments;
 -- Table structure for table orders
 --
 
-DROP TABLE IF EXISTS appointments;
-CREATE TABLE IF NOT EXISTS appointments (
-  AppointmentID INT NOT NULL,
-  AppointmentDate DATE NOT NULL,
-  TimeslotID INT NOT NULL,
-  EmployeeID CHAR(2) NOT NULL,
-  PatientID CHAR(3) NOT NULL,
-  PatientName VARCHAR(50) NOT NULL,
-  Claimed BOOLEAN NOT NULL,
-  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
+DROP TABLE IF EXISTS orders;
+CREATE TABLE IF NOT EXISTS orders (
+  OrderID INT  NOT NULL,
+  ProductID INT NOT NULL,
+  ProductName VARCHAR(50) NOT NULL,
+  ProductQty INT NOT NULL,
+  UnitsOrdered INT NOT NULL,
+  OrderDate DATE NOT NULL,
+  SupplierID INT NOT NULL,
+  SupplierContactEmail VARCHAR(100),
+  CONSTRAINT orders_pk PRIMARY KEY (OrderID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table orders
 --
 
-INSERT INTO appointments (AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed) VALUES 
+INSERT INTO Orders (OrderID, ProductID, ProductName, ProductQty, UnitsOrdered, OrderDate, SupplierID, SupplierContactEmail) VALUES 
 
-(1, '2024-03-16', 2, 21, 100, 'John Doe', TRUE),
-(2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE),
-(3, '2024-03-30',3,21,101,'John Snow',FALSE),
-(4, '2024-03-07',3,21,100,'John Doe',FALSE);
+(1, 701, 'Aspirin', 50, 300, '2023-10-15', 81, 'shizer@gmail.com'),
+(2, 702, 'Amoxicillin', 40, 200, '2023-11-20', 82, 'jackson&jackson@gmail.com');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

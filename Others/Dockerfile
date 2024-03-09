@@ -3,7 +3,7 @@ FROM python:3-slim
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
-#download dependency
+#download dependency from requirements.txt
 RUN python -m pip install --no-cache-dir -r requirements.txt
 #copy book.py to the current directory
 COPY ./book.py .

@@ -12,45 +12,43 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: smuclinic
+-- Database: employees
 --
-CREATE DATABASE IF NOT EXISTS appointments DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE appointments;
+CREATE DATABASE IF NOT EXISTS patients DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE patients;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table orders
+-- Table structure for table patients
 --
 
-DROP TABLE IF EXISTS appointments;
-CREATE TABLE IF NOT EXISTS appointments (
-  AppointmentID INT NOT NULL,
-  AppointmentDate DATE NOT NULL,
-  TimeslotID INT NOT NULL,
-  EmployeeID CHAR(2) NOT NULL,
+DROP TABLE IF EXISTS patients;
+CREATE TABLE IF NOT EXISTS patients (
   PatientID CHAR(3) NOT NULL,
-  PatientName VARCHAR(50) NOT NULL,
-  Claimed BOOLEAN NOT NULL,
-  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
+  PatientName VarChar(50) NOT NULL,
+  ContactNo CHAR(8) NOT NULL,
+  Email VarChar(50) NOT NULL,
+  NRIC CHAR(9) NOT NULL,
+  PRIMARY KEY (PatientID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table orders
+-- Dumping data for table patients
 --
 
-INSERT INTO appointments (AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed) VALUES 
+INSERT INTO patients (PatientID, PatientName, ContactNo, Email, NRIC) VALUES
 
-(1, '2024-03-16', 2, 21, 100, 'John Doe', TRUE),
-(2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE),
-(3, '2024-03-30',3,21,101,'John Snow',FALSE),
-(4, '2024-03-07',3,21,100,'John Doe',FALSE);
+(100, 'John Doe', '91234567', 'johndoe@gmail.com', 'S9812345W'),
+(101, 'Jane Smith', '87654321', 'janesmith@outlook.com', 'T0753829R'),
+(102, 'Alice Johnson', '93691470', 'alicejohnson@hotmail.com', 'T0203619F');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

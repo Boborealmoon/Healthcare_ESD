@@ -20,37 +20,44 @@ SET time_zone = "+00:00";
 --
 -- Database: smuclinic
 --
-CREATE DATABASE IF NOT EXISTS appointments DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE appointments;
+CREATE DATABASE IF NOT EXISTS calendar DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE calendar;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table orders
+-- Table structure for table calendar
 --
 
-DROP TABLE IF EXISTS appointments;
-CREATE TABLE IF NOT EXISTS appointments (
-  AppointmentID INT NOT NULL,
-  AppointmentDate DATE NOT NULL,
+DROP TABLE IF EXISTS calendar;
+CREATE TABLE IF NOT EXISTS calendar (
   TimeslotID INT NOT NULL,
-  EmployeeID CHAR(2) NOT NULL,
-  PatientID CHAR(3) NOT NULL,
-  PatientName VARCHAR(50) NOT NULL,
-  Claimed BOOLEAN NOT NULL,
-  CONSTRAINT appointments_pk PRIMARY KEY (AppointmentID)
+  TimeBegin TIME NOT NULL,
+  TimeEnd TIME NOT NULL,
+  PRIMARY KEY (TimeslotID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table orders
+-- Dumping data for table calendar
 --
 
-INSERT INTO appointments (AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed) VALUES 
+INSERT INTO calendar (TimeslotID, TimeBegin, TimeEnd) VALUES 
 
-(1, '2024-03-16', 2, 21, 100, 'John Doe', TRUE),
-(2, '2024-03-29', 3, 21, 100, 'John Doe', FALSE),
-(3, '2024-03-30',3,21,101,'John Snow',FALSE),
-(4, '2024-03-07',3,21,100,'John Doe',FALSE);
+(1, '09:00:00', '09:30:00'),
+(2, '09:30:00', '10:00:00'),
+(3, '10:00:00', '10:30:00'),
+(4, '10:30:00', '11:00:00'),
+(5, '11:00:00', '11:30:00'),
+(6, '11:30:00', '12:00:00'),
+(7, '13:00:00', '13:30:00'),
+(8, '13:30:00', '14:00:00'),
+(9, '14:00:00', '14:30:00'),
+(10, '14:30:00', '15:00:00'),
+(11, '15:00:00', '15:30:00'),
+(12, '15:30:00', '16:00:00'),
+(13, '16:00:00', '16:30:00'),
+(14, '16:30:00', '17:00:00');
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
