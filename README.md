@@ -11,7 +11,7 @@ type this into command line to set DB URL:
     export dbURL=mysql+mysqlconnector://root:root@localhost:yourMAMPSQLPort/Path
 
 2) [For Windows]
-    export dbURL=mysql+mysqlconnector://root@localhost:yourWAMPSQLPort/Path
+    set dbURL=mysql://root:root@localhost/path 
 
 
 To run the service, type in cmd line: 
