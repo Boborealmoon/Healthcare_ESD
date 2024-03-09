@@ -49,8 +49,8 @@ def book_appointment():
     }), 400
 
 def processAppointmentbooking(appointment):
-    # 2. Send the order info {cart items}
-    # Invoke the order microservice
+    # 2. Send the appointment info {appointment items}
+    # Invoke the appointment microservice
     print('\n-----Invoking order microservice-----')
     appointment_result = invoke_http(appointments_url, method='POST', json=appointment)
     print('appointment_result:', appointment_result)
