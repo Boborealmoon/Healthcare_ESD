@@ -17,17 +17,17 @@ claims_url = "http://localhost:5002/claims"
 # order_url = "http://localhost:5005/order"
 patients_url = "http://localhost:5006/patient"
 
-@app.route("/place_order", methods=['POST'])
-def place_order():
+@app.route("/submit_claims", methods=['POST'])
+def submit_claims():
     # Simple check of input format and data of the request are JSON
     if request.is_json:
         try:
-            order = request.get_json()
-            print("\nReceived an order in JSON:", order)
+            claim = request.get_json()
+            print("\nSubmitted a claim in JSON:", claim)
 
             # do the actual work
             # 1. Send order info {cart items}
-            result = processPlaceOrder(order)
+            result = processSubmitClaim(claim)
             return jsonify(result), result["code"]
 
         except Exception as e:
@@ -39,7 +39,7 @@ def place_order():
 
             return jsonify({
                 "code": 500,
-                "message": "place_order.py internal error: " + ex_str
+                "message": "submit_claims.py internal error: " + ex_str
             }), 500
 
     # if reached here, not a JSON request.
@@ -49,31 +49,76 @@ def place_order():
     }), 400
 
 
-def processPlaceOrder(order):
+def processSubmitClaim(claim):
     # 2. Send the order info {cart items}
     # Invoke the order microservice
-
+    print('\n-----Invoking order microservice-----')
+    order_result = invoke_http(order_URL, method='POST', json=order)
+    print('order_result:', order_result)
+    
     # 4. Record new order
     # record the activity log anyway
+    print('\n\n-----Invoking activity_log microservice-----')
+    invoke_http(activity_log_URL, method="POST", json=order_result)
+    print("\nOrder sent to activity log.\n")
+    # - reply from the invocation is not used;
+    # continue even if this invocation fails
 
     # Check the order result; if a failure, send it to the error microservice.
+    code = order_result["code"]
+    if code not in range(200, 300):
+    
+        # Inform the error microservice
+        print('\n\n-----Invoking error microservice as order fails-----')
+        invoke_http(error_URL, method="POST", json=order_result)
+        # - reply from the invocation is not used; 
+        # continue even if this invocation fails
+        print("Order status ({:d}) sent to the error microservice:".format(
+            code), order_result)
 
-    # Inform the error microservice
-
-    # 7. Return error
+        # 7. Return error
+        return {
+            "code": 500,
+            "data": {"order_result": order_result},
+            "message": "Order creation failure sent for error handling."
+        }
 
     # 5. Send new order to shipping
     # Invoke the shipping record microservice
+    print('\n\n-----Invoking shipping_record microservice-----')
+    shipping_result = invoke_http(
+        shipping_record_URL, method="POST", json=order_result['data'])
+    print("shipping_result:", shipping_result, '\n')
 
     # Check the shipping result;
     # if a failure, send it to the error microservice.
+    code = shipping_result["code"]
+    if code not in range(200, 300):
 
-    # Inform the error microservice
+        # Inform the error microservice
+        print('\n\n-----Invoking error microservice as shipping fails-----')
+        invoke_http(error_URL, method="POST", json=shipping_result)
+        print("Shipping status ({:d}) sent to the error microservice:".format(
+            code), shipping_result)
 
-    # 7. Return error
+        # 7. Return error
+        return {
+            "code": 400,
+            "data": {
+                "order_result": order_result,
+                "shipping_result": shipping_result
+            },
+            "message": "Simulated shipping record error sent for error handling."
+        }
 
     # 7. Return created order, shipping record
-    return {}
+    return {
+        "code": 201,
+        "data": {
+            "order_result": order_result,
+            "shipping_result": shipping_result
+        }
+    }
 
 
 # Execute this program if it is run as a main script (not by 'import')
