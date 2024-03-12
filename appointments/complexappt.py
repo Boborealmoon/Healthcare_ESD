@@ -61,6 +61,8 @@ def processAppointmentbooking(appointment):
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
     print('appointment_result:', patient_result)
 
+    patient_email = patient_result["data"]["Email"]
+
     return {
         "code": 201,
         "data": {
