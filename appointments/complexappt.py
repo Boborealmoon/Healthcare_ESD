@@ -15,7 +15,7 @@ appointments_url = "http://localhost:5000/appointments"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
-# patients_url = "http://localhost:5006/patient"
+patients_url = "http://localhost:5006/patient"
 
 @app.route("/book_appointment", methods=['POST'])
 def book_appointment():
@@ -51,16 +51,24 @@ def book_appointment():
 def processAppointmentbooking(appointment):
     # 2. Send the appointment info {appointment items}
     # Invoke the appointment microservice
-    print('\n-----Invoking order microservice-----')
+    print('\n-----Invoking appointments microservice-----')
     appointment_result = invoke_http(appointments_url, method='POST', json=appointment)
     print('appointment_result:', appointment_result)
+
+    patient_id = appointment.get("PatientID")
+
+    print('\n-----Invoking patients microservice-----')
+    patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
+    print('appointment_result:', patient_result)
 
     return {
         "code": 201,
         "data": {
-            "appointment":appointment_result
+            "appointment":appointment_result,
+            "patient":patient_result
         }
     }
+    
     # # 4. Record new order
     # # record the activity log anyway
     # print('\n\n-----Invoking activity_log microservice-----')
