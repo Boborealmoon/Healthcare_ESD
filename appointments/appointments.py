@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Sequence
 from os import environ
 from datetime import date
 
@@ -13,7 +14,7 @@ db = SQLAlchemy(app)
 
 class appointments(db.Model):
     __tablename__ = 'appointments'
-    AppointmentID = db.Column(db.Integer, primary_key=True)
+    AppointmentID = db.Column(db.Integer,primary_key=True)
     AppointmentDate = db.Column(db.Date, nullable=False)
     TimeslotID = db.Column(db.Integer, nullable=False)
     EmployeeID = db.Column(db.String(2), nullable=False)
@@ -21,8 +22,7 @@ class appointments(db.Model):
     PatientName = db.Column(db.String(50), nullable=False)
     Claimed = db.Column(db.Boolean, nullable=False)
 
-    def __init__(self, AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed):
-        self.AppointmentID = AppointmentID
+    def __init__(self, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed):
         self.AppointmentDate = AppointmentDate
         self.TimeslotID = TimeslotID
         self.EmployeeID = EmployeeID
@@ -104,7 +104,7 @@ def create_appointment():
 
     
     data = request.get_json()
-    new_appointment = appointments(AppointmentID=data['AppointmentID'],
+    new_appointment = appointments(
         AppointmentDate=data['AppointmentDate'],
         TimeslotID=data['TimeslotID'],
         EmployeeID=data['EmployeeID'],
