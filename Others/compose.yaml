@@ -6,7 +6,48 @@ networks:
     driver: bridge
     name: kong-net
 
+version: "3.8"
+
 services:
+
+  #################################
+  # Patient: The Patients microservice
+  #################################
+  patient:
+    image: boborealmoon/patient:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/patients
+
+  #################################
+  # Employee: The Employees microservice
+  #################################
+  employee:
+    image: boborealmoon/employee:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/employees
+
+  #################################
+  # Inventory: The Inventory microservice
+  #################################
+  inventory:
+    image: boborealmoon/inventory:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/inventory
+
+
+
+  ###############################################
+  # callbook: The test_invoke_http.py program
+  ###############################################
+  callbook:
+    image: <dockerid>/callbook:1.0
+    depends_on:
+      - book
+    environment:
+      bookURL: http://book:5000/book
 
   #######################################
   # Postgres: The database used by Kong
