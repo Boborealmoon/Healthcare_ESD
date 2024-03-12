@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from os import environ
 
 # from flasgger import Swagger
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -71,36 +72,28 @@ def get_all():
 #     ), 404
 
 # Create a new claim
-@app.route("/claims/<string:ClaimID>", methods=['POST'])
-def new_claim(ClaimID):
-    if( db.session.scalars(
-        db.select(Claim).filter_by(ClaimID = ClaimID).limit(1)
-).first()
-):
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "ClaimID": ClaimID
-                },
-                "message": "Claim {ClaimID} has already been made."
-            }
-        ), 400
-        
+@app.route("/claims/", methods=['POST'])
+def new_claim():
+    
+    # check last ClaimID
+    lastClaimID = db.session.query(func.max(Claim.ClaimID)).scalar()
+    # Increment the max AppointmentID by 1 to determine the ID for the new appointment
+    newClaimID = 901 if lastClaimID is None else lastClaimID + 1
+    
     data = request.get_json()
-    claim = Claim(ClaimID, **data)
+    claim = Claim(
+                    ClaimID= newClaimID,
+                    StatusOfClaims= data['StatusOfClaims'],
+                    AppointmentID= data['AppointmentID'])
     
     try:
         db.session.add(claim)
         db.session.commit()
-    except:
+    except Exception as e:
         return jsonify(
             {
                 "code": 500,
-                "data": {
-                    "ClaimID": ClaimID
-                },
-                "message": "An error occured submitting the claim."
+                "message": "An error occured submitting the claim." + str(e)
             }
         ), 500
         
