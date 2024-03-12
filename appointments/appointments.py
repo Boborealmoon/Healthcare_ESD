@@ -99,31 +99,16 @@ def get_appointment_by_ID(PatientID):
                 }
             ), 404
 
-@app.route("/appointments/<string:PatientID>", methods=['POST'])
-def create_appointment(PatientID):
+@app.route("/appointments", methods=['POST'])
+def create_appointment():
 
-    # NO NEED TO CHECK IF APPOINTMENT IS MADE BEFORE ANOT, CAUSE WE ONLY RETURN AVAILABLE APPOINTMENTS
-    #     if (db.session.scalars(
-    #     	db.select(Book).filter_by(isbn13=isbn13).
-    #     	limit(1)
-    # ).first()
-    # ):
-    #         return jsonify(
-    #             {
-    #                 "code": 400,
-    #                 "data": {
-    #                     "isbn13": isbn13
-    #                 },
-    #                 "message": "Book already exists."
-    #             }
-    #         ), 400
-
+    
     data = request.get_json()
     new_appointment = appointments(AppointmentID=data['AppointmentID'],
         AppointmentDate=data['AppointmentDate'],
         TimeslotID=data['TimeslotID'],
         EmployeeID=data['EmployeeID'],
-        PatientID=PatientID,  # PatientID from URL parameter
+        PatientID=data['PatientID'], 
         PatientName=data['PatientName'],
         Claimed=data['Claimed'])
 
