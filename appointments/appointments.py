@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Sequence
+from sqlalchemy import func
 from os import environ
 from datetime import date
 
@@ -22,7 +22,8 @@ class appointments(db.Model):
     PatientName = db.Column(db.String(50), nullable=False)
     Claimed = db.Column(db.Boolean, nullable=False)
 
-    def __init__(self, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed):
+    def __init__(self, AppointmentID, AppointmentDate, TimeslotID, EmployeeID, PatientID, PatientName, Claimed):
+        self.AppointmentID = AppointmentID
         self.AppointmentDate = AppointmentDate
         self.TimeslotID = TimeslotID
         self.EmployeeID = EmployeeID
@@ -101,10 +102,15 @@ def get_appointment_by_ID(PatientID):
 
 @app.route("/appointments", methods=['POST'])
 def create_appointment():
+    
+    max_appointment_id = db.session.query(func.max(appointments.AppointmentID)).scalar()
 
+    # Increment the max AppointmentID by 1 to determine the ID for the new appointment
+    next_appointment_id = max_appointment_id + 1 if max_appointment_id is not None else 1
     
     data = request.get_json()
     new_appointment = appointments(
+        AppointmentID = next_appointment_id,
         AppointmentDate=data['AppointmentDate'],
         TimeslotID=data['TimeslotID'],
         EmployeeID=data['EmployeeID'],
