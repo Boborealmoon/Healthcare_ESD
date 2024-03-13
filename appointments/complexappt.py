@@ -98,43 +98,6 @@ def processAppointmentbooking(appointment):
     #         "message": "Order creation failure sent for error handling."
     #     }
 
-    # # 5. Send new order to shipping
-    # # Invoke the shipping record microservice
-    # print('\n\n-----Invoking shipping_record microservice-----')
-    # shipping_result = invoke_http(
-    #     shipping_record_URL, method="POST", json=order_result['data'])
-    # print("shipping_result:", shipping_result, '\n')
-
-    # # Check the shipping result; 
-    # # if a failure, send it to the error microservice.
-    # code = shipping_result["code"]
-    # if code not in range(200, 300):
-
-    #     # Inform the error microservice
-    #     print('\n\n-----Invoking error microservice as shipping fails-----')
-    #     invoke_http(error_URL, method="POST", json=shipping_result)
-    #     print("Shipping status ({:d}) sent to the error microservice:".format(
-    #         code), shipping_result)
-
-    #     # 7. Return error
-    #     return {
-    #         "code": 400,
-    #         "data": {
-    #             "order_result": order_result,
-    #             "shipping_result": shipping_result
-    #         },
-    #         "message": "Simulated shipping record error sent for error handling."
-    #     }
-
-    # # 7. Return created order, shipping record
-    # return {
-    #     "code": 201,
-    #     "data": {
-    #         "order_result": order_result,
-    #         "shipping_result": shipping_result
-    #     }
-    # }
-
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
