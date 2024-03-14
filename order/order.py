@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 class Order(db.Model):
     __tablename__ = 'orders'
     OrderID = db.Column(db.Integer, primary_key=True)
-    ProductID = db.Column(db.Integer, primary_key=True)
+    ProductID = db.Column(db.Integer, nullable=False)
     ProductName = db.Column(db.String(50), nullable=False)
     ProductQty = db.Column(db.Integer, nullable=False)
     UnitsOrdered = db.Column(db.Integer, nullable=False)
