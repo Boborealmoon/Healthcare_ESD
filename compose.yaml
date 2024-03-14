@@ -10,139 +10,6 @@ networks:
 version: "3.8"
 
 services:
-  ###################################
-  # Patient: The Order microservice
-  ###################################
-  Patient:
-    build:
-      context: ./
-      dockerfile: patient.Dockerfile
-    image: boborealmoon/patient:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
-      PYTHONUNBUFFERED: 1
-
-  #################################
-  # Employee: The Employees microservice
-  #################################
-  employee:
-    build:
-    context: ./
-    dockerfile: employee.Dockerfile
-    image: boborealmoon/employee:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
-
-  #################################
-  # Inventory: The Inventory microservice
-  #################################
-  inventory:
-    build:
-    context: ./
-    dockerfile: inventory.Dockerfile
-    image: boborealmoon/inventory:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
-
-  #################################
-  # Claims: The Claims microservice
-  #################################
-  Claims:
-    build:
-    context: ./
-    dockerfile: claims.Dockerfile
-    image: boborealmoon/claims:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
-
-  #################################
-  # Appointments: The Claims microservice
-  #################################
-  Appointments:
-    build:
-    context: ./
-    dockerfile: appointments.Dockerfile
-    image: boborealmoon/appointments:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
-
-  #################################
-  # Order: The Claims microservice
-  #################################
-  Order:
-    build:
-    context: ./
-    dockerfile: order.Dockerfile
-    image: boborealmoon/order:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/order
-
-  #################################
-  # Calendar: The Claims microservice
-  #################################
-  Calendar:
-    build:
-    context: ./
-    dockerfile: calendar.Dockerfile
-    image: boborealmoon/calendar:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
-
-  ###################################
-  # Error: The Error microservice
-  ###################################
-  error:
-    build:
-      context: ./
-      dockerfile: error.Dockerfile
-    image: boborealmoon/error:esd
-    restart: always
-    depends_on:
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      e_queue_name: Error
-      PYTHONUNBUFFERED: 1
-
-  #################################################
-  # Activity Log: The Activity Log microservice
-  #################################################
-  activity_log:
-    build:
-      context: ./
-      dockerfile: activity_log.Dockerfile
-    image: boborealmoon/activity_log:esd
-    restart: always
-    depends_on:
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      a_queue_name: Activity_Log
-      PYTHONUNBUFFERED: 1
-
-
-  ###############################################
-  # Submit Claims: The Submit Claims program
-  ###############################################
-  callbook:
-    image: <dockerid>/callbook:1.0
-    depends_on:
-      - book
-    environment:
-      bookURL: http://book:5000/book
-
-
-
-
   ####################################
   # RabbitMQ: The messaging broker   
   ####################################
@@ -157,7 +24,6 @@ services:
       - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
       - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
       - rabbitmq_data:/var/lib/rabbitmq
-
 
 
   #######################################
@@ -234,4 +100,149 @@ services:
       - "8446:8446" # Dev Portal. Listens for HTTP traffic, assuming Dev Portal is enabled.
       - "8004:8004" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
       - "8447:8447" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
+
+
+  ###################################
+  # Patient: The Order microservice
+  ###################################
+  Patient:
+    build:
+      context: ./
+      dockerfile: patient.Dockerfile
+    image: boborealmoon/patient:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
+      PYTHONUNBUFFERED: 1
+    # port map for those exposed 
+    # ports:
+    #   - "5000:5000"
+
+  #################################
+  # Employee: The Employees microservice
+  #################################
+  employee:
+    build:
+    context: ./
+    dockerfile: employee.Dockerfile
+    image: boborealmoon/employee:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
+    # ports:
+    #   - "5000:5000"
+    
+
+  #################################
+  # Inventory: The Inventory microservice
+  #################################
+  inventory:
+    build:
+    context: ./
+    dockerfile: inventory.Dockerfile
+    image: boborealmoon/inventory:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
+    ports:
+      - "5000:5000"
+
+  #################################
+  # Claims: The Claims microservice
+  #################################
+  Claims:
+    build:
+    context: ./
+    dockerfile: claims.Dockerfile
+    image: boborealmoon/claims:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
+    ports:
+      - "5000:5000"
+
+  #################################
+  # Appointments: The Claims microservice
+  #################################
+  Appointments:
+    build:
+    context: ./
+    dockerfile: appointments.Dockerfile
+    image: boborealmoon/appointments:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
+    # ports:
+    #   - "5000:5000"
+
+  #################################
+  # Order: The Claims microservice
+  #################################
+  Order:
+    build:
+    context: ./
+    dockerfile: order.Dockerfile
+    image: boborealmoon/order:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/order
+
+  #################################
+  # Calendar: The Claims microservice
+  #################################
+  Calendar:
+    build:
+    context: ./
+    dockerfile: calendar.Dockerfile
+    image: boborealmoon/calendar:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
+    # ports:
+    #   - "5000:5000"
+
+  ###################################
+  # Error: The Error microservice
+  ###################################
+  error:
+    build:
+      context: ./
+      dockerfile: error.Dockerfile
+    image: boborealmoon/error:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      e_queue_name: Error
+      PYTHONUNBUFFERED: 1
+
+  #################################################
+  # Activity Log: The Activity Log microservice
+  #################################################
+  activity_log:
+    build:
+      context: ./
+      dockerfile: activity_log.Dockerfile
+    image: boborealmoon/activity_log:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      a_queue_name: Activity_Log
+      PYTHONUNBUFFERED: 1
+
+
+  # ###############################################
+  # # Submit Claims: The Submit Claims program
+  # ###############################################
+  # callbook:
+  #   image: <dockerid>/callbook:1.0
+  #   depends_on:
+  #     - book
+  #   environment:
+  #     bookURL: http://book:5000/book
 
