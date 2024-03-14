@@ -144,10 +144,10 @@ order_url = "http://localhost:5005/order"
 
 
 # -----------------
-@app.route("/refill_prescription")
+@app.route("/refill_prescription", methods=['GET'])
 def check_inventory_threshold():
     # Make a GET request to the /inventory endpoint to get all inventory items
-    response = requests.get("http://localhost:5004/inventory")
+    response = requests.get(inventory_url)
     
     # Check if the request was successful
     if response.status_code in range(199,399):
@@ -165,7 +165,7 @@ def check_inventory_threshold():
                     "SupplierContactEmail": item["SupplierContactEmail"]
                 })
 
-        return items_below_threshold
+        return (items_below_threshold)
     else:
         # Handle the case where the request was not successful
         print("Failed to fetch inventory data")
@@ -179,3 +179,6 @@ if __name__ == "__main__":
             print(item)
     else:
         print("No items found below threshold.")
+if __name__ == "__main__":
+    print("success")
+    app.run(host="0.0.0.0", port=5100, debug=True)
