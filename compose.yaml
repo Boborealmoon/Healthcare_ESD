@@ -1,5 +1,6 @@
 volumes:
   pgdata: 
+  rabbitmq_data:
 
 networks:
   kong-net:
@@ -9,38 +10,128 @@ networks:
 version: "3.8"
 
 services:
-
-  #################################
-  # Patient: The Patients microservice
-  #################################
-  patient:
+  ###################################
+  # Patient: The Order microservice
+  ###################################
+  Patient:
+    build:
+      context: ./
+      dockerfile: patient.Dockerfile
     image: boborealmoon/patient:1.0
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/patients
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
+      PYTHONUNBUFFERED: 1
 
   #################################
   # Employee: The Employees microservice
   #################################
   employee:
+    build:
+    context: ./
+    dockerfile: employee.Dockerfile
     image: boborealmoon/employee:1.0
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/employees
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
 
   #################################
   # Inventory: The Inventory microservice
   #################################
   inventory:
+    build:
+    context: ./
+    dockerfile: inventory.Dockerfile
     image: boborealmoon/inventory:1.0
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/inventory
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
 
+  #################################
+  # Claims: The Claims microservice
+  #################################
+  Claims:
+    build:
+    context: ./
+    dockerfile: claims.Dockerfile
+    image: boborealmoon/claims:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
+
+  #################################
+  # Appointments: The Claims microservice
+  #################################
+  Appointments:
+    build:
+    context: ./
+    dockerfile: appointments.Dockerfile
+    image: boborealmoon/appointments:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
+
+  #################################
+  # Order: The Claims microservice
+  #################################
+  Order:
+    build:
+    context: ./
+    dockerfile: order.Dockerfile
+    image: boborealmoon/order:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/order
+
+  #################################
+  # Calendar: The Claims microservice
+  #################################
+  Calendar:
+    build:
+    context: ./
+    dockerfile: calendar.Dockerfile
+    image: boborealmoon/calendar:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
+
+  ###################################
+  # Error: The Error microservice
+  ###################################
+  error:
+    build:
+      context: ./
+      dockerfile: error.Dockerfile
+    image: boborealmoon/error:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      e_queue_name: Error
+      PYTHONUNBUFFERED: 1
+
+  #################################################
+  # Activity Log: The Activity Log microservice
+  #################################################
+  activity_log:
+    build:
+      context: ./
+      dockerfile: activity_log.Dockerfile
+    image: boborealmoon/activity_log:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      a_queue_name: Activity_Log
+      PYTHONUNBUFFERED: 1
 
 
   ###############################################
-  # callbook: The test_invoke_http.py program
+  # Submit Claims: The Submit Claims program
   ###############################################
   callbook:
     image: <dockerid>/callbook:1.0
@@ -48,6 +139,26 @@ services:
       - book
     environment:
       bookURL: http://book:5000/book
+
+
+
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
 
   #######################################
   # Postgres: The database used by Kong
