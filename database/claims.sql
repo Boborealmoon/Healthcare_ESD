@@ -31,11 +31,11 @@ USE claims;
 
 DROP TABLE IF EXISTS claims;
 CREATE TABLE IF NOT EXISTS claims (
-  ClaimID CHAR(3) NOT NULL,
+  ClaimID CHAR(3) NOT NULL AUTO_INCREMENT,
   StatusOfClaims VARCHAR(50) NOT NULL,
   AppointmentID INT NOT NULL,
   CONSTRAINT calendars_pk PRIMARY KEY (ClaimID)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table claims
