@@ -102,13 +102,30 @@ def get_appointment_by_ID(PatientID):
 
 @app.route("/appointments", methods=['POST'])
 def create_appointment():
-    
+
     max_appointment_id = db.session.query(func.max(appointments.AppointmentID)).scalar()
 
     # Increment the max AppointmentID by 1 to determine the ID for the new appointment
     next_appointment_id = max_appointment_id + 1 if max_appointment_id is not None else 1
     
     data = request.get_json()
+    
+    appointmentlist = db.session.scalars(db.select(appointments).filter_by(AppointmentDate=data['AppointmentDate']))
+
+    if appointmentlist:
+        appointments_data = [appointment.json() for appointment in appointmentlist]
+        appointments_booked = []
+        for appointment in appointments_data:
+            appointments_booked.append(appointment['TimeslotID'])
+    
+    if data['TimeslotID'] in appointments_booked:
+        return jsonify(
+            {
+                "code": 400,
+                "message": f"Error booking appointment, Unavailable booking"
+            }
+        ),400
+
     new_appointment = appointments(
         AppointmentID = next_appointment_id,
         AppointmentDate=data['AppointmentDate'],
@@ -118,6 +135,7 @@ def create_appointment():
         PatientName=data['PatientName'],
         Claimed=data['Claimed'])
 
+    
     try:
         db.session.add(new_appointment)
         db.session.commit()

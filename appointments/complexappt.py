@@ -16,6 +16,8 @@ appointments_url = "http://localhost:5000/appointments"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
 patients_url = "http://localhost:5006/patient"
+activitylog_url = "http://localhost:5007/activity_log"
+error_url = "http://localhost:5008/error"
 
 @app.route("/book_appointment", methods=['POST'])
 def book_appointment():
@@ -60,6 +62,29 @@ def processAppointmentbooking(appointment):
     print('\n-----Invoking patients microservice-----')
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
     print('appointment_result:', patient_result)
+
+    print('\n-----Invoking activity_log microservice-----')
+    invoke_http(activitylog_url, method="POST", json=appointment_result)
+    print('\nOrder sent to activity log.\n')
+
+    code = appointment_result["code"]
+    if code not in range(200, 300):
+
+        # Inform the error microservice
+        print('\n\n-----Invoking error microservice as order fails-----')
+        invoke_http(error_url, method="POST", json=appointment_result)
+        # - reply from the invocation is not used; 
+        # continue even if this invocation fails
+        print("Appointment Booking status ({:d}) sent to the error microservice:".format(
+            code), appointment_result)
+
+        # 7. Return error
+        return {
+            "code": 500,
+            "data": {"order_result": appointment_result},
+            "message": "Order creation failure sent for error handling."
+        }
+
 
     patient_email = patient_result["data"]["Email"]
 
