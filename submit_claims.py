@@ -15,7 +15,9 @@ claims_url = "http://localhost:5002/claims"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
-# patients_url = "http://localhost:5006/patient"
+patients_url = "http://localhost:5006/patient"
+activitylog_url = "http://localhost:5007/activity_log"
+error_url = "http://localhost:5008/error"
 
 @app.route("/submit_claims", methods=['POST'])
 def submit_claims():
@@ -25,8 +27,7 @@ def submit_claims():
             claim = request.get_json()
             print("\nSubmitted a claim in JSON:", claim)
 
-            # do the actual work
-            # 1. Send order info {cart items}
+            # Send claim info {claim items}
             result = processSubmitClaim(claim)
             return jsonify(result), result["code"]
 
@@ -48,17 +49,28 @@ def submit_claims():
         "message": "Invalid JSON input: " + str(request.get_data())
     }), 400
 
-
 def processSubmitClaim(claim):
-    # Send the claim info (Patient)
+    # Send the claim info {claim items}
     # Invoke the claims.py microservice
-    print('\n-----Invoking order microservice-----')
+    print('\n-----Invoking claims microservice-----')
     claim_result = invoke_http(claims_url, method='POST', json=claim)
     print('claim_result:', claim_result)
 
-    # Check the order result; if a failure, send it to the error microservice.
+    # Record new claim in activity_log
+    print('\n\n-----Invoking activity_log microservice-----')
+    invoke_http(activitylog_URL, method="POST", json=claim_result)
+    print("\nClaim sent to activity log.\n")
+    
+    # Check the claim_result; if a failure, send it to the error microservice.
     code = claim_result["code"]
     if code not in range(200, 300):
+        
+        # Inform the error microservice
+        print('\n\n-----Invoking error microservice as order fails-----')
+        invoke_http(error_URL, method="POST", json=claim_result)
+        print("Claim submission status ({:d}) sent to the error microservice:".format(
+            code), claim_result)
+
         # Return error
         return {
             "code": 500,
