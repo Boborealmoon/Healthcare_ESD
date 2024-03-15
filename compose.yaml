@@ -5,7 +5,6 @@ volumes:
 networks:
   kong-net:
     driver: bridge
-    name: kong-net
 
 version: "3.8"
 
@@ -103,7 +102,7 @@ services:
 
 
   ###################################
-  # Patient: The Order microservice
+  # Patient: The Patient microservice
   ###################################
   Patient:
     build:
@@ -123,8 +122,8 @@ services:
   #################################
   employee:
     build:
-    context: ./
-    dockerfile: employee.Dockerfile
+      context: ./
+      dockerfile: employee.Dockerfile
     image: boborealmoon/employee:1.0
     restart: always
     environment:
@@ -136,10 +135,10 @@ services:
   #################################
   # Inventory: The Inventory microservice
   #################################
-  inventory:
+  Inventory:
     build:
-    context: ./
-    dockerfile: inventory.Dockerfile
+      context: ./
+      dockerfile: inventory.Dockerfile
     image: boborealmoon/inventory:1.0
     restart: always
     environment:
@@ -152,22 +151,22 @@ services:
   #################################
   Claims:
     build:
-    context: ./
-    dockerfile: claims.Dockerfile
+      context: ./
+      dockerfile: claims.Dockerfile
     image: boborealmoon/claims:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
-    ports:
-      - "5000:5000"
+    # ports:
+    #   - "5000:5000"
 
   #################################
-  # Appointments: The Claims microservice
+  # Appointments: The Appointments microservice
   #################################
   Appointments:
     build:
-    context: ./
-    dockerfile: appointments.Dockerfile
+      context: ./
+      dockerfile: appointments.Dockerfile
     image: boborealmoon/appointments:1.0
     restart: always
     environment:
@@ -176,30 +175,30 @@ services:
     #   - "5000:5000"
 
   #################################
-  # Order: The Claims microservice
+  # Order: The Order microservice
   #################################
   Order:
     build:
-    context: ./
-    dockerfile: order.Dockerfile
+      context: ./
+      dockerfile: order.Dockerfile
     image: boborealmoon/order:1.0
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/order
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
 
-  #################################
-  # Calendar: The Claims microservice
-  #################################
-  Calendar:
-    build:
-    context: ./
-    dockerfile: calendar.Dockerfile
-    image: boborealmoon/calendar:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
-    # ports:
-    #   - "5000:5000"
+  # #################################
+  # # Calendar: The Claims microservice
+  # #################################
+  # Calendar:
+  #   build:
+  #   context: ./
+  #   dockerfile: calendar.Dockerfile
+  #   image: boborealmoon/calendar:1.0
+  #   restart: always
+  #   environment:
+  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
+  #   # ports:
+  #   #   - "5000:5000"
 
   ###################################
   # Error: The Error microservice
