@@ -6,18 +6,17 @@ from os import environ
 # from flasgger import Swagger
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/claims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 class Claim(db.Model):
     __tablename__ = 'claims'
-    ClaimID = db.Column(db.String(3), primary_key=True)
+    ClaimID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     StatusOfClaims = db.Column(db.String(50), nullable=False)
     AppointmentID = db.Column(db.Integer, nullable=False)
     
-    # Initialize Claim object
     def __init__(self, ClaimID, StatusOfClaims, AppointmentID):
         self.ClaimID = ClaimID
         self.StatusOfClaims = StatusOfClaims
@@ -72,38 +71,41 @@ def get_all():
 #     ), 404
 
 # Create a new claim
-@app.route("/claims/", methods=['POST'])
+@app.route("/new_claim", methods=['POST'])
 def new_claim():
-    
-    # check last ClaimID
-    lastClaimID = db.session.query(func.max(Claim.ClaimID)).scalar()
-    # Increment the max AppointmentID by 1 to determine the ID for the new appointment
-    newClaimID = 901 if lastClaimID is None else lastClaimID + 1
-    
-    data = request.get_json()
-    claim = Claim(
-                    ClaimID= newClaimID,
-                    StatusOfClaims= data['StatusOfClaims'],
-                    AppointmentID= data['AppointmentID'])
-    
     try:
+        data = request.get_json()
+        last_claim = int(db.session.query(func.max(Claim.ClaimID)).scalar())
+        new_claim_id = 901 if last_claim is None else last_claim + 1
+        
+        claim = Claim(
+            ClaimID=new_claim_id,
+            StatusOfClaims=data['StatusOfClaims'],
+            AppointmentID=data['AppointmentID']
+        )
         db.session.add(claim)
         db.session.commit()
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occured submitting the claim." + str(e)
-            }
-        ), 500
         
-    return jsonify(
-        {
-            "code": 201,
-            "data": claim.json()
+        response_data = {
+            "ClaimID": new_claim_id,
+            "StatusOfClaims": claim.StatusOfClaims,
+            "AppointmentID": claim.AppointmentID
         }
-    ), 201
-    
+        
+        response = {
+            "code": 201,
+            "message": "Claim created successfully",
+            "data": response_data
+        }
+        
+        return jsonify(response), 201
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            "code": 500,
+            "message": f"An error occurred submitting the claim: {str(e)}"
+        }), 500
     
 #run
 if __name__ == '__main__':
