@@ -95,33 +95,6 @@ def processAppointmentbooking(appointment):
             "patient":patient_result
         }
     }
-    
-    # # 4. Record new order
-    # # record the activity log anyway
-    # print('\n\n-----Invoking activity_log microservice-----')
-    # invoke_http(activity_log_URL, method="POST", json=order_result)
-    # print("\nOrder sent to activity log.\n")
-    # # - reply from the invocation is not used;
-    # # continue even if this invocation fails
-
-    # # Check the order result; if a failure, send it to the error microservice.
-    # code = order_result["code"]
-    # if code not in range(200, 300):
-
-    #     # Inform the error microservice
-    #     print('\n\n-----Invoking error microservice as order fails-----')
-    #     invoke_http(error_URL, method="POST", json=order_result)
-    #     # - reply from the invocation is not used; 
-    #     # continue even if this invocation fails
-    #     print("Order status ({:d}) sent to the error microservice:".format(
-    #         code), order_result)
-
-    #     # 7. Return error
-    #     return {
-    #         "code": 500,
-    #         "data": {"order_result": order_result},
-    #         "message": "Order creation failure sent for error handling."
-    #     }
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
