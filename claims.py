@@ -87,15 +87,17 @@ def new_claim():
         db.session.commit()
         
         response_data = {
+            "AppointmentID": claim.AppointmentID,
             "ClaimID": new_claim_id,
-            "StatusOfClaims": claim.StatusOfClaims,
-            "AppointmentID": claim.AppointmentID
+            "StatusOfClaims": claim.StatusOfClaims
         }
         
         response = {
             "code": 201,
             "message": "Claim created successfully",
-            "data": response_data
+            "data": {
+                "claims": [response_data]
+            }
         }
         
         return jsonify(response), 201
