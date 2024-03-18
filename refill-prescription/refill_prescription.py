@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sqlalchemy import func
 from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 
 import requests
 from invokes import invoke_http
@@ -14,7 +15,6 @@ CORS(app)
 employees_url = "http://localhost:5003/employee"
 inventory_url = "http://localhost:5004/inventory"
 order_url = "http://localhost:5005/create_order"
-get_order_url = "http://localhost:5005/orders"
 
 # -----------------
 @app.route("/refill_prescription", methods=['GET'])
@@ -36,14 +36,15 @@ def check_inventory_threshold():
                     "ProductName": item["ProductName"],
                     "ProductQty": item["ProductQty"],
                     "SupplierID": item["SupplierID"],
-                    "SupplierContactEmail": item["SupplierContactEmail"]
+                    "SupplierContactEmail": item["SupplierContactEmail"],
+                    "UnitsToOrder": item["UnitsToOrder"]
                 })
 
         for item in items_below_threshold:
- 
+            today = str(date.today())
             order_data = {
-                "UnitsOrdered": 50,
-                "OrderDate": "2025-06-07",
+                "UnitsOrdered": item["UnitsToOrder"],
+                "OrderDate": today,
                 "ProductID": item["ProductID"],
                 "ProductName": item["ProductName"],
                 "ProductQty": item["ProductQty"],
@@ -58,7 +59,7 @@ def check_inventory_threshold():
 
                 print(f"Failed to create order for {item['ProductName']}")
             orders.append(order_data)
-        return jsonify({"status": "success", "items_below_threshold": order_result})
+        return jsonify({"status": "success", "order": order_result})
 
     else:
         # Handle the case where the request was not successful
@@ -66,5 +67,4 @@ def check_inventory_threshold():
 
 
 if __name__ == "__main__":
-    print("success")
     app.run(host="0.0.0.0", port=5100, debug=True)
