@@ -74,6 +74,7 @@ def processSubmitClaim(claim):
 
     # Check the order result; if a failure, send it to the error microservice.
     code = claim_result["code"]
+    email = claim_result['data']['patientemail']
     message = json.dumps(claim_result)
  
     if code not in range(200, 300):
