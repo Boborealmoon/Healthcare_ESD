@@ -24,7 +24,6 @@ activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
 email_service_url = "http://localhost:5010/email_service"
 
-
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
 
@@ -79,49 +78,12 @@ def processSubmitClaim(claim):
 
     patient_id = claim_result['data']['PatientID']
 
-
-    # Invoke the patient.py microservice
-    print('\n-----Invoking patient microservice-----')
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
     print('appointment_result:', patient_result)
 
+
     message = json.dumps(claim_result)
-    
-    patient_id = claim.get("PatientID")
-
-    appointment_id = claim.get("AppointmentID")
-
-    # Invoke the appointment.py microservice
-    print('\n-----Invoking appointment microservice-----')
-    appointment_result = invoke_http(appointments_url+f"/ID/{appointment_id}", method='GET')
-    print('appointment_result:', appointment_result)
-
-    # Check the order result; if a failure, send it to the error microservice.
-    code = claim_result["code"]
-    patient_email = patient_result['data']['Email']
-    patient_name = patient_result["data"]["PatientName"]
-    appt_date = appointment_id["data"]["AppointmentDate"]
-    message = json.dumps(claim_result)
-
-    # Send an email function
-    email_data = {
-        "recipient_email": patient_email,
-        "subject": "Appointment Confirmation",
-        "message_body": f"Dear {patient_name},\n\nYou have successfully submitted a claim for your appointment on {appt_date}.\n\nThank you!"
-    }
-
-    print('\n\n-----Invoking email microservice as order fails-----')
-    email_result = invoke_http(email_service_url, method='POST', json=email_data)
-    print(email_result)
-    
-    return {
-        "code": 201,
-        "data": {
-            "appointment":appointment_result,
-            "patient":patient_result
-        }
-    }
-
+ 
     if code not in range(200, 300):
         # Inform the error microservice
         #print('\n\n-----Invoking error microservice as claim submission fails-----')
@@ -144,16 +106,24 @@ def processSubmitClaim(claim):
             "data": {"claim_result": claim_result},
             "message": "Claim submission failure sent for error handling."
         }
-    
 
-
-    # Publish to "Activity Log" only when there is no error in order creation.
+# Publish to "Activity Log" only when there is no error in order creation.
     # Since the "Activity Log" binds to the queue using '#' => any routing_key would be matched 
     # and a message sent to “Error” queue can be received by “Activity Log” too.
 
     else:
 
         patient_email = patient_result["data"]["Email"]
+        # Send an email function
+        email_data = {
+            "recipient_email": patient_email,
+            "subject": "Appointment Confirmation",
+            "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment.\n\nThank you!"
+        }
+
+        print('\n\n-----Invoking email microservice as order fails-----')
+        email_result = invoke_http(email_service_url, method='POST', json=email_data)
+        print(email_result)
         # Record new claim, record the activity log anyway
         #print('\n\n-----Invoking activity_log microservice-----')
         print('\n\n-----Publishing the (claim info) message with routing_key=claim.info-----')        
