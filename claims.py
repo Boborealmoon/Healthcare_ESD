@@ -6,7 +6,7 @@ from os import environ
 # from flasgger import Swagger
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/claims'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/claims'
 # 'mysql+mysqlconnector://root:root@localhost:8889/claims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

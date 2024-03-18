@@ -115,6 +115,7 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
+      # 'mysql+mysqlconnector://is213@localhost:3306/claims'
       PYTHONUNBUFFERED: 1
     # port map for those exposed 
     # ports:
@@ -131,6 +132,7 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
+      # 'mysql+mysqlconnector://is213@localhost:3306/employees'
     # ports:
     #   - "5000:5000"
     
@@ -146,6 +148,7 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
+      # 'mysql+mysqlconnector://is213@localhost:3306/inventory'
     ports:
       - "5000:5000"
 
@@ -160,6 +163,7 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
+      # 'mysql+mysqlconnector://is213@localhost:3306/claims'
     # ports:
     #   - "5000:5000"
 
@@ -174,6 +178,7 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
+      # 'mysql+mysqlconnector://is213@localhost:3306/appointments'
     # ports:
     #   - "5000:5000"
 
@@ -188,18 +193,20 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
+      # 'mysql+mysqlconnector://is213@localhost:3306/orders'
 
   #################################
-  # Calendar: The Claims microservice
+  # Calendar: The Calendar microservice
   #################################
   Calendar:
-      build:
+    build:
       context: ./calendar/
       dockerfile: calendar.Dockerfile
     image: boborealmoon/calendar:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
+      # 'mysql+mysqlconnector://is213@localhost:3306/calendar'
   #   # ports:
   #   #   - "5000:5000"
 
@@ -265,6 +272,8 @@ services:
       - Inventory 
       - Order
     environment:
+      appointments_url = "http://appointments:5000/appointments"
+      claims_url = "http://claims:5002/new_claim"
       order_url = "http://order:5005/create_order"
       inventory_url = "http://inventory:5004/inventory"
 
