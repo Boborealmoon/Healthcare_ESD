@@ -5,7 +5,7 @@ from sqlalchemy import func
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root:root@localhost:8889/orders')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/orders')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -93,7 +93,7 @@ def create_order():
             }
         ), 500
 
-    return jsonify({'message': 'Order created successfully'}), 201
+    return jsonify({'code': 201, 'message': 'Order created successfully'}), 201
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5005, debug=True)

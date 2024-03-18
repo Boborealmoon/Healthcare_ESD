@@ -24,6 +24,7 @@ class Inventory(db.Model):
     SupplierID = db.Column(db.Integer, nullable=False)
     SupplierContactEmail = db.Column(db.String, nullable=False)
     Threshold = db.Column(db.Integer, nullable=False)
+    UnitsToOrder = db.Column(db.Integer, nullable=False)
 
     def __init__(self,ProductID,
                 ProductName,
@@ -33,6 +34,7 @@ class Inventory(db.Model):
                 SupplierID,
                 SupplierContactEmail,
                 Threshold,
+                UnitsToOrder
                 ):
         self.ProductID = ProductID
         self.ProductName = ProductName
@@ -42,12 +44,13 @@ class Inventory(db.Model):
         self.SupplierID = SupplierID
         self.SupplierContactEmail = SupplierContactEmail
         self.Threshhold = Threshold
+        self.UnitsToOrder = UnitsToOrder
         
 
     def json(self):
         return {"ProductID": self.ProductID, "ProductName": self.ProductName,"ProductQty": self.ProductQty,
                 "UnitOfMeasurement": self.UnitOfMeasurement,"UnitCost": self.UnitCost,
-                "SupplierID": self.SupplierID,"SupplierContactEmail": self.SupplierContactEmail,"Threshold": self.Threshold,}  # Convert to string
+                "SupplierID": self.SupplierID,"SupplierContactEmail": self.SupplierContactEmail,"Threshold": self.Threshold, "UnitsToOrder": self.UnitsToOrder}  # Convert to string
 
 
 @app.route('/inventory')
