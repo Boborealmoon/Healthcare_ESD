@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from sqlalchemy import func
+from flask_sqlalchemy import SQLAlchemy
 
 import requests
 from invokes import invoke_http
@@ -12,6 +14,7 @@ CORS(app)
 employees_url = "http://localhost:5003/employee"
 inventory_url = "http://localhost:5004/inventory"
 order_url = "http://localhost:5005/create_order"
+get_order_url = "http://localhost:5005/orders"
 
 # -----------------
 @app.route("/refill_prescription", methods=['GET'])
@@ -37,10 +40,10 @@ def check_inventory_threshold():
                 })
 
         for item in items_below_threshold:
+ 
             order_data = {
-                "OrderID": 11,
                 "UnitsOrdered": 50,
-                "OrderDate": "2024-06-07",
+                "OrderDate": "2025-06-07",
                 "ProductID": item["ProductID"],
                 "ProductName": item["ProductName"],
                 "ProductQty": item["ProductQty"],
@@ -48,7 +51,7 @@ def check_inventory_threshold():
                 "SupplierContactEmail": item["SupplierContactEmail"]
             }
             
-            print('\n-----Invoking order microservice-----')
+            print('\n-----Invoking order microservice to create order-----')
             order_result = invoke_http(order_url, method='POST', json=order_data)
             print('order_result:', order_result)
             if order_result.get("code") not in range(200, 300):
@@ -59,8 +62,8 @@ def check_inventory_threshold():
 
     else:
         # Handle the case where the request was not successful
-        print("Failed to fetch inventory data")
-        return None
+        return jsonify({"status": "error", "message": "Failed to fetch inventory data"})
+
 
 if __name__ == "__main__":
     print("success")
