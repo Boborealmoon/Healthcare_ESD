@@ -93,7 +93,7 @@ def create_order():
             }
         ), 500
 
-    return jsonify({'message': 'Order created successfully'}), 201
+    return jsonify({'code': 201, 'message': 'Order created successfully'}), 201
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5005, debug=True)
