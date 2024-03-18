@@ -19,9 +19,10 @@ claims_url = "http://localhost:5002/new_claim"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
-# patients_url = "http://localhost:5006/patient"
+patients_url = "http://localhost:5006/patient"
 activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
+email_service_url = "http://localhost:5010/email_service"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
@@ -68,13 +69,29 @@ def submit_claims():
 def processSubmitClaim(claim):
     # Send the claim info {claim items}
     # Invoke the claims.py microservice
-    print('\n-----Invoking claims microservice-----')
+    print('\n-----Invoking claix`xmms microservice-----')
     claim_result = invoke_http(claims_url, method='POST', json=claim)
     print('claim_result:', claim_result)
+    
+    # Print out the structure of the claim_result object
+    print('Structure of claim_result:', json.dumps(claim_result, indent=4))
 
     # Check the order result; if a failure, send it to the error microservice.
     code = claim_result["code"]
-    email = claim_result['data']['patientemail']
+
+    # Ensure that 'data' key exists in claim_result before accessing 'PatientID'
+    if 'data' in claim_result and 'PatientID' in claim_result['data']:
+        patient_id = claim_result['data']['PatientID']
+        print(patient_id)
+    else:
+        print("PatientID not found in claim_result['data']")
+        # Handle the case where PatientID is not present in the response
+        # patient_id = claim_result['data']['PatientID']
+
+    print('\n-----Invoking patients microservice-----')
+    patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
+    print('patient_result:', patient_result)
+
     message = json.dumps(claim_result)
  
     if code not in range(200, 300):
@@ -105,6 +122,19 @@ def processSubmitClaim(claim):
     # and a message sent to “Error” queue can be received by “Activity Log” too.
 
     else:
+        patient_email = patient_result['data']['Email']
+        
+        print(patient_email)
+        # Send an email function
+        email_data = {
+            "recipient_email": patient_email,
+            "subject": "Appointment Confirmation",
+            "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment.\n\nThank you!"
+        }
+
+        print('\n\n-----Invoking email microservice as order fails-----')
+        email_result = invoke_http(email_service_url, method='POST', json=email_data)
+        print(email_result)
         # Record new claim, record the activity log anyway
         #print('\n\n-----Invoking activity_log microservice-----')
         print('\n\n-----Publishing the (claim info) message with routing_key=claim.info-----')        
