@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS inventory (
   SupplierID INT,
   SupplierContactEmail VARCHAR(100),
   Threshold INT,
+  UnitsToOrder INT,
   PRIMARY KEY (ProductID,SupplierID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -47,18 +48,18 @@ CREATE TABLE IF NOT EXISTS inventory (
 -- Dumping data for table inventory
 --
 
-INSERT INTO inventory (ProductID, ProductName, ProductQty, UnitOfMeasurement, UnitCost, SupplierID, SupplierContactEmail, Threshold) VALUES
+INSERT INTO inventory (ProductID, ProductName, ProductQty, UnitOfMeasurement, UnitCost, SupplierID, SupplierContactEmail, Threshold, UnitsToOrder) VALUES
 
-(701, 'Aspirin', 500, 'Bottle', 5.99, 81, 'shizer@gmail.com', 100),
-(702, 'Amoxicillin', 300, 'Box', 24.50, 82, 'jackson&jackson@gmail.com', 50),
-(703, 'Lisinopril', 200, 'Each', 0.25, 82, 'jackson&jackson@gmail.com', 30),
-(704, 'Simvastatin', 400, 'Bottle', 12.75, 82, 'jackson&jackson@gmail.com', 80),
-(705, 'Metformin', 350, 'Box', 18.99, 82, 'jackson&jackson@gmail.com', 60),
-(706, 'Atorvastatin', 250, 'Each', 4.99, 81, 'shizer@gmail.com', 40),
-(707, 'Amlodipine', 150, 'Bottle', 15.75, 81, 'shizer@gmail.com', 20),
-(708, 'Ibuprofen', 600, 'Box', 8.99, 81, 'shizer@gmail.com', 120),
-(709, 'Omeprazole', 200, 'Each', 3.75, 83, 'Movartis@gmail.com', 30),
-(710, 'Losartan', 300, 'Bottle', 16.50, 83, 'Movartis@gmail.com', 70);
+(701, 'Aspirin', 0, 'Bottle', 5.99, 81, 'shizer@gmail.com', 100, 400),
+(702, 'Amoxicillin', 300, 'Box', 24.50, 82, 'jackson&jackson@gmail.com', 50, 200),
+(703, 'Lisinopril', 200, 'Each', 0.25, 82, 'jackson&jackson@gmail.com', 30, 200),
+(704, 'Simvastatin', 400, 'Bottle', 12.75, 82, 'jackson&jackson@gmail.com', 80, 300),
+(705, 'Metformin', 350, 'Box', 18.99, 82, 'jackson&jackson@gmail.com', 60, 200),
+(706, 'Atorvastatin', 250, 'Each', 4.99, 81, 'shizer@gmail.com', 40, 200),
+(707, 'Amlodipine', 150, 'Bottle', 15.75, 81, 'shizer@gmail.com', 20, 100),
+(708, 'Ibuprofen', 600, 'Box', 8.99, 81, 'shizer@gmail.com', 120, 400),
+(709, 'Omeprazole', 200, 'Each', 3.75, 83, 'Movartis@gmail.com', 30, 200),
+(710, 'Losartan', 300, 'Bottle', 16.50, 83, 'Movartis@gmail.com', 70, 300);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

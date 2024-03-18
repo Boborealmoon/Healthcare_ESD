@@ -7,6 +7,7 @@ from os import environ
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/claims'
+# 'mysql+mysqlconnector://root:root@localhost:8889/claims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -16,18 +17,22 @@ class Claim(db.Model):
     ClaimID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     StatusOfClaims = db.Column(db.String(50), nullable=False)
     AppointmentID = db.Column(db.Integer, nullable=False)
+    PatientID = db.Column(db.String(3), nullable=False)
     
-    def __init__(self, ClaimID, StatusOfClaims, AppointmentID):
+    def __init__(self, ClaimID, StatusOfClaims, AppointmentID, PatientID):
         self.ClaimID = ClaimID
         self.StatusOfClaims = StatusOfClaims
         self.AppointmentID = AppointmentID
+        self.PatientID = PatientID
+
         
     # Represent Claim objects as a dictionary
     def json(self):
         return {
             "ClaimID": self.ClaimID,
             "StatusOfClaims": self.StatusOfClaims,
-            "AppointmentID": self.AppointmentID
+            "AppointmentID": self.AppointmentID,
+            "PatientID": self.PatientID
         }
 
 # Retrieve all claims
@@ -39,9 +44,8 @@ def get_all():
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    "claims": [claims.json() for claims in claimsList]
-                }
+                "data":  [claims.json() for claims in claimsList]
+    
             }
         )
     return jsonify(
@@ -81,21 +85,23 @@ def new_claim():
         claim = Claim(
             ClaimID=new_claim_id,
             StatusOfClaims=data['StatusOfClaims'],
-            AppointmentID=data['AppointmentID']
+            AppointmentID=data['AppointmentID'],
+            PatientID=data['PatientID']
         )
         db.session.add(claim)
         db.session.commit()
         
-        response_data = {
-            "ClaimID": new_claim_id,
-            "StatusOfClaims": claim.StatusOfClaims,
-            "AppointmentID": claim.AppointmentID
-        }
+        # response_data = {
+        #     "AppointmentID": claim.AppointmentID,
+        #     "ClaimID": new_claim_id,
+        #     "StatusOfClaims": claim.StatusOfClaims,
+        #     "PatientID": claim.PatientID
+        # }
         
         response = {
             "code": 201,
             "message": "Claim created successfully",
-            "data": response_data
+            "data": claim.json()
         }
         
         return jsonify(response), 201
@@ -110,3 +116,4 @@ def new_claim():
 #run
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True)
+

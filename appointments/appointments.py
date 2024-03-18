@@ -1,19 +1,20 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from os import environ
 from datetime import date
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments1
+# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments
 
 db = SQLAlchemy(app)
 
 class appointments(db.Model):
     __tablename__ = 'appointments'
-    AppointmentID = db.Column(db.Integer, primary_key=True)
+    AppointmentID = db.Column(db.Integer,primary_key=True)
     AppointmentDate = db.Column(db.Date, nullable=False)
     TimeslotID = db.Column(db.Integer, nullable=False)
     EmployeeID = db.Column(db.String(2), nullable=False)
@@ -99,34 +100,42 @@ def get_appointment_by_ID(PatientID):
                 }
             ), 404
 
-@app.route("/appointments/<string:PatientID>", methods=['POST'])
-def create_appointment(PatientID):
+@app.route("/appointments", methods=['POST'])
+def create_appointment():
 
-    # NO NEED TO CHECK IF APPOINTMENT IS MADE BEFORE ANOT, CAUSE WE ONLY RETURN AVAILABLE APPOINTMENTS
-    #     if (db.session.scalars(
-    #     	db.select(Book).filter_by(isbn13=isbn13).
-    #     	limit(1)
-    # ).first()
-    # ):
-    #         return jsonify(
-    #             {
-    #                 "code": 400,
-    #                 "data": {
-    #                     "isbn13": isbn13
-    #                 },
-    #                 "message": "Book already exists."
-    #             }
-    #         ), 400
+    max_appointment_id = db.session.query(func.max(appointments.AppointmentID)).scalar()
 
+    # Increment the max AppointmentID by 1 to determine the ID for the new appointment
+    next_appointment_id = max_appointment_id + 1 if max_appointment_id is not None else 1
+    
     data = request.get_json()
-    new_appointment = appointments(AppointmentID=data['AppointmentID'],
+    
+    appointmentlist = db.session.scalars(db.select(appointments).filter_by(AppointmentDate=data['AppointmentDate']))
+
+    if appointmentlist:
+        appointments_data = [appointment.json() for appointment in appointmentlist]
+        appointments_booked = []
+        for appointment in appointments_data:
+            appointments_booked.append(appointment['TimeslotID'])
+    
+    if data['TimeslotID'] in appointments_booked:
+        return jsonify(
+            {
+                "code": 400,
+                "message": f"Error booking appointment, Unavailable booking"
+            }
+        ),400
+
+    new_appointment = appointments(
+        AppointmentID = next_appointment_id,
         AppointmentDate=data['AppointmentDate'],
         TimeslotID=data['TimeslotID'],
         EmployeeID=data['EmployeeID'],
-        PatientID=PatientID,  # PatientID from URL parameter
+        PatientID=data['PatientID'], 
         PatientName=data['PatientName'],
         Claimed=data['Claimed'])
 
+    
     try:
         db.session.add(new_appointment)
         db.session.commit()
@@ -152,4 +161,4 @@ def create_appointment(PatientID):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
