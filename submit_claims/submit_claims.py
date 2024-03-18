@@ -69,14 +69,14 @@ def submit_claims():
 def processSubmitClaim(claim):
     # Send the claim info {claim items}
     # Invoke the claims.py microservice
-    print('\n-----Invoking claix`xmms microservice-----')
+    print('\n-----Invoking claims microservice-----')
     claim_result = invoke_http(claims_url, method='POST', json=claim)
     print('claim_result:', claim_result)
     
     # Print out the structure of the claim_result object
     print('Structure of claim_result:', json.dumps(claim_result, indent=4))
 
-    # Check the order result; if a failure, send it to the error microservice.
+    # Check the claim submission result; if a failure, send it to the error microservice.
     code = claim_result["code"]
 
     # Ensure that 'data' key exists in claim_result before accessing 'PatientID'
@@ -117,7 +117,7 @@ def processSubmitClaim(claim):
             "message": "Claim submission failure sent for error handling."
         }
 
-    # Publish to "Activity Log" only when there is no error in order creation.
+    # Publish to "Activity Log" only when there is no error in claim submission.
     # Since the "Activity Log" binds to the queue using '#' => any routing_key would be matched 
     # and a message sent to “Error” queue can be received by “Activity Log” too.
 
@@ -128,11 +128,11 @@ def processSubmitClaim(claim):
         # Send an email function
         email_data = {
             "recipient_email": patient_email,
-            "subject": "Appointment Confirmation",
+            "subject": "Claim Submission Confirmation",
             "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment.\n\nThank you!"
         }
 
-        print('\n\n-----Invoking email microservice as order fails-----')
+        print('\n\n-----Invoking email microservice as claim submission fails-----')
         email_result = invoke_http(email_service_url, method='POST', json=email_data)
         print(email_result)
         # Record new claim, record the activity log anyway
@@ -140,8 +140,7 @@ def processSubmitClaim(claim):
         print('\n\n-----Publishing the (claim info) message with routing_key=claim.info-----')        
 
         # invoke_http(activity_log_URL, method="POST", json=claim_result)            
-        channel.basic_publish(exchange=exchangename, routing_key="claim.info", 
-            body=message)
+        channel.basic_publish(exchange=exchangename, routing_key="claim.info", body=message)
     
     print("\nClaim submission published to RabbitMQ Exchange.\n")
     # - reply from the invocation is not used;
