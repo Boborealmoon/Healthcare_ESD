@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS claims (
   ClaimID INT NOT NULL AUTO_INCREMENT,
   StatusOfClaims VARCHAR(50) NOT NULL,
   AppointmentID INT NOT NULL,
+  PatientEmail VARCHAR(50) NOT NULL,
   CONSTRAINT calendars_pk PRIMARY KEY (ClaimID)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -41,9 +42,9 @@ CREATE TABLE IF NOT EXISTS claims (
 -- Dumping data for table claims
 --
 
-INSERT INTO claims (ClaimID, StatusOfClaims, AppointmentID) VALUES 
+INSERT INTO claims (ClaimID, StatusOfClaims, AppointmentID , PatientEmail) VALUES 
 
-(901,'Approved',1);
+(901,'Approved',1,'johndoe@gmail.com');
 
 COMMIT;
 
