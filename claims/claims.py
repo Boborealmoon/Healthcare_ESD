@@ -6,29 +6,32 @@ from os import environ
 # from flasgger import Swagger
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/claims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 class Claim(db.Model):
     __tablename__ = 'claims'
-    ClaimID = db.Column(db.String(3), primary_key=True)
+    ClaimID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     StatusOfClaims = db.Column(db.String(50), nullable=False)
     AppointmentID = db.Column(db.Integer, nullable=False)
+    PatientEmail = db.Column(db.String(50), nullable=False)
     
-    # Initialize Claim object
-    def __init__(self, ClaimID, StatusOfClaims, AppointmentID):
+    def __init__(self, ClaimID, StatusOfClaims, AppointmentID, PatientEmail):
         self.ClaimID = ClaimID
         self.StatusOfClaims = StatusOfClaims
         self.AppointmentID = AppointmentID
+        self.PatientEmail = PatientEmail
+
         
     # Represent Claim objects as a dictionary
     def json(self):
         return {
             "ClaimID": self.ClaimID,
             "StatusOfClaims": self.StatusOfClaims,
-            "AppointmentID": self.AppointmentID
+            "AppointmentID": self.AppointmentID,
+            "PatientEmail": self.PatientEmail
         }
 
 # Retrieve all claims
@@ -72,38 +75,45 @@ def get_all():
 #     ), 404
 
 # Create a new claim
-@app.route("/claims/", methods=['POST'])
+@app.route("/new_claim", methods=['POST'])
 def new_claim():
-    
-    # check last ClaimID
-    lastClaimID = .session.query(func.max(Claidbm.ClaimID)).scalar()
-    # Increment the max AppointmentID by 1 to determine the ID for the new appointment
-    newClaimID = 901 if lastClaimID is None else lastClaimID + 1
-    
-    data = request.get_json()
-    claim = Claim(
-                    ClaimID= newClaimID,
-                    StatusOfClaims= data['StatusOfClaims'],
-                    AppointmentID= data['AppointmentID'])
-    
     try:
+        data = request.get_json()
+        last_claim = int(db.session.query(func.max(Claim.ClaimID)).scalar())
+        new_claim_id = 901 if last_claim is None else last_claim + 1
+        
+        claim = Claim(
+            ClaimID=new_claim_id,
+            StatusOfClaims=data['StatusOfClaims'],
+            AppointmentID=data['AppointmentID'],
+            PatientEmail=data['PatientEmail']
+        )
         db.session.add(claim)
         db.session.commit()
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occured submitting the claim." + str(e)
-            }
-        ), 500
         
-    return jsonify(
-        {
-            "code": 201,
-            "data": claim.json()
+        response_data = {
+            "AppointmentID": claim.AppointmentID,
+            "ClaimID": new_claim_id,
+            "StatusOfClaims": claim.StatusOfClaims,
+            "PatientEmail": claim.PatientEmail
         }
-    ), 201
-    
+        
+        response = {
+            "code": 201,
+            "message": "Claim created successfully",
+            "data": {
+                "claims": [response_data]
+            }
+        }
+        
+        return jsonify(response), 201
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            "code": 500,
+            "message": f"An error occurred submitting the claim: {str(e)}"
+        }), 500
     
 #run
 if __name__ == '__main__':
