@@ -19,7 +19,7 @@ claims_url = "http://localhost:5002/new_claim"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
-# patients_url = "http://localhost:5006/patient"
+patients_url = "http://localhost:5006/patient"
 activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
 
@@ -74,7 +74,15 @@ def processSubmitClaim(claim):
 
     # Check the order result; if a failure, send it to the error microservice.
     code = claim_result["code"]
-    email = claim_result['data']['patientemail']
+
+    patient_id = claim_result['data']['PatientID']
+
+    patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
+    print('appointment_result:', patient_result)
+
+    
+
+
     message = json.dumps(claim_result)
  
     if code not in range(200, 300):
@@ -99,12 +107,16 @@ def processSubmitClaim(claim):
             "data": {"claim_result": claim_result},
             "message": "Claim submission failure sent for error handling."
         }
+    
+
 
     # Publish to "Activity Log" only when there is no error in order creation.
     # Since the "Activity Log" binds to the queue using '#' => any routing_key would be matched 
     # and a message sent to “Error” queue can be received by “Activity Log” too.
 
     else:
+
+        patient_email = patient_result["data"]["Email"]
         # Record new claim, record the activity log anyway
         #print('\n\n-----Invoking activity_log microservice-----')
         print('\n\n-----Publishing the (claim info) message with routing_key=claim.info-----')        
