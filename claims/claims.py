@@ -16,13 +16,13 @@ class Claim(db.Model):
     ClaimID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     StatusOfClaims = db.Column(db.String(50), nullable=False)
     AppointmentID = db.Column(db.Integer, nullable=False)
-    PatientEmail = db.Column(db.String(50), nullable=False)
+    PatientID = db.Column(db.String(3), nullable=False)
     
-    def __init__(self, ClaimID, StatusOfClaims, AppointmentID, PatientEmail):
+    def __init__(self, ClaimID, StatusOfClaims, AppointmentID, PatientID):
         self.ClaimID = ClaimID
         self.StatusOfClaims = StatusOfClaims
         self.AppointmentID = AppointmentID
-        self.PatientEmail = PatientEmail
+        self.PatientID = PatientID
 
         
     # Represent Claim objects as a dictionary
@@ -31,7 +31,7 @@ class Claim(db.Model):
             "ClaimID": self.ClaimID,
             "StatusOfClaims": self.StatusOfClaims,
             "AppointmentID": self.AppointmentID,
-            "PatientEmail": self.PatientEmail
+            "PatientID": self.PatientID
         }
 
 # Retrieve all claims
@@ -86,7 +86,7 @@ def new_claim():
             ClaimID=new_claim_id,
             StatusOfClaims=data['StatusOfClaims'],
             AppointmentID=data['AppointmentID'],
-            PatientEmail=data['PatientEmail']
+            PatientID=data['PatientID']
         )
         db.session.add(claim)
         db.session.commit()
@@ -95,7 +95,7 @@ def new_claim():
             "AppointmentID": claim.AppointmentID,
             "ClaimID": new_claim_id,
             "StatusOfClaims": claim.StatusOfClaims,
-            "PatientEmail": claim.PatientEmail
+            "PatientID": claim.PatientID
         }
         
         response = {
@@ -118,3 +118,4 @@ def new_claim():
 #run
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True)
+
