@@ -55,7 +55,7 @@
     ],
     "exchanges": [
         {
-            "name": "order_topic",
+            "name": "clinic_topic",
             "vhost": "/",
             "type": "topic",
             "durable": true,
@@ -66,7 +66,7 @@
     ],
     "bindings": [
         {
-            "source": "order_topic",
+            "source": "clinic_topic",
             "vhost": "/",
             "destination": "Activity_Log",
             "destination_type": "queue",
@@ -74,7 +74,7 @@
             "arguments": {}
         },
         {
-            "source": "order_topic",
+            "source": "clinic_topic",
             "vhost": "/",
             "destination": "Error",
             "destination_type": "queue",

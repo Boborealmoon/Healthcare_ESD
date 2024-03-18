@@ -15,7 +15,7 @@ CORS(app)
 
 appointments_url = "http://localhost:5000/appointments"
 # calendar_url = "http://localhost:5001/Clinic_calendar"
-claims_url = "http://localhost:5002/new_claim"
+claims_url = "http://localhost:5002/submit_claim"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
@@ -36,7 +36,7 @@ if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
     print("\nCreate the 'Exchange' before running this microservice. \nExiting the program.")
     sys.exit(0)  # Exit with a success status
 
-@app.route("/new_claim", methods=['POST'])
+@app.route("/submit_claim", methods=['POST'])
 def submit_claims():
     # Simple check of input format and data of the request are JSON
     if request.is_json:

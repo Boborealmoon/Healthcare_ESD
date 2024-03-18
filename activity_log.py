@@ -14,7 +14,7 @@ def receiveOrderLog(channel):
         channel.basic_consume(queue=a_queue_name, on_message_callback=callback, auto_ack=True)
         print('activity_log: Consuming from queue:', a_queue_name)
         channel.start_consuming()  # an implicit loop waiting to receive messages;
-             #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
+            #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
     
     except pika.exceptions.AMQPError as e:
         print(f"activity_log: Failed to connect: {e}") # might encounter error if the exchange or the queue is not created
