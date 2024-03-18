@@ -242,17 +242,31 @@ services:
   ###########Complex Microservices###############
   ###############################################
 
+  # ###############################################
+  # # Submit Claims: The Submit Claims program
+  # ###############################################
+  # Submit_claims:
+  #   image: boborealmoon/submit_claims:1.0
+  #   depends_on:
+  #     - Claims 
+  #     - Appointments
+  #     - activity_log
+
+  #   environment:
+  #     appointments_url = "http://appointments:5000/appointments"
+  #     claims_url = "http://claims:5002/claims"
+
   ###############################################
-  # Submit Claims: The Submit Claims program
+  # Refill Prescription: The Refill Prescription program
   ###############################################
-  submit_claims:
-    image: boborealmoon/submit_claims:1.0
+  Refill_prescription:
+    image: boborealmoon/refill_prescription:1.0
     depends_on:
-      - Claims 
-      - Appointments
+      - Inventory 
+      - Order
     environment:
-      appointments_url = "http://appointments:5000/appointments"
-      claims_url = "http://claims:5002/claims"
+      order_url = "http://order:5005/create_order"
+      inventory_url = "http://inventory:5004/inventory"
 
 
   ###############################################
