@@ -25,6 +25,10 @@ def check_inventory_threshold():
         items_below_threshold = []
         orders = []
 
+        # Fetch the last OrderID from the database
+        lastOrderID = db.session.query(func.max(Order.OrderID)).scalar()
+        newOrderID = 901 if lastOrderID is None else lastOrderID + 1
+
         for item in inventory_data:
             # Check if ProductQty is less than Threshold
             if item["ProductQty"] < item["Threshold"]:
@@ -38,7 +42,7 @@ def check_inventory_threshold():
 
         for item in items_below_threshold:
             order_data = {
-                "OrderID": 11,
+                "OrderID": newOrderID,
                 "UnitsOrdered": 50,
                 "OrderDate": "2024-06-07",
                 "ProductID": item["ProductID"],
