@@ -22,6 +22,8 @@ claims_url = "http://localhost:5002/new_claim"
 patients_url = "http://localhost:5006/patient"
 activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
+email_service_url = "http://localhost:5010/email_service"
+
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
@@ -102,23 +104,23 @@ def processSubmitClaim(claim):
     message = json.dumps(claim_result)
 
     # Send an email function
-    # email_data = {
-    #     "recipient_email": patient_email,
-    #     "subject": "Appointment Confirmation",
-    #     "message_body": f"Dear {patient_name},\n\nYou have successfully submitted a claim for your appointment on {appt_date}.\n\nThank you!"
-    # }
+    email_data = {
+        "recipient_email": patient_email,
+        "subject": "Appointment Confirmation",
+        "message_body": f"Dear {patient_name},\n\nYou have successfully submitted a claim for your appointment on {appt_date}.\n\nThank you!"
+    }
 
-    # print('\n\n-----Invoking email microservice as order fails-----')
-    # email_result = invoke_http(email_service_url, method='POST', json=email_data)
-    # print(email_result)
+    print('\n\n-----Invoking email microservice as order fails-----')
+    email_result = invoke_http(email_service_url, method='POST', json=email_data)
+    print(email_result)
     
-    # return {
-    #     "code": 201,
-    #     "data": {
-    #         "appointment":appointment_result,
-    #         "patient":patient_result
-    #     }
-    # }
+    return {
+        "code": 201,
+        "data": {
+            "appointment":appointment_result,
+            "patient":patient_result
+        }
+    }
 
     if code not in range(200, 300):
         # Inform the error microservice
