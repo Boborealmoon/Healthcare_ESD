@@ -40,8 +40,8 @@ def check_inventory_threshold():
                 })
 
         for item in items_below_threshold:
+ 
             order_data = {
-                "OrderID": 'newOrderID',
                 "UnitsOrdered": 50,
                 "OrderDate": "2025-06-07",
                 "ProductID": item["ProductID"],
@@ -50,23 +50,15 @@ def check_inventory_threshold():
                 "SupplierID": item["SupplierID"],
                 "SupplierContactEmail": item["SupplierContactEmail"]
             }
-
-            # Fetch the last OrderID from the database
-            print('\n-----Invoking order microservice to get orders-----')
-            all_orders = invoke_http(get_order_url, method='GET')
-            print('all_orders:', all_orders)
             
-            # lastOrderID = db.session.query(func.max(Order.OrderID)).scalar()
-            # newOrderID = 901 if lastOrderID is None else lastOrderID + 1
-            
-        #     print('\n-----Invoking order microservice-----')
-        #     order_result = invoke_http(order_url, method='POST', json=order_data)
-        #     print('order_result:', order_result)
-        #     if order_result.get("code") not in range(200, 300):
+            print('\n-----Invoking order microservice to create order-----')
+            order_result = invoke_http(order_url, method='POST', json=order_data)
+            print('order_result:', order_result)
+            if order_result.get("code") not in range(200, 300):
 
-        #         print(f"Failed to create order for {item['ProductName']}")
-        #     orders.append(order_data)
-        # return jsonify({"status": "success", "items_below_threshold": order_result})
+                print(f"Failed to create order for {item['ProductName']}")
+            orders.append(order_data)
+        return jsonify({"status": "success", "items_below_threshold": order_result})
 
     else:
         # Handle the case where the request was not successful

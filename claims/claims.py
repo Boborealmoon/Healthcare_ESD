@@ -76,7 +76,7 @@ def get_all():
 def new_claim():
     
     # check last ClaimID
-    lastClaimID = db.session.query(func.max(Claim.ClaimID)).scalar()
+    lastClaimID = .session.query(func.max(Claidbm.ClaimID)).scalar()
     # Increment the max AppointmentID by 1 to determine the ID for the new appointment
     newClaimID = 901 if lastClaimID is None else lastClaimID + 1
     
