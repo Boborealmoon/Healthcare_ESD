@@ -12,7 +12,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-employees_url = "http://localhost:5003/employee"
+employees_url = "http://localhost:5003/employees/email/1"
 inventory_url = "http://localhost:5004/inventory"
 order_url = "http://localhost:5005/create_order"
 activitylog_url = "http://localhost:5007/activity_log"
@@ -88,9 +88,28 @@ def refill_prescription():
             "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order.\n\nThank you!"
         }
 
-        print('\n\n-----Invoking email microservice as order fails-----')
+        print('\n\n-----Invoking email microservice-----')
         email_result = invoke_http(email_service_url, method='POST', json=email_data)
         print(email_result)
+
+    
+    print('\n-----Invoking employee microservice-----')
+    employee_email = invoke_http(employees_url)
+    print('employee_email:', employee_email)
+
+    
+    clinic_email = employee_email['data']['Email']
+
+    email_data = {
+            "recipient_email": clinic_email,
+            "subject": "Order Confirmation",
+            "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order. \n\n\n\nThank you!"
+        }
+
+    print('\n\n-----Invoking email microservice-----')
+    email_result = invoke_http(email_service_url, method='POST', json=email_data)
+    print(email_result)
+    
     return jsonify({"status": "success", "order": order_result})
 
 if __name__ == "__main__":

@@ -2,14 +2,14 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 
-from flasgger import Swagger
+# from flasgger import Swagger
 
 #constructor
 app = Flask(__name__)
 
 #conncecting to SQLAlchemy: 
 #The SQLAlchemy Database URI format is: dialect+driver://username:password@host:port/database
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/employees')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/employees
@@ -77,7 +77,7 @@ def find_by_ID(EmployeeID):
         }
     ), 404
 
-@app.route("/employees/email/<string:EmployeeID>")
+@app.route("/employees/email/<int:EmployeeID>")
 def getPatientEmail(EmployeeID):
     employee = Employee.query.filter_by(EmployeeID=EmployeeID).first()
 
