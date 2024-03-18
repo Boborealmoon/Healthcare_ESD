@@ -109,7 +109,7 @@ services:
   ###################################
   Patient:
     build:
-      context: ./patient/
+      context: ./
       dockerfile: patient.Dockerfile
     image: boborealmoon/patient:1.0
     restart: always
@@ -126,7 +126,7 @@ services:
   #################################
   employee:
     build:
-      context: ./employee/
+      context: ./
       dockerfile: employee.Dockerfile
     image: boborealmoon/employee:1.0
     restart: always
@@ -142,7 +142,7 @@ services:
   #################################
   Inventory:
     build:
-      context: ./inventory/
+      context: ./
       dockerfile: inventory.Dockerfile
     image: boborealmoon/inventory:1.0
     restart: always
@@ -157,7 +157,7 @@ services:
   #################################
   Claims:
     build:
-      context: ./claims/
+      context: ./
       dockerfile: claims.Dockerfile
     image: boborealmoon/claims:1.0
     restart: always
@@ -172,7 +172,7 @@ services:
   #################################
   Appointments:
     build:
-      context: ./appointments/
+      context: ./
       dockerfile: appointments.Dockerfile
     image: boborealmoon/appointments:1.0
     restart: always
@@ -187,7 +187,7 @@ services:
   #################################
   Order:
     build:
-      context: ./order/
+      context: ./
       dockerfile: order.Dockerfile
     image: boborealmoon/order:1.0
     restart: always
@@ -200,7 +200,7 @@ services:
   #################################
   Calendar:
     build:
-      context: ./calendar/
+      context: ./
       dockerfile: calendar.Dockerfile
     image: boborealmoon/calendar:1.0
     restart: always
@@ -215,7 +215,7 @@ services:
   ###################################
   error:
     build:
-      context: ./error/
+      context: ./
       dockerfile: error.Dockerfile
     image: boborealmoon/error:esd
     restart: always
@@ -232,7 +232,7 @@ services:
   #################################################
   activity_log:
     build:
-      context: ./activity_log/
+      context: ./
       dockerfile: activity_log.Dockerfile
     image: boborealmoon/activity_log:esd
     restart: always
@@ -249,24 +249,13 @@ services:
   ###########Complex Microservices###############
   ###############################################
 
-  # ###############################################
-  # # Submit Claims: The Submit Claims program
-  # ###############################################
-  # Submit_claims:
-  #   image: boborealmoon/submit_claims:1.0
-  #   depends_on:
-  #     - Claims 
-  #     - Appointments
-  #     - activity_log
-
-  #   environment:
-  #     appointments_url = "http://appointments:5000/appointments"
-  #     claims_url = "http://claims:5002/claims"
-
   ###############################################
   # Refill Prescription: The Refill Prescription program
   ###############################################
   Refill_prescription:
+    build:
+      context: ./
+      dockerfile: refill_prescription.Dockerfile
     image: boborealmoon/refill_prescription:1.0
     depends_on:
       - Inventory 
@@ -283,7 +272,7 @@ services:
   ###############################################
   Submit_claims:
     build:
-      context: ./submit_claims/
+      context: ./
       dockerfile: submit_claims.Dockerfile
     image: boborealmoon/submit_claims:esd
     restart: always
