@@ -107,7 +107,7 @@ services:
   ###################################
   # Patient: The Patient microservice
   ###################################
-  Patient:
+  patient:
     build:
       context: ./
       dockerfile: patient.Dockerfile
@@ -140,7 +140,7 @@ services:
   #################################
   # Inventory: The Inventory microservice
   #################################
-  Inventory:
+  inventory:
     build:
       context: ./
       dockerfile: inventory.Dockerfile
@@ -155,7 +155,7 @@ services:
   #################################
   # Claims: The Claims microservice
   #################################
-  Claims:
+  claims:
     build:
       context: ./
       dockerfile: claims.Dockerfile
@@ -170,7 +170,7 @@ services:
   #################################
   # Appointments: The Appointments microservice
   #################################
-  Appointments:
+  appointments:
     build:
       context: ./
       dockerfile: appointments.Dockerfile
@@ -185,7 +185,7 @@ services:
   #################################
   # Order: The Order microservice
   #################################
-  Order:
+  order:
     build:
       context: ./
       dockerfile: order.Dockerfile
@@ -198,7 +198,7 @@ services:
   #################################
   # Calendar: The Calendar microservice
   #################################
-  Calendar:
+  calendar:
     build:
       context: ./
       dockerfile: calendar.Dockerfile
@@ -213,7 +213,7 @@ services:
   #################################
   # Email: The Email microservice
   #################################
-  Email:
+  email_service:
     build:
       context: ./
       dockerfile: email_service.Dockerfile
@@ -257,49 +257,95 @@ services:
       PYTHONUNBUFFERED: 1
 
 
+  ##############################################
+  ##########Complex Microservices###############
+  ##############################################
+
   ###############################################
-  ###########Complex Microservices###############
+  # Refill Prescription: The Refill Prescription program
   ###############################################
+  refill_prescription:
+    build:
+      context: ./
+      dockerfile: refill_prescription.Dockerfile
+    image: boborealmoon/refill_prescription:1.0
+    depends_on:
+      - employee
+      - inventory 
+      - order
+      - email_service
+      - activity_log
+      - error
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq 
+      rabbit_port: 5672 
+      employees_url: "http://appointments:5000/appointments"
+      inventory_url: "http://inventory:5004/inventory"
+      order_url: "http://order:5005/create_order"
+      email_service: "http://email_service:5010/email_service"
+      activitylog_url: "http://activity_log:5007/activity_log"
+      error_url: "http://error:5008/error"
+      PYTHONUNBUFFERED: 1 
+    # ports: 
+    #   - "5100:5100"
 
-  # ###############################################
-  # # Refill Prescription: The Refill Prescription program
-  # ###############################################
-  # Refill_prescription:
-  #   build:
-  #     context: ./
-  #     dockerfile: refill_prescription.Dockerfile
-  #   image: boborealmoon/refill_prescription:1.0
-  #   depends_on:
-  #     - employee
-  #     - inventory 
-  #     - order
-  #   environment:
-  #     appointments_url = "http://appointments:5000/appointments"
-  #     employees_url = "http://claims:5002/new_claim"
-  #     order_url = "http://order:5005/create_order"
-  #     inventory_url = "http://inventory:5004/inventory"
+
+  ###############################################
+  # Book Appointment: The Book Appointment microservice
+  ###############################################
+  book_appointment:
+    build:
+      context: ./
+      dockerfile: book_appointment.Dockerfile
+    image: boborealmoon/book_appointment:esd
+    restart: always
+    depends_on:
+      - patient
+      - appointments
+      - activity_log
+      - error
+      - rabbitmq
+      - email_service
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      email_service: "http://email_service:5010/email_service"
+      activitylog_url: "http://activity_log:5007/activity_log"
+      error_url: "http://error:5008/error"
+      patients_url: "http://patient:5006/patient"
+      appointments_url: "http://appointments:5000/appointments"
+      PYTHONUNBUFFERED: 1
+    # ports:
+    #   - "5100:5100"
 
 
-  # ###############################################
-  # # Place Order: The Place Order microservice
-  # ###############################################
-  # Submit_claims:
-  #   build:
-  #     context: ./
-  #     dockerfile: submit_claims.Dockerfile
-  #   image: boborealmoon/submit_claims:esd
-  #   restart: always
-  #   depends_on:
-  #     - Claims
-  #     - Appointments
-  #     - activity_log
-  #     - error
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     order_URL: http://order:5001/order
-  #     shipping_record_URL: http://shipping_record:5002/shipping_record 
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - "5100:5100"
+  ###############################################
+  # Submit Claims: The Submit Claims microservice
+  ###############################################
+  submit_claims:
+    build:
+      context: ./
+      dockerfile: submit_claims.Dockerfile
+    image: boborealmoon/submit_claims:esd
+    restart: always
+    depends_on:
+      - patient
+      - appointments
+      - activity_log
+      - error
+      - rabbitmq
+      - email_service
+      - claims
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      email_service: "http://email_service:5010/email_service"
+      activitylog_url: "http://activity_log:5007/activity_log"
+      error_url: "http://error:5008/error"
+      patients_url: "http://patient:5006/patient"
+      appointments_url: "http://appointments:5000/appointments"
+      claims_url: "http://new_claim:5002/new_claim"
+      PYTHONUNBUFFERED: 1
+    # ports:
+    #   - "5100:5100"

@@ -12,7 +12,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-employees_url = "http://localhost:5003/employees/email/1"
+employees_url = "http://localhost:5003/employees"
 inventory_url = "http://localhost:5004/inventory"
 order_url = "http://localhost:5005/create_order"
 activitylog_url = "http://localhost:5007/activity_log"
