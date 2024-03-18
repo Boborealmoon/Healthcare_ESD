@@ -16,18 +16,22 @@ class Claim(db.Model):
     ClaimID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     StatusOfClaims = db.Column(db.String(50), nullable=False)
     AppointmentID = db.Column(db.Integer, nullable=False)
+    PatientEmail = db.Column(db.String(50), nullable=False)
     
-    def __init__(self, ClaimID, StatusOfClaims, AppointmentID):
+    def __init__(self, ClaimID, StatusOfClaims, AppointmentID, PatientEmail):
         self.ClaimID = ClaimID
         self.StatusOfClaims = StatusOfClaims
         self.AppointmentID = AppointmentID
+        self.PatientEmail = PatientEmail
+
         
     # Represent Claim objects as a dictionary
     def json(self):
         return {
             "ClaimID": self.ClaimID,
             "StatusOfClaims": self.StatusOfClaims,
-            "AppointmentID": self.AppointmentID
+            "AppointmentID": self.AppointmentID,
+            "PatientEmail": self.PatientEmail
         }
 
 # Retrieve all claims
@@ -81,7 +85,8 @@ def new_claim():
         claim = Claim(
             ClaimID=new_claim_id,
             StatusOfClaims=data['StatusOfClaims'],
-            AppointmentID=data['AppointmentID']
+            AppointmentID=data['AppointmentID'],
+            PatientEmail=data['PatientEmail']
         )
         db.session.add(claim)
         db.session.commit()
@@ -89,7 +94,8 @@ def new_claim():
         response_data = {
             "AppointmentID": claim.AppointmentID,
             "ClaimID": new_claim_id,
-            "StatusOfClaims": claim.StatusOfClaims
+            "StatusOfClaims": claim.StatusOfClaims,
+            "PatientEmail": claim.PatientEmail
         }
         
         response = {
