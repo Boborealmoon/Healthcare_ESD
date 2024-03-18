@@ -100,13 +100,16 @@ services:
       - "8004:8004" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
       - "8447:8447" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
 
+  ###############################################
+  ########### Simple Microservices###############
+  ###############################################
 
   ###################################
   # Patient: The Patient microservice
   ###################################
   Patient:
     build:
-      context: ./
+      context: ./patient/
       dockerfile: patient.Dockerfile
     image: boborealmoon/patient:1.0
     restart: always
@@ -122,7 +125,7 @@ services:
   #################################
   employee:
     build:
-      context: ./
+      context: ./employee/
       dockerfile: employee.Dockerfile
     image: boborealmoon/employee:1.0
     restart: always
@@ -137,7 +140,7 @@ services:
   #################################
   Inventory:
     build:
-      context: ./
+      context: ./inventory/
       dockerfile: inventory.Dockerfile
     image: boborealmoon/inventory:1.0
     restart: always
@@ -151,7 +154,7 @@ services:
   #################################
   Claims:
     build:
-      context: ./
+      context: ./claims/
       dockerfile: claims.Dockerfile
     image: boborealmoon/claims:1.0
     restart: always
@@ -165,7 +168,7 @@ services:
   #################################
   Appointments:
     build:
-      context: ./
+      context: ./appointments/
       dockerfile: appointments.Dockerfile
     image: boborealmoon/appointments:1.0
     restart: always
@@ -179,24 +182,24 @@ services:
   #################################
   Order:
     build:
-      context: ./
+      context: ./order/
       dockerfile: order.Dockerfile
     image: boborealmoon/order:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
 
-  # #################################
-  # # Calendar: The Claims microservice
-  # #################################
-  # Calendar:
-  #   build:
-  #   context: ./
-  #   dockerfile: calendar.Dockerfile
-  #   image: boborealmoon/calendar:1.0
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
+  #################################
+  # Calendar: The Claims microservice
+  #################################
+  Calendar:
+      build:
+      context: ./calendar/
+      dockerfile: calendar.Dockerfile
+    image: boborealmoon/calendar:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
   #   # ports:
   #   #   - "5000:5000"
 
@@ -205,7 +208,7 @@ services:
   ###################################
   error:
     build:
-      context: ./
+      context: ./error/
       dockerfile: error.Dockerfile
     image: boborealmoon/error:esd
     restart: always
@@ -222,7 +225,7 @@ services:
   #################################################
   activity_log:
     build:
-      context: ./
+      context: ./activity_log/
       dockerfile: activity_log.Dockerfile
     image: boborealmoon/activity_log:esd
     restart: always
@@ -235,13 +238,43 @@ services:
       PYTHONUNBUFFERED: 1
 
 
-  # ###############################################
-  # # Submit Claims: The Submit Claims program
-  # ###############################################
-  # callbook:
-  #   image: <dockerid>/callbook:1.0
-  #   depends_on:
-  #     - book
-  #   environment:
-  #     bookURL: http://book:5000/book
+  ###############################################
+  ###########Complex Microservices###############
+  ###############################################
 
+  ###############################################
+  # Submit Claims: The Submit Claims program
+  ###############################################
+  submit_claims:
+    image: boborealmoon/submit_claims:1.0
+    depends_on:
+      - Claims 
+      - Appointments
+    environment:
+      appointments_url = "http://appointments:5000/appointments"
+      claims_url = "http://claims:5002/claims"
+
+
+  ###############################################
+  # Place Order: The Place Order microservice
+  ###############################################
+  Submit_claims:
+    build:
+      context: ./submit_claims/
+      dockerfile: submit_claims.Dockerfile
+    image: boborealmoon/submit_claims:esd
+    restart: always
+    depends_on:
+      - Claims
+      - Appointments
+      - activity_log
+      - error
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      order_URL: http://order:5001/order
+      shipping_record_URL: http://shipping_record:5002/shipping_record 
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5100:5100"

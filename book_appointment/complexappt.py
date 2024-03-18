@@ -18,6 +18,7 @@ appointments_url = "http://localhost:5000/appointments"
 patients_url = "http://localhost:5006/patient"
 activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
+email_service_url = "http://localhost:5010/email_service"
 
 @app.route("/book_appointment", methods=['POST'])
 def book_appointment():
@@ -66,7 +67,7 @@ def processAppointmentbooking(appointment):
     print('\n-----Invoking activity_log microservice-----')
     invoke_http(activitylog_url, method="POST", json=appointment_result)
     print('\nOrder sent to activity log.\n')
-
+    
     code = appointment_result["code"]
     if code not in range(200, 300):
 
@@ -85,9 +86,20 @@ def processAppointmentbooking(appointment):
             "message": "Order creation failure sent for error handling."
         }
 
-
     patient_email = patient_result["data"]["Email"]
+    patient_name = appointment_result["data"]["PatientName"]
+    appt_date = appointment_result["data"]["AppointmentDate"]
 
+    email_data = {
+        "recipient_email": patient_email,
+        "subject": "Appointment Confirmation",
+        "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date}.\n\nThank you!"
+    }
+    
+    print('\n\n-----Invoking email microservice as order fails-----')
+    email_result = invoke_http(email_service_url, method='POST', json=email_data)
+    print(email_result)
+    
     return {
         "code": 201,
         "data": {

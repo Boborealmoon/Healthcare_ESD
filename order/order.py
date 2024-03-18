@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from sqlalchemy import func
 
 app = Flask(__name__)
 
@@ -43,26 +44,34 @@ class Order(db.Model):
         }
 
 
+# @app.route('/orders')
+# def get_all_orders():
+#     orderlist = db.session.scalars(db.select(Order)).all()
+#     if len(orderlist):
+#         return jsonify(
+#             {
+#                 "code": 200,
+#                 "data": {
+#                     "inventory": [orders.json() for orders in orderlist]
+#                 }
+#             }
+#         )
+#     return jsonify(
+#         {
+#             "code": 404,
+#             "message": "Error nigga"
+#         }
+#     ), 404
+
+
 @app.route('/create_order', methods=['POST'])
 def create_order():
     data = request.get_json()
-    if Order.query.filter_by(OrderID=data['OrderID']).first() is not None:
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "OrderID": data['OrderID']
-                },
-                "message": "Order already exists."
-            }
-        ), 400
-    
-
-    if not all(key in data for key in ['OrderID', 'ProductID', 'ProductName', 'ProductQty', 'UnitsOrdered', 'OrderDate', 'SupplierID']):
-        return jsonify({'error': 'Missing required fields'}), 400
+    lastOrderID = db.session.query(func.max(Order.OrderID)).scalar()
+    newOrderID = 901 if lastOrderID is None else lastOrderID + 1    
 
     new_order = Order(
-        OrderID=data['OrderID'],
+        OrderID= newOrderID,
         ProductID=data['ProductID'],
         ProductName=data['ProductName'],
         ProductQty=data['ProductQty'],
