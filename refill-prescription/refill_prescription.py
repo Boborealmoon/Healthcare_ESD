@@ -17,6 +17,7 @@ inventory_url = "http://localhost:5004/inventory"
 order_url = "http://localhost:5005/create_order"
 activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
+email_service_url = "http://localhost:5010/email_service"
 
 # -----------------
 @app.route("/refill_prescription", methods=['GET'])
@@ -78,6 +79,18 @@ def refill_prescription():
                 "message": "Order creation failure sent for error handling."
             }
         orders.append(order_data)
+
+        vendor_email = item["SupplierContactEmail"]
+
+        email_data = {
+            "recipient_email": vendor_email,
+            "subject": "Order Confirmation",
+            "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order.\n\nThank you!"
+        }
+
+        print('\n\n-----Invoking email microservice as order fails-----')
+        email_result = invoke_http(email_service_url, method='POST', json=email_data)
+        print(email_result)
     return jsonify({"status": "success", "order": order_result})
 
 if __name__ == "__main__":
