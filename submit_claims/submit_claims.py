@@ -69,18 +69,28 @@ def submit_claims():
 def processSubmitClaim(claim):
     # Send the claim info {claim items}
     # Invoke the claims.py microservice
-    print('\n-----Invoking claims microservice-----')
+    print('\n-----Invoking claix`xmms microservice-----')
     claim_result = invoke_http(claims_url, method='POST', json=claim)
     print('claim_result:', claim_result)
+    
+    # Print out the structure of the claim_result object
+    print('Structure of claim_result:', json.dumps(claim_result, indent=4))
 
     # Check the order result; if a failure, send it to the error microservice.
     code = claim_result["code"]
 
-    patient_id = claim_result['data']['PatientID']
+    # Ensure that 'data' key exists in claim_result before accessing 'PatientID'
+    if 'data' in claim_result and 'PatientID' in claim_result['data']:
+        patient_id = claim_result['data']['PatientID']
+        print(patient_id)
+    else:
+        print("PatientID not found in claim_result['data']")
+        # Handle the case where PatientID is not present in the response
+        # patient_id = claim_result['data']['PatientID']
 
+    print('\n-----Invoking patients microservice-----')
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
-    print('appointment_result:', patient_result)
-
+    print('patient_result:', patient_result)
 
     message = json.dumps(claim_result)
  
@@ -107,13 +117,14 @@ def processSubmitClaim(claim):
             "message": "Claim submission failure sent for error handling."
         }
 
-# Publish to "Activity Log" only when there is no error in order creation.
+    # Publish to "Activity Log" only when there is no error in order creation.
     # Since the "Activity Log" binds to the queue using '#' => any routing_key would be matched 
     # and a message sent to “Error” queue can be received by “Activity Log” too.
 
     else:
-
-        patient_email = patient_result["data"]["Email"]
+        patient_email = patient_result['data']['Email']
+        
+        print(patient_email)
         # Send an email function
         email_data = {
             "recipient_email": patient_email,

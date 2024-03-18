@@ -43,9 +43,8 @@ def get_all():
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    "claims": [claims.json() for claims in claimsList]
-                }
+                "data":  [claims.json() for claims in claimsList]
+    
             }
         )
     return jsonify(
@@ -91,19 +90,17 @@ def new_claim():
         db.session.add(claim)
         db.session.commit()
         
-        response_data = {
-            "AppointmentID": claim.AppointmentID,
-            "ClaimID": new_claim_id,
-            "StatusOfClaims": claim.StatusOfClaims,
-            "PatientID": claim.PatientID
-        }
+        # response_data = {
+        #     "AppointmentID": claim.AppointmentID,
+        #     "ClaimID": new_claim_id,
+        #     "StatusOfClaims": claim.StatusOfClaims,
+        #     "PatientID": claim.PatientID
+        # }
         
         response = {
             "code": 201,
             "message": "Claim created successfully",
-            "data": {
-                "claims": [response_data]
-            }
+            "data": claim.json()
         }
         
         return jsonify(response), 201
