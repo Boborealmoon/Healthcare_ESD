@@ -6,6 +6,10 @@ import os, sys
 import requests
 from invokes import invoke_http
 
+import pika
+import json
+import amqp_connection
+
 app = Flask(__name__)
 CORS(app)
 
@@ -16,9 +20,21 @@ appointments_url = "http://localhost:5000/appointments"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
 patients_url = "http://localhost:5006/patient"
-activitylog_url = "http://localhost:5007/activity_log"
-error_url = "http://localhost:5008/error"
+# activitylog_url = "http://localhost:5007/activity_log"
+# error_url = "http://localhost:5008/error"
 email_service_url = "http://localhost:5010/email_service"
+
+exchangename = "clinic_topic" # exchange name
+exchangetype="topic" # use a 'topic' exchange to enable interaction
+
+#create a connection and a channel to the broker to publish messages to activity_log, error queues
+connection = amqp_connection.create_connection() 
+channel = connection.channel()
+
+#if the exchange is not yet created, exit the program
+if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
+    print("\nCreate the 'Exchange' before running this microservice. \nExiting the program.")
+    sys.exit(0)  # Exit with a success status
 
 @app.route("/book_appointment", methods=['POST'])
 def book_appointment():
@@ -64,26 +80,32 @@ def processAppointmentbooking(appointment):
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
     print('appointment_result:', patient_result)
 
-    print('\n-----Invoking activity_log microservice-----')
-    invoke_http(activitylog_url, method="POST", json=appointment_result)
-    print('\nOrder sent to activity log.\n')
-    
+    # print('\n-----Invoking activity_log microservice-----')
+    # invoke_http(activitylog_url, method="POST", json=appointment_result)
+    # print('\nOrder sent to activity log.\n')
+    message = json.dumps(appointment_result)
+
     code = appointment_result["code"]
     if code not in range(200, 300):
 
-        # Inform the error microservice
-        print('\n\n-----Invoking error microservice as order fails-----')
-        invoke_http(error_url, method="POST", json=appointment_result)
-        # - reply from the invocation is not used; 
-        # continue even if this invocation fails
-        print("Appointment Booking status ({:d}) sent to the error microservice:".format(
+        print('\n\n-----Publishing the (claim error) message with routing_key=claim.error-----')
+
+        # invoke_http(error_URL, method="POST", json=claim_result)
+        channel.basic_publish(exchange=exchangename, routing_key="appointment.error", 
+            body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        # make message persistent within the matching queues until it is received by some receiver 
+        # (the matching queues have to exist and be durable and bound to the exchange)
+
+        # - reply from the invocation is not used;
+        # continue even if this invocation fails        
+        print("\n Appointment Creation Failure ({:d}) published to the RabbitMQ Exchange:".format(
             code), appointment_result)
 
         # 7. Return error
         return {
             "code": 500,
-            "data": {"order_result": appointment_result},
-            "message": "Order creation failure sent for error handling."
+            "data": {"appointment_result": appointment_result},
+            "message": "Appointment creation failure sent for error handling."
         }
 
     patient_email = patient_result["data"]["Email"]
@@ -100,6 +122,13 @@ def processAppointmentbooking(appointment):
     email_result = invoke_http(email_service_url, method='POST', json=email_data)
     print(email_result)
     
+    print('\n\n-----Publishing the (Appointment Info) message with routing_key=Appointment.info-----')        
+
+        # invoke_http(activity_log_URL, method="POST", json=claim_result)            
+    channel.basic_publish(exchange=exchangename, routing_key="appointment.info", body=message)
+    
+    print("\nAppointment Creation published to RabbitMQ Exchange.\n")
+
     return {
         "code": 201,
         "data": {
