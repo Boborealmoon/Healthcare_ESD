@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("./templates/index.html")
 
 # Fixed route function to correctly capture the input
 @app.route("/<name>")
@@ -21,4 +21,4 @@ def user(name):
     return f"Welcome, {name}!"
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5555, debug=True)

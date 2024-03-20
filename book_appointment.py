@@ -141,4 +141,4 @@ def processAppointmentbooking(appointment):
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " for booking an appointment...")
-    app.run(host="0.0.0.0", port=5100, debug=True)
+    app.run(host="0.0.0.0", port=5200, debug=True)
