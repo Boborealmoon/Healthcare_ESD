@@ -2,8 +2,8 @@ import time
 import pika
 from os import environ
 
-hostname = "localhost" # default hostname
-port = 5672            # default port
+hostname = environ.get('rabbit_host') or 'localhost' ###
+port = environ.get('rabbit_port') or 5672 ###
 exchangename = "clinic_topic" # exchange name
 exchangetype = "topic" # - use a 'topic' exchange to enable interaction
 
