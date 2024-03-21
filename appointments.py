@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments1
+# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments
 
 db = SQLAlchemy(app)
 

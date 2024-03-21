@@ -1,0 +1,351 @@
+volumes:
+  pgdata: 
+  rabbitmq_data:
+
+networks:
+  kong-net:
+    driver: bridge
+
+version: "3.8"
+
+services:
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
+  #######################################
+  # Postgres: The database used by Kong
+  #######################################
+  kong-database:
+    image: postgres:15 # tested 20231101; Ref: https://docs.konghq.com/gateway/latest/support/third-party/
+    platform: linux/amd64  # <- required for Mac M1 chip. Otherwise, can remove
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      POSTGRES_DB: kong
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  #######################################
+  # Kong database migration
+  #######################################
+  kong-migration:
+    image: kong/kong-gateway:3.2.2.5 # tested 20231101
+    platform: linux/amd64  # <- required for Mac M1 chip. Otherwise, can remove
+    command: "kong migrations bootstrap"
+    restart: on-failure
+    networks:
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+    depends_on:
+      - kong-database
+
+  #######################################
+  # Kong: The API Gateway
+  #######################################
+  kong:
+    image: kong/kong-gateway:3.2.2.5 # tested 20231101
+    platform: linux/amd64  # <- required for Mac M1 chip. Otherwise, can remove
+    restart: always
+    networks:
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_ADMIN_GUI_URL: http://localhost:8002
+    depends_on:
+      - kong-migration
+    ports: # https://docs.konghq.com/gateway/latest/production/networking/default-ports/
+      - "8000:8000" # Takes incoming HTTP traffic from Consumers, and forwards it to upstream Services.
+      - "8443:8443" # Takes incoming HTTPS traffic from Consumers, and forwards it to upstream Services.
+      - "8001:8001" # Admin API. Listens for calls from the command line over HTTP.
+      - "8444:8444" # Admin API. Listens for calls from the command line over HTTPS.
+      - "8002:8002" # Kong Manager (GUI). Listens for HTTP traffic.
+      - "8445:8445" # Kong Manager (GUI). Listens for HTTPS traffic.
+      - "8003:8003" # Dev Portal. Listens for HTTP traffic, assuming Dev Portal is enabled.
+      - "8446:8446" # Dev Portal. Listens for HTTP traffic, assuming Dev Portal is enabled.
+      - "8004:8004" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
+      - "8447:8447" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
+
+  ###############################################
+  ########### Simple Microservices###############
+  ###############################################
+
+  ###################################
+  # Patient: The Patient microservice
+  ###################################
+  patient:
+    build:
+      context: ./
+      dockerfile: patient.Dockerfile
+    image: boborealmoon/patient:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
+      # 'mysql+mysqlconnector://is213@localhost:3306/claims'
+      PYTHONUNBUFFERED: 1
+    # port map for those exposed 
+    # ports:
+    #   - "5000:5000"
+
+  #################################
+  # Employee: The Employees microservice
+  #################################
+  employee:
+    build:
+      context: ./
+      dockerfile: employee.Dockerfile
+    image: boborealmoon/employee:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
+      # 'mysql+mysqlconnector://is213@localhost:3306/employees'
+    # ports:
+    #   - "5000:5000"
+    
+
+  #################################
+  # Inventory: The Inventory microservice
+  #################################
+  inventory:
+    build:
+      context: ./
+      dockerfile: inventory.Dockerfile
+    image: boborealmoon/inventory:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
+      # 'mysql+mysqlconnector://is213@localhost:3306/inventory'
+    ports:
+      - "5000:5000"
+
+  #################################
+  # Claims: The Claims microservice
+  #################################
+  claims:
+    build:
+      context: ./
+      dockerfile: claims.Dockerfile
+    image: boborealmoon/claims:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
+      # 'mysql+mysqlconnector://is213@localhost:3306/claims'
+    # ports:
+    #   - "5000:5000"
+
+  #################################
+  # Appointments: The Appointments microservice
+  #################################
+  appointments:
+    build:
+      context: ./
+      dockerfile: appointments.Dockerfile
+    image: boborealmoon/appointments:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
+      # 'mysql+mysqlconnector://is213@localhost:3306/appointments'
+    # ports:
+    #   - "5000:5000"
+
+  #################################
+  # Order: The Order microservice
+  #################################
+  order:
+    build:
+      context: ./
+      dockerfile: order.Dockerfile
+    image: boborealmoon/order:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
+      # 'mysql+mysqlconnector://is213@localhost:3306/orders'
+
+  #################################
+  # Calendar: The Calendar microservice
+  #################################
+  calendar:
+    build:
+      context: ./
+      dockerfile: calendar.Dockerfile
+    image: boborealmoon/calendar:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
+      # 'mysql+mysqlconnector://is213@localhost:3306/calendar'
+  #   # ports:
+  #   #   - "5000:5000"
+
+  #################################
+  # Email: The Email microservice
+  #################################
+  email_service:
+    build:
+      context: ./
+      dockerfile: email_service.Dockerfile
+    image: boborealmoon/email_service:1.0
+    restart: always
+  #   # ports:
+  #   #   - "5000:5000"
+
+  ###################################
+  # Error: The Error microservice
+  ###################################
+  error:
+    build:
+      context: ./
+      dockerfile: error.Dockerfile
+    image: boborealmoon/error:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      e_queue_name: Error
+      PYTHONUNBUFFERED: 1
+
+  #################################################
+  # Activity Log: The Activity Log microservice
+  #################################################
+  activity_log:
+    build:
+      context: ./
+      dockerfile: activity_log.Dockerfile
+    image: boborealmoon/activity_log:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      a_queue_name: Activity_Log
+      PYTHONUNBUFFERED: 1
+
+
+  ##############################################
+  ##########Complex Microservices###############
+  ##############################################
+
+  ###############################################
+  # Refill Prescription: The Refill Prescription program
+  ###############################################
+  refill_prescription:
+    build:
+      context: ./
+      dockerfile: refill_prescription.Dockerfile
+    image: boborealmoon/refill_prescription:1.0
+    depends_on:
+      - employee
+      - inventory 
+      - order
+      - email_service
+      - activity_log
+      - error
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq 
+      rabbit_port: 5672 
+      employees_url: "http://appointments:5000/appointments"
+      inventory_url: "http://inventory:5004/inventory"
+      order_url: "http://order:5005/create_order"
+      email_service: "http://email_service:5010/email_service"
+      activitylog_url: "http://activity_log:5007/activity_log"
+      error_url: "http://error:5008/error"
+      PYTHONUNBUFFERED: 1 
+    # ports: 
+    #   - "5100:5100"
+
+
+  ###############################################
+  # Book Appointment: The Book Appointment microservice
+  ###############################################
+  book_appointment:
+    build:
+      context: ./
+      dockerfile: book_appointment.Dockerfile
+    image: boborealmoon/book_appointment:esd
+    restart: always
+    depends_on:
+      - patient
+      - appointments
+      - activity_log
+      - error
+      - rabbitmq
+      - email_service
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      email_service: "http://email_service:5010/email_service"
+      activitylog_url: "http://activity_log:5007/activity_log"
+      error_url: "http://error:5008/error"
+      patients_url: "http://patient:5006/patient"
+      appointments_url: "http://appointments:5000/appointments"
+      PYTHONUNBUFFERED: 1
+    # ports:
+    #   - "5100:5100"
+
+
+  ###############################################
+  # Submit Claims: The Submit Claims microservice
+  ###############################################
+  submit_claims:
+    build:
+      context: ./
+      dockerfile: submit_claims.Dockerfile
+    image: boborealmoon/submit_claims:esd
+    restart: always
+    depends_on:
+      - patient
+      - appointments
+      - activity_log
+      - error
+      - rabbitmq
+      - email_service
+      - claims
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      email_service: "http://email_service:5010/email_service"
+      activitylog_url: "http://activity_log:5007/activity_log"
+      error_url: "http://error:5008/error"
+      patients_url: "http://patient:5006/patient"
+      appointments_url: "http://appointments:5000/appointments"
+      claims_url: "http://submit_claim:5002/submit_claim"
+      PYTHONUNBUFFERED: 1
+    # ports:
+    #   - "5100:5100"
