@@ -13,114 +13,6 @@
 }
 /* END */
 
-/* Start of Chatbot */
-#chatbot {
-    position: fixed;
-    right: 30px;
-    bottom: 20px;
-    z-index: 999;
-  }
-  
-  #chatbot-popup {
-    display: none;
-    position: fixed;
-    right: 30px;
-    bottom: 20px;
-    z-index: 9999;
-    width: 345px; /* Set the desired fixed width */
-  }
-  
-  #usertext {
-    width: 100%; /* Make the textarea width 100% to fill the chatbox */
-  }
-  
-  .chatbotimg {
-    width: 150px;
-  }
-#spacing{
-	padding:10px;
-}
-/* End of ChatBot */
-
-/* Start of Password CSS */
-#password{
-    border-radius: 5px;
-    position:relative;
-}
-#confirmpassword{
-    border-radius:5px;
-    position:relative;
-}
-#togglePassword{
-    right:10px;
-}
-form i{
-    margin-left: -30px;
-    cursor: pointer;
-}
-#right{
-    display:flex;
-    align-items: right;
-    justify-content: end;
-}
-#loginphoto{
-    width:445px;
-    height:500px;
-}
-
-#newbox{
-    background-image: url("../images/background.avif");
-    background-size: cover;
-    background-attachment: fixed;
-    transition: transform 1s;
-}
-#loginbox{
-    transition: transform 1s;
-}
-
-#text{
-    margin-top: 50%;
-}
-
-#overbackground{
-    background-image: url("../images/overbackground.jpeg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
-    background-position: center center;
-}
-
-#forgotpassword{
-    color:black;
-    display:none;
-}
-
-#closebox{
-    display:none;
-}
-
-#togglePassword2{
-    right:10px;
-}
-.center{
-  transform: translate(0, 10%);
-  padding: 10px;
-}
-
-#space{
-    margin-right:5px;
-}
-
-#gender{
-    margin-right:10px;
-}
-
-#country{
-    border-radius: 5px;
-}
-#sizing{
-    height:200px;
-}
 /* TOPBAR CSS */
 #topbar {
     font-size: 14px;
@@ -160,40 +52,6 @@ form i{
     font-weight: bold;
 }
 
-/* Media Query for screens smaller than 568px */
-@media (max-width: 568px) {
-    #topbar {
-        height: auto; /* Allow the height to adjust as needed */
-    }
-    
-    #top-link {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
-    }
-    
-    #top-link ul {
-        padding: 0;
-        margin: 0;
-    }
-
-    #top-link ul li {
-        display: block;
-        margin: 10px 0;
-    }
-
-    #top-link ul li a {
-        display: inline-block;
-        margin: 5px;
-        padding: 10px 15px;
-        background-color: #de6262;
-        color: white;
-        font-weight: bold;
-    }
-}
-/* END OF TOPBAR CSS */
 /* HEADER CSS  */
 #menu-link ul {
     display: flex;
@@ -262,7 +120,6 @@ ul li a {
 
 /* Apply a fixed position to the header */
 header {
-    position: fixed;
     top: 0;
     left: 0;
     right: 0;
