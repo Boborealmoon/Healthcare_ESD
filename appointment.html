@@ -45,7 +45,7 @@
                         <ul>
                             <li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
                             <li class="highlight"><a href="appointment.html"><span>BOOK APPOINTMENT</span></a></li>
-                            <li><a href="client_consultlogin.html" class="menufont linkhover"><span>CLAIMS</span></a></li>
+                            <li><a href="" class="menufont linkhover"><span>CLAIMS</span></a></li>
                             <li class="menufont linkhover dropdown">
                                 <a href="profile.html">JOHN DOE</a>
                                 <div class="dropdown-content">
@@ -87,7 +87,7 @@
                 <input type="checkbox" class="form-check-input" id="claimed" v-model="claimed">
                 <label class="form-check-label" for="claimed">Claimed</label>
             </div> -->
-            <button type="submit" class="btn btn-primary">Book Appointment</button>
+            <button type="submit" class="btn btn-primary" id="book">Book Appointment</button>
         </form>
     </div>
 
@@ -133,6 +133,7 @@
                         console.log("Appointment booked successfully:", data);
                         alert("Appointment booked successfully!");
                         // You can redirect or do other actions here after successful booking
+                        window.location.href = 'appointment.html'; // Replace 'success.html' with the URL of your desired HTML file
                     })
                     .catch(error => {
                         console.error("Error booking appointment:", error);
