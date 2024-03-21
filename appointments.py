@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from os import environ
 from datetime import date
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+CORS(app)
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments
 
 db = SQLAlchemy(app)
@@ -133,7 +134,7 @@ def create_appointment():
         EmployeeID=data['EmployeeID'],
         PatientID=data['PatientID'], 
         PatientName=data['PatientName'],
-        Claimed=data['Claimed'])
+        Claimed=False)
 
     
     try:
@@ -157,8 +158,6 @@ def create_appointment():
             "data": new_appointment.json()
         }
     ), 201
-
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

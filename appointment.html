@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Appointment Booking</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
+        rel='stylesheet'
+        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
+        crossorigin='anonymous'>
+
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <h1>Appointment Booking</h1>
+        <form @submit.prevent="createAppointment">
+            <div class="mb-3">
+                <label for="appointmentDate" class="form-label">Appointment Date</label>
+                <input type="date" class="form-control" id="AppointmentDate" v-model="AppointmentDate" required>
+            </div>
+            <div class="mb-3">
+                <label for="timeslotID" class="form-label">Timeslot ID</label>
+                <input type="number" class="form-control" id="TimeslotID" v-model="TimeslotID" min="1" max="14" required>
+            </div>
+            <div class="mb-3">
+                <label for="employeeID" class="form-label">Employee ID</label>
+                <input type="text" class="form-control" id="EmployeeID" v-model="EmployeeID" required>
+            </div>
+            <div class="mb-3">
+                <label for="patientID" class="form-label">Patient ID</label>
+                <input type="text" class="form-control" id="PatientID" v-model="PatientID" required>
+            </div>
+            <div class="mb-3">
+                <label for="patientName" class="form-label">Patient Name</label>
+                <input type="text" class="form-control" id="PatientName" v-model="PatientName" required>
+            </div>
+            <!-- <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="claimed" v-model="claimed">
+                <label class="form-check-label" for="claimed">Claimed</label>
+            </div> -->
+            <button type="submit" class="btn btn-primary">Book Appointment</button>
+        </form>
+    </div>
+
+    <script>
+        const createAppointmentURL = "http://localhost:5000/appointments"; // Update this URL
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    AppointmentDate: "",
+                    TimeslotID: "",
+                    EmployeeID: "",
+                    PatientID: "",
+                    PatientName: "",
+                };
+            },
+            methods: {
+                createAppointment() {
+                    const data = {
+                        AppointmentDate: this.AppointmentDate,
+                        TimeslotID: parseInt(this.TimeslotID),
+                        EmployeeID: this.EmployeeID,
+                        PatientID: this.PatientID,
+                        PatientName: this.PatientName,
+                    };
+
+                    console.log(data)
+
+                    fetch(createAppointmentURL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error booking appointment");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Appointment booked successfully:", data);
+                        alert("Appointment booked successfully!");
+                        // You can redirect or do other actions here after successful booking
+                    })
+                    .catch(error => {
+                        console.error("Error booking appointment:", error);
+                        alert("Error booking appointment. Please try again.");
+                    });
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
+
+    <!-- Bootstrap Javascript -->
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
+        integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
+        crossorigin='anonymous'></script>
+
+</body>
+
+</html>
