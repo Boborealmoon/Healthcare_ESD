@@ -15,9 +15,52 @@
 
     <!-- Vue 3 -->
     <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+
+    <link rel="stylesheet" href="general.css">
 </head>
 
 <body>
+    <!-- Header -->
+    <header>
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-center">
+                <div class="col-sm-12 col-lg-3">
+                    <div class="row">
+                        <div class="col-lg-3">
+                        </div>
+                        <div class="col-lg-9">
+                            <div id="logo-container">
+                                <a href="index.html"><img src="logo.png" width="235px"></a>
+                                <i class="bi bi-list" id="closemenu"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-3">  
+                </div>
+                
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div class="text-center" id="menu-link">
+                        <ul>
+                            <li class="highlight"><a href="homelogin.html" class="menufont" style="color:white;"><span>HOME</span></a></li>
+                            <li><a href="about-uslogin.html" class="menufont linkhover"><span>ABOUT US</span></a></li>
+                            <li><a href="client_consultlogin.html" class="menufont linkhover"><span>CONSULT</span></a></li>
+                            <li><a href="locatorlogin.html" class="menufont linkhover"><span>NEAREST CLINIC</span></a></li>
+                            <li class="menufont linkhover dropdown">
+                                <a href="profile.html">JOHN DOE</a>
+                                <div class="dropdown-content">
+                                    <a href="index.html">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End of Header -->
+
     <div id="app" class="container">
         <h1>Appointment Booking</h1>
         <form @submit.prevent="createAppointment">
@@ -50,7 +93,7 @@
     </div>
 
     <script>
-        const createAppointmentURL = "http://localhost:5000/appointments"; // Update this URL
+        const book_appointment_URL = "http://localhost:5100/book_appointment"; // Update this URL
 
         const app = Vue.createApp({
             data() {
@@ -74,7 +117,7 @@
 
                     console.log(data)
 
-                    fetch(createAppointmentURL, {
+                    fetch(book_appointment_URL, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
