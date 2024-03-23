@@ -2,10 +2,16 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from os import environ
+from flask import Flask
+from flask_cors import CORS
+
+
+
 
 # from flasgger import Swagger
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/claims'
 # 'mysql+mysqlconnector://root:root@localhost:8889/claims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

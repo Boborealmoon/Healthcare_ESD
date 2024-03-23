@@ -15,7 +15,7 @@ CORS(app)
 
 appointments_url = "http://localhost:5000/appointments"
 # calendar_url = "http://localhost:5001/Clinic_calendar"
-claims_url = "http://localhost:5002/submit_claim"
+claims_url = "http://localhost:5002/claims"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
@@ -159,7 +159,7 @@ def processSubmitClaim(claim):
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           " for creating a claim...")
-    app.run(host="0.0.0.0", port=5100, debug=True)
+    app.run(host="0.0.0.0", port=5200, debug=True)
     # Notes for the parameters:
     # - debug=True will reload the program automatically if a change is detected;
     #   -- it in fact starts two instances of the same flask program,

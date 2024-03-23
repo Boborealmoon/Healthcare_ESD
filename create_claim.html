@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Head content goes here -->
     <title>Appointment Booking</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -14,8 +15,9 @@
     <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
     <link rel="stylesheet" href="general.css">
 </head>
+</head>
 <body>
-    <!-- Header -->
+    <!-- Header content goes here -->
     <header>
         <div class="container-fluid">
             <div class="row d-flex justify-content-center">
@@ -53,60 +55,46 @@
             </div>
         </div>
     </header>
-    <!-- End of Header -->
+    
     <div id="app" class="container">
-        <h1>Appointment Booking</h1>
-        <form @submit.prevent="createAppointment">
+        <h1>Submit Claim</h1>
+        <form @submit.prevent="submitClaim" method="POST" action="http://localhost:5200/submit_claim">
             <div class="mb-3">
-                <label for="appointmentDate" class="form-label">Appointment Date</label>
-                <input type="date" class="form-control" id="AppointmentDate" v-model="AppointmentDate" required>
-            </div>
-            <div class="mb-3">
-                <label for="timeslotID" class="form-label">Timeslot ID</label>
-                <input type="number" class="form-control" id="TimeslotID" v-model="TimeslotID" min="1" max="14" required>
-            </div>
-            <div class="mb-3">
-                <label for="employeeID" class="form-label">Employee ID</label>
+                <label for="EmployeeID" class="form-label">Employee ID</label>
                 <input type="text" class="form-control" id="EmployeeID" v-model="EmployeeID" required>
             </div>
             <div class="mb-3">
-                <label for="patientID" class="form-label">Patient ID</label>
-                <input type="text" class="form-control" id="PatientID" v-model="PatientID" required>
+                <label for="AppointmentID" class="form-label">Appointment ID</label>
+                <input type="text" class="form-control" id="AppointmentID" v-model="AppointmentID" required>
             </div>
             <div class="mb-3">
-                <label for="patientName" class="form-label">Patient Name</label>
-                <input type="text" class="form-control" id="PatientName" v-model="PatientName" required>
+                <label for="Claimstatus" class="form-label">Claim Status</label>
+                <input type="text" class="form-control" id="Claimstatus" v-model="Claimstatus" placeholder='Please Type in NEW for new claims'required>
             </div>
-            <!-- <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="claimed" v-model="claimed">
-                <label class="form-check-label" for="claimed">Claimed</label>
-            </div> -->
-            <button type="submit" class="btn btn-primary" id="book">Book Appointment</button>
+            <button type="submit" class="btn btn-primary">Submit Claim</button>
         </form>
     </div>
+
     <script>
-        const book_appointment_URL = "http://localhost:5100/book_appointment"; // Update this URL
         const app = Vue.createApp({
             data() {
                 return {
-                    AppointmentDate: "",
-                    TimeslotID: "",
                     EmployeeID: "",
-                    PatientID: "",
-                    PatientName: "",
+                    AppointmentID: "",
+                    Claimstatus: ""
                 };
             },
             methods: {
-                createAppointment() {
+                submitClaim() {
+                    // Prepare data object
                     const data = {
-                        AppointmentDate: this.AppointmentDate,
-                        TimeslotID: parseInt(this.TimeslotID),
                         EmployeeID: this.EmployeeID,
-                        PatientID: this.PatientID,
-                        PatientName: this.PatientName,
+                        AppointmentID: this.AppointmentID,
+                        Claimstatus: this.Claimstatus
                     };
-                    console.log(data)
-                    fetch(book_appointment_URL, {
+
+                    // Send POST request to the microservice
+                    fetch("http://localhost:5200/submit_claim", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -115,28 +103,25 @@
                     })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error("Error booking appointment");
+                            throw new Error("Error submitting claim");
                         }
                         return response.json();
                     })
                     .then(data => {
-                        console.log("Appointment booked successfully:", data);
-                        alert("Appointment booked successfully!");
-                        // You can redirect or do other actions here after successful booking
-                        window.location.href = 'appointment.html'; // Replace 'success.html' with the URL of your desired HTML file
+                        console.log("Claim submitted successfully:", data);
+                        // Handle successful response
                     })
                     .catch(error => {
-                        console.error("Error booking appointment:", error);
-                        alert("Error booking appointment. Please try again.");
+                        console.error("Error submitting claim:", error);
+                        // Handle error
                     });
                 }
             }
         });
+
         app.mount('#app');
     </script>
-    <!-- Bootstrap Javascript -->
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
-        integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
-        crossorigin='anonymous'></script>
+
+    <!-- Other scripts and closing body/html tags -->
 </body>
 </html>
