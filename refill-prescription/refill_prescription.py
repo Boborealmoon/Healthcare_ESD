@@ -7,7 +7,10 @@ from datetime import date
 import requests
 from invokes import invoke_http
 
+import pika
 import json
+import amqp_connection
+import sys
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +21,20 @@ order_url = "http://localhost:5005/create_order"
 activitylog_url = "http://localhost:5007/activity_log"
 error_url = "http://localhost:5008/error"
 email_service_url = "http://localhost:5010/email_service"
+
+
+exchangename = "clinic_topic"  # exchange name
+exchangetype = "topic"  # use a 'topic' exchange to enable interaction
+
+# create a connection and a channel to the broker to publish messages to activity_log, error queues
+connection = amqp_connection.create_connection()
+channel = connection.channel()
+
+# if the exchange is not yet created, exit the program
+if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
+    print("\nCreate the 'Exchange' before running this microservice. \nExiting the program.")
+    sys.exit(0)  # Exit with a success status
+
 
 # -----------------
 @app.route("/refill_prescription", methods=['GET'])
@@ -65,12 +82,20 @@ def refill_prescription():
         print('\nOrder sent to activity log.\n')
 
         if order_result.get("code") not in range(200, 300):
-            print('\n\n-----Invoking error microservice as order fails-----')
-            invoke_http(error_url, method="POST", json=order_result)
-            # - reply from the invocation is not used; 
-            # continue even if this invocation fails
-            print("Order Creation status sent to the error microservice:".format(
+            #changes made#
+            print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
+            message = json.dumps(order_result)
+            channel.basic_publish(exchange=exchangename, routing_key="order.error",
+                                  body=message, properties=pika.BasicProperties(delivery_mode=2))
+            print("\nOrder Creation Failure ({:d}) published to the RabbitMQ Exchange:".format(
                 order_result.get("code")), order_result)
+
+            # print('\n\n-----Invoking error microservice as order fails-----')
+            # invoke_http(error_url, method="POST", json=order_result)
+            # # - reply from the invocation is not used; 
+            # # continue even if this invocation fails
+            # print("Order Creation status sent to the error microservice:".format(
+            #     order_result.get("code")), order_result)
 
             # Return error
             return {
