@@ -1,18 +1,23 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from os import environ
-
-from flasgger import Swagger
+from datetime import date
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect(url_for('home'))
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+@app.route('/home')
+def home():
+    index_page_load = render_template('index.html')
+    return index_page_load
+
+# @app.route('/about')
+# def about():
+#     return render_template('about.html')
 
 # @app.route('/contact')
 # def contact():
