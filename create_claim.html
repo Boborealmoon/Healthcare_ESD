@@ -69,7 +69,7 @@
             </div>
             <div class="mb-3">
                 <label for="Claimstatus" class="form-label">Claim Status</label>
-                <input type="text" class="form-control" id="Claimstatus" v-model="ClaimStatus" placeholder='Please Type in NEW for new claims'required>
+                <input type="text" class="form-control" id="Claimstatus" v-model="StatusOfClaims" placeholder='Please Type in NEW for new claims'required>
             </div>
             <button type="submit" class="btn btn-primary">Submit Claim</button>
         </form>
@@ -81,7 +81,7 @@
                 return {
                     PatientID: "",
                     AppointmentID: "",
-                    ClaimStatus: ""
+                    StatusOfClaims: ""
                 };
             },
             methods: {
@@ -90,7 +90,7 @@
                     const data = {
                         PatientID: this.PatientID,
                         AppointmentID: this.AppointmentID,
-                        ClaimStatus: this.ClaimStatus
+                        StatusOfClaims: this.StatusOfClaims
                     };
 
                     // Send POST request to the microservice
