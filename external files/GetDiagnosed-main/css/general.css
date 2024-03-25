@@ -1,0 +1,338 @@
+
+/* About Us Box */
+#translucent{
+	border-radius:10px;
+	background-color: black;
+	opacity: 70%;
+	color:white;
+	width: 300px;
+	padding-top:10px;
+	padding-bottom:10px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+/* END */
+
+/* Start of Chatbot */
+#chatbot {
+    position: fixed;
+    right: 30px;
+    bottom: 20px;
+    z-index: 999;
+  }
+  
+  #chatbot-popup {
+    display: none;
+    position: fixed;
+    right: 30px;
+    bottom: 20px;
+    z-index: 9999;
+    width: 345px; /* Set the desired fixed width */
+  }
+  
+  #usertext {
+    width: 100%; /* Make the textarea width 100% to fill the chatbox */
+  }
+  
+  .chatbotimg {
+    width: 150px;
+  }
+#spacing{
+	padding:10px;
+}
+/* End of ChatBot */
+
+/* Start of Password CSS */
+#password{
+    border-radius: 5px;
+    position:relative;
+}
+#confirmpassword{
+    border-radius:5px;
+    position:relative;
+}
+#togglePassword{
+    right:10px;
+}
+form i{
+    margin-left: -30px;
+    cursor: pointer;
+}
+#right{
+    display:flex;
+    align-items: right;
+    justify-content: end;
+}
+#loginphoto{
+    width:445px;
+    height:500px;
+}
+
+#newbox{
+    background-image: url("../images/background.avif");
+    background-size: cover;
+    background-attachment: fixed;
+    transition: transform 1s;
+}
+#loginbox{
+    transition: transform 1s;
+}
+
+#text{
+    margin-top: 50%;
+}
+
+#overbackground{
+    background-image: url("../images/overbackground.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    background-position: center center;
+}
+
+#forgotpassword{
+    color:black;
+    display:none;
+}
+
+#closebox{
+    display:none;
+}
+
+#togglePassword2{
+    right:10px;
+}
+.center{
+  transform: translate(0, 10%);
+  padding: 10px;
+}
+
+#space{
+    margin-right:5px;
+}
+
+#gender{
+    margin-right:10px;
+}
+
+#country{
+    border-radius: 5px;
+}
+#sizing{
+    height:200px;
+}
+/* TOPBAR CSS */
+#topbar {
+    font-size: 14px;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    height: 40px;
+}
+
+#top-link ul li {
+    display: inline;
+}
+
+#top-link-end {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#top-link-start {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+}
+
+#top-link ul li a {
+    background-color: #de6262;
+    padding: 10px 15px;
+    color: white;
+    font-weight: bold;
+}
+
+/* Media Query for screens smaller than 568px */
+@media (max-width: 568px) {
+    #topbar {
+        height: auto; /* Allow the height to adjust as needed */
+    }
+    
+    #top-link {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+    
+    #top-link ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    #top-link ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    #top-link ul li a {
+        display: inline-block;
+        margin: 5px;
+        padding: 10px 15px;
+        background-color: #de6262;
+        color: white;
+        font-weight: bold;
+    }
+}
+/* END OF TOPBAR CSS */
+/* HEADER CSS  */
+#menu-link ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    list-style: none; /* Remove default list styling */
+    padding: 0;
+}
+
+#menu-link ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+ul li a {
+    color: black;
+    text-decoration: none;
+}
+
+.highlight {
+    background-color: #de6262;
+    padding: 10px 15px;
+}
+
+.menufont {
+    font-family: 'Montserrat', 'sans-serif';
+}
+
+.linkhover:hover {
+    background-color: lightgray;
+    opacity: 0.7;
+    color: red;
+    padding: 12px 15px;
+}
+
+/* Hide the dropdown content by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 100%; /* Adjust the width as needed */
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    top: 100%; /* Position the dropdown below the button */
+    left: 0;
+}
+
+/* Style the dropdown links */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change the text color and background color on hover */
+.dropdown-content a:hover {
+    background-color: lightgray;
+}
+
+/* Show the dropdown content when hovering over the menu item */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Apply a fixed position to the header */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff; /* You can set your desired background color */
+    z-index: 1000; /* Ensure the header stays on top of other elements */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a box shadow for a subtle effect */
+}
+
+/* Hide the "closemenu" icon by default for screens larger than 768px */
+#closemenu {
+    display: none;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Show the "closemenu" icon for screens below 992px */
+/* Show the "closemenu" icon for screens below 992px */
+@media (max-width: 992px) {
+    #closemenu {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute;
+        right: 10px; /* Adjust the right position as needed */
+        top: 32px; /* Adjust the top position as needed */
+        
+    }
+
+    /* Hide the menu content by default for screens below 992px */
+    #menu-link ul {
+        display: none;
+    }
+
+    /* Stack the list items on top of each other */
+    #menu-link ul li {
+        display: block;
+        margin: 0;
+        padding:10px 15px;
+        text-align: center;
+    }
+
+    /* Position the "closemenu" icon beside the logo */
+    #logo-container {
+        display: flex;
+        align-items: center;
+    }
+}
+
+
+#menu-link ul.active {
+    display: block; /* Show the menu when the icon is active */
+}
+
+@media (min-width: 993px) {
+    #menu-link ul {
+        display: flex;
+    }
+
+    #menu-link ul li {
+        display: inline;
+        margin-right: 15px;
+    }
+
+    #menu-link ul.active {
+        display: flex; /* Reset to the original style */
+    }
+
+    #closemenu {
+        display: none; /* Hide the closemenu icon */
+    }
+}
+/* END HEADER CSS */
+
