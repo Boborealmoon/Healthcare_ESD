@@ -134,10 +134,10 @@ services:
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
-      # 'mysql+mysqlconnector://is213@localhost:3306/claims'
+      # 'mysql+mysqlconnector://is213@localhost:3306/patients'
       PYTHONUNBUFFERED: 1
-    networks:
-      - kong-net
+    # networks:
+    #   - kong-net
     # port map for those exposed 
     ports:
       - "5006:5006"
@@ -154,9 +154,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
       # 'mysql+mysqlconnector://is213@localhost:3306/employees'
-    networks:
-      - kong-net
-    
+    # networks:
+    #   - kong-net
     ports:
       - "5003:5003"
     
