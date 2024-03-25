@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GetDiagnosed</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/general.css">
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script> 
+
+    <!-- This is the API from Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script> 
+    
+</head>
+<body id="overbackground">
+    <!-- [START] TOP OF PAGE -->
+    <div>
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-3">
+                </div>
+                <div class="col- col-lg-6 col-md-6 col-sm-6">
+                    <a href="index.html"><img src="images/logo.png" width="300"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [END] TOP OF PAGE -->
+
+    <!-- [START] MIDDLE OF PAGE -->
+
+    <div id="main">
+        <div class="row mt-5 justify-content-md-center">
+            <div class="col-12 col-lg-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded text-center" id="newbox">
+                <div id="text" style="margin-top:20%">
+                    <h2 id="desc">New here?</h2>
+                    <p id="message">Sign up for quality and easily accessed healthcare</p>
+                    <p>
+                        <a class="btn btn-secondary" href="register_patient.html" id="register">Sign Up here</a>
+                    </p>
+                </div>
+                
+            </div>
+            <div class="col-12 col-lg-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded" id="loginbox">
+                <h2 class="text-center" id="formtitle">Log In</h2> 
+                <hr>
+
+                <h3>Login Credentials</h3>
+                <form action="homelogin.html" id="registration" method="GET">
+                    <p>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" id="username" required>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="input-group">
+                            <input type="password" class="form-control" placeholder="Password" id="password" required>
+                            <i class="bi bi-eye-slash position-absolute top-50 translate-middle-y" id="togglePassword"></i>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="input-group" >
+                            <input type="password" class="form-control" placeholder="Confirm Password" id="confirmpassword" style="display:none">
+                            <i class="bi bi-eye-slash position-absolute top-50 translate-middle-y" id="togglePassword2" style="display:none"></i>
+                        </div>
+                    </p>
+                    <span class="opacity-50">
+                        <a id="forgotpassword" href="forgotpassword.html" style="display:inline">forgot password?</a>
+                    </span>
+
+                     <!-- Modal -->
+                     <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Log In Fail</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="errormessage">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><a href="#" id="tologin"  style="color:white;">Close</a> </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="right">
+                        <input class="btn btn-secondary" type="submit" value="Login" onclick="validatelogin()" data-bs-toggle="modal" data-bs-target="#loginModal"  id="loginbutton">
+                    </p>                        
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- [END] MIDDLE OF PAGE -->
+
+    <!-- Bootstrap Script -->
+    <script src="js/login_patient.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+
+
+</html>
