@@ -4,7 +4,7 @@ from os import environ
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/inventory')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root:root@localhost:3306/inventory')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:3306/inventory
