@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /usr/src/app
 # Copy the dependencies file to the working directory
-COPY requirements.txt .
+COPY http.reqs.txt ./
 # Install any dependencies
 RUN pip install --no-cache-dir -r http.reqs.txt
 # Copy the content of the local src directory to the working directory
