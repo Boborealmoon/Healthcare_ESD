@@ -10,20 +10,20 @@ version: "3.8"
 
 services:
 
-  # ####################################
-  # # App: The Frontend App Service   
-  # ####################################
-  # app:
-  #   build:
-  #     context: ./
-  #     dockerfile: app.Dockerfile
-  #   image: boborealmoon/app:1.0
-  #   restart: always
-  #   # environment:
-  #   #   dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
-  #     # 'mysql+mysqlconnector://is213@localhost:3306/employees'
-  #   # ports:
-  #   #   - "5555:5555"
+  ####################################
+  # App: The Frontend App Service   
+  ####################################
+  app:
+    build:
+      context: ./
+      dockerfile: app.Dockerfile
+    image: boborealmoon/app:1.0
+    restart: always
+    # environment:
+    #   dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
+      # 'mysql+mysqlconnector://is213@localhost:3306/employees'
+    ports:
+      - "5555:5555"
     
 
   ####################################
