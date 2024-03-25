@@ -11,15 +11,17 @@ version: "3.8"
 services:
 
   ####################################
-  # App: The Frontend App Service   
+  # Webpage: The Frontend App Service   
   ####################################
-  app:
+  webpage:
     build:
       context: ./
-      dockerfile: app.Dockerfile
-    image: boborealmoon/app:1.0
+      dockerfile: webpage.Dockerfile
+    image: boborealmoon/webpage:1.0
     restart: always
-    # environment:
+    environment:
+      FLASK_APP: "webpage.py"
+      FLASK_ENV: "production"
     #   dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
       # 'mysql+mysqlconnector://is213@localhost:3306/employees'
     ports:
