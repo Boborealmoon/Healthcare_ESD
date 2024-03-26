@@ -71,10 +71,10 @@
                 <label for="Claimstatus" class="form-label">Claim Status</label>
                 <input type="text" class="form-control" id="Claimstatus" v-model="StatusOfClaims" placeholder='Please Type in NEW for new claims'required>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Claim</button>
+            <button type="submit"  class="btn btn-primary">Submit Claim</button>
         </form>
     </div>
-
+    <!-- v-on:click="submitClaim()" -->
     <script>
         const app = Vue.createApp({
             data() {

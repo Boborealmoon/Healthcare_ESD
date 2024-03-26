@@ -1,10 +1,10 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
-from os import environ
-from datetime import date
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():

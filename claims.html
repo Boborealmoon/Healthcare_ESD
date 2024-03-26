@@ -91,6 +91,9 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- <li v-for="claim in claims" :key="claim.ClaimID">{{ claim.ClaimID }}</li> -->
+
         <button class="btn btn-primary" onclick="redirectToCreateClaim()">Submit New Claim</button>
     </div>
 
@@ -113,6 +116,7 @@
                         if (!response.ok) {
                             throw new Error('Failed to fetch claims data. Please try again.');
                         }
+                        print("fetch okay")
                         return response.json();
                     })
                     .then(data => {
