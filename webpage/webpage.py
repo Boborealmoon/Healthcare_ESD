@@ -1,23 +1,30 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from os import environ
 from datetime import date
+from flask_cors import CORS
 
-app = Flask(__name__)
+from flask import render_template
+
+app = Flask(__name__, template_folder='templates')
+CORS(app)
+
+
 
 @app.route('/')
 def index():
-    return redirect(url_for('home'))
+    return redirect(url_for('about'))
 
 @app.route('/home')
 def home():
-    index_page_load = render_template('index.html')
-    return index_page_load
+    abs_path='/usr/src/app/Templates/index.html'
+    file='index.html'
+    return render_template(file)
 
-# @app.route('/about')
-# def about():
-#     return render_template('about.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 # @app.route('/contact')
 # def contact():

@@ -3,8 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from os import environ
 from datetime import date
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
