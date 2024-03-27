@@ -30,4 +30,9 @@ CMD ["python", "./webpage.py"]
 # # Define environment variables
 # ENV FLASK_APP=app.py
 # ENV FLASK_RUN_HOST=0.0.0.0
-# EN
+# ENV FLASK_RUN_PORT=5555
+
+# CMD [ "python", "./app.py" ]
+
+# # Run the Flask application on container startup
+# CMD [ "flask", "run" ]
