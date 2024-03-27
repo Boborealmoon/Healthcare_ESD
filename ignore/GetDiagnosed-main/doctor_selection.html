@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consult</title>
+
+    <link rel='stylesheet' type='text/css' media='screen' href='css/client_consult.css'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&Montserrat:wght@400;700&family=Crete+Round:ital@0;1&display=swap" rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="css/doctor_selection_style.css">
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="css/medical-icons.css">
+
+	<!-- css -->
+	<link rel="stylesheet" href="css/medical.css">
+	<link rel="stylesheet" href="css/general2.css">
+    
+    <!-- Menu-Link Font -->
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+	
+	<!-- Bootstrap Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+	<!-- Unicons Icons -->
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+	<!-- Fontawesome -->
+	<script src="https://kit.fontawesome.com/7fab40c677.js" crossorigin="anonymous"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script> 
+
+    <!-- This is the API from Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script> 
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    
+</head>
+<body onload="filter_specialty()" class="stretched">
+    <div id="wrapper">
+        <!-- Header -->
+        <header>
+			<div class="container-fluid">
+				<div class="row d-flex justify-content-center">
+					<div class="col-sm-12 col-lg-3">
+						<div class="row">
+							<div class="col-lg-3">
+							</div>
+							<div class="col-lg-9">
+								<div id="logo-container">
+									<a href="homelogin.html"><img src="images/logo.png" width="235px"></a>
+									<i class="bi bi-list" id="closemenu"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+		
+					<div class="col-3">  
+					</div>
+					
+					<div class="col-lg-6 d-flex justify-content-center">
+						<div class="text-center" id="menu-link">
+							<ul>
+								<li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
+								<li><a href="about-uslogin.html" class="menufont linkhover"><span>ABOUT US</span></a></li>
+								<li class="highlight"><a href="client_consultlogin.html" class="menufont"  style="color:white;"><span>CONSULT</span></a></li>
+								<li><a href="locatorlogin.html" class="menufont linkhover"><span>NEAREST CLINIC</span></a></li>
+								<li class="menufont linkhover dropdown">
+                                    <a href="profile.html">HYUNBINHUBBY</a>
+									<div class="dropdown-content">
+										<a href="index.html">Logout</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- End of Header -->
+        
+       <!--Datatable STARTS HERE -->
+       <div id="welcome" >
+        <h1 class="display-2">Welcome Hyunbinhubby</h1>
+        <h1>
+            
+        </h1>
+    </div>
+    <div id="patient_form">
+        <div id="table" style="margin-left: 10%; margin-right: 10%; overflow-x:auto ">
+            <table class="table table-striped table-hover container container" id="doctor_table">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="warningModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+             <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Disclaimer: Video Consultation Privacy</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Thank you for choosing GetDiagnosed for your healthcare needs. We value your trust and privacy. 
+                        <br><br> Please take a moment to review the following important information regarding our video consultations:
+                        <br><br>
+                    Confidentiality: Your privacy is our utmost concern. Rest assured that your video consultation is entirely confidential. Our healthcare professionals are committed to keeping your personal information and medical history private and secure.
+                    <br><br>
+                    No Recording: We want you to feel comfortable and at ease during your video consultation. We want to clarify that we do not record video calls. Your video consultation is strictly for real-time communication between you and your healthcare provider.
+                    <br><br>
+                    Patient Responsibility: We kindly request that you do not record or take screenshots during your video consultation, as this may compromise the privacy and security of your medical information.
+                    <br><br>
+                    We look forward to providing you with high-quality medical care in the comfort of your own space.
+                    Please proceed to click on the button below to start your consultation. Have a nice day!</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="consult.html">
+                    <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Join Call</button>
+                </a>
+                </div>
+                </div>
+
+            </div>
+            </div>
+    </div>
+
+        <!-- Footer
+            ============================================= -->
+            <footer id="footer" class="bg-contrast-100" style="border-top: 2px solid rgba(var(--GD-contrast-rgb),0.06);">
+                <div class="container" style="border-bottom: 1px solid rgba(var(--GD-contrast-rgb),0.06);">
+    
+                    <!-- Footer Widgets
+                    ============================================= -->
+    
+    
+                                <div class="widget mt-3">
+    
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="footer-big-contacts">
+                                                <span>Call Us:</span>
+                                                +65 87654321
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="footer-big-contacts">
+                                                <span>Address:</span>
+                                                
+                                            </div>
+                                            <div class="footer-big-contacts">GetDiagnosed 81 Victoria Street, Singapore 188065</div>
+                                        </div>
+    
+                                        <div class="col-lg-4">
+                                            <div class="footer-big-contacts">
+                                                <span>Send an Email:</span>
+                                                GetDiagnosed@business.com
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+    
+                                <div class="widget subscribe-widget mb-3" style="margin-top: 3%;">
+    
+                                    <div class="row col-mb-30">
+                                        <div class="col-sm-6 col-md-12 col-lg-6">
+                                            <a href="#" class="social-icon bg-contrast-200 h-bg-facebook mb-0 me-3">
+                                                <i class="fa-brands fa-facebook-f"></i>
+                                                <i class="fa-brands fa-facebook-f"></i>
+                                            </a>
+                                            <a href="#"><small class="d-block"><strong>Like us</strong><br>on Facebook</small></a>
+                                        </div>
+                                        <div class="col-sm-6 col-md-12 col-lg-6">
+                                            <a href="#" class="social-icon bg-contrast-200 h-bg-rss mb-0 me-3">
+                                                <i class="fa-solid fa-rss"></i>
+                                                <i class="fa-solid fa-rss"></i>
+                                            </a>
+                                            <a href="#"><small class="d-block"><strong>Subscribe</strong><br>to RSS Feeds</small></a>
+                                        </div>
+                                    </div>
+    
+                                </div>
+    
+                        
+                        
+                        <!-- .footer-widgets-wrap end -->
+                </div>
+    
+                <!-- Copyrights
+                ============================================= -->
+                <div id="copyrights" class="bg-transparent">
+                    <div class="container">
+    
+                        <div class="row col-mb-30">
+                            <div class="col-md-6 text-center text-md-start">
+                                Copyrights &copy; 2023 All Rights Reserved by GetDiagnosed.<br>
+                                <div class="copyright-links"><a href="#">Terms of Use</a> / <a href="#">Privacy Policy</a></div>
+                            </div>
+    
+                            <div class="col-md-6 text-center text-md-end">
+                                <div class="copyrights-menu copyright-links">
+                                    <a href="index.html">Home</a>/<a href="#">About Us</a>/<a href="consult.html">Consult</a>/<a href="nearest.html">Nearest Clinic</a>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div><!-- #copyrights end -->
+            </footer><!-- #footer end -->
+    </div>
+    <script src="js/functions.bundle.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/doctor_selection.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Consult - GetDiagnosed</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+   
+    <!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&Montserrat:wght@400;700&family=Crete+Round:ital@0;1&display=swap" rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="css/client_consultlogin_style.css">
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="css/medical-icons.css">
+
+	<!-- css -->
+	<link rel="stylesheet" href="css/medical.css">
+	<link rel='stylesheet' type='text/css' media='screen' href='css/client_consult.css'>
+	<link rel="stylesheet" href="css/general2.css">
+	
+	<!-- Menu-Link Font -->
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+	
+	<!-- Bootstrap Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+	<!-- Unicons Icons -->
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+	<!-- Fontawesome -->
+	<script src="https://kit.fontawesome.com/7fab40c677.js" crossorigin="anonymous"></script>
+
+    <!-- Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+
+	 <!-- Bootstrap v5.3.2 -->
+	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="stretched">
+    <div id="wrapper">
+        <header>
+			<div class="container-fluid">
+				<div class="row d-flex justify-content-center">
+					<div class="col-sm-12 col-lg-3">
+						<div class="row">
+							<div class="col-lg-3">
+							</div>
+							<div class="col-lg-9">
+								<div id="logo-container">
+									<a href="homelogin.html"><img src="images/logo.png" width="235px"></a>
+									<i class="bi bi-list" id="closemenu"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+		
+					<div class="col-3">  
+					</div>
+					
+					<div class="col-lg-6 d-flex justify-content-center">
+						<div class="text-center" id="menu-link">
+							<ul>
+								<li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
+								<li><a href="about-uslogin.html" class="menufont linkhover"><span>ABOUT US</span></a></li>
+								<li class="highlight"><a href="client_consultlogin.html" class="menufont"  style="color:white;"><span>CONSULT</span></a></li>
+								<li><a href="locatorlogin.html" class="menufont linkhover"><span>NEAREST CLINIC</span></a></li>
+								<li class="menufont linkhover dropdown">
+                                    <a href="profile.html">HYUNBINHUBBY</a>
+									<div class="dropdown-content">
+										<a href="index.html">Logout</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- End of Header -->
+<!--FORM STARTS HERE -->
+    <div id="welcome">
+        <h1 class="display-5">Welcome Hyunbinhubby</h1>
+    </div>
+
+    <div class="section row p-0 align-items-stretch dark mt-4">
+        
+        <div id="patient_form" class="col-lg-12 p-0">
+            <div class="bg-color form-widget col-padding " data-loader="button">
+                <h2 class="text-center">Take the first step</h2>
+                <div class="form-result"></div>
+                <form class="row mb-0" id="consult-form" name="consult-form" action="doctor_selection.html" method="get">
+                    <div class="form-process">
+                        <div class="css3-spinner">
+                            <div class="css3-spinner-scaler"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 form-group">
+                        <label for="specialisation">Specialisation Required</label>
+                        <select class="form-select not-dark" name="specialisation" id="specialisation"  v-model="selected_specialisation">
+                            <option value="">-----Select-----</option>
+                            <option v-for="spec of specialty_list" :key="spec" :value="spec">{{spec}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 form-group">
+                        <label for="allergies">Drug Allergies</label>
+                        <input type="text" id="allergies" name="allergies" class="form-control not-dark required" value="" placeholder="None">
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        
+                                <label for="preconditions">Pre Existing Conditions</label>
+                                <input type="text" id="preconditions" name="preconditions" class="form-control not-dark required" value="" placeholder="None">
+                            
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 form-group mt-3">
+                        <label for="hehe"> How are you feeling?</label>
+
+                        <textarea id="hehe" name="comments" class="form-control not-dark required" cols="30" rows="5"></textarea>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                    
+                    
+                    <div class="col-4 form-group text-end">
+                        <button class="button button-white button-light button-rounded m-0" type="submit" value="submit">Find a Doctor Now</button>
+                        
+                    </div>
+                    <div class="col-md-4"></div>
+                    
+                    <input type="hidden" name="prefix" value="template-medical-">
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- Footer
+		============================================= -->
+		<footer id="footer" class="bg-contrast-100" style="border-top: 2px solid rgba(var(--GD-contrast-rgb),0.06);">
+			<div class="container" style="border-bottom: 1px solid rgba(var(--GD-contrast-rgb),0.06);">
+
+				<!-- Footer Widgets
+				============================================= -->
+
+
+							<div class="widget mt-3">
+
+								<div class="row">
+									<div class="col-lg-4">
+										<div class="footer-big-contacts">
+											<span>Call Us:</span>
+											+65 87654321
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="footer-big-contacts">
+											<span>Address:</span>
+											
+										</div>
+										<div class="footer-big-contacts">GetDiagnosed 81 Victoria Street, Singapore 188065</div>
+									</div>
+
+									<div class="col-lg-4">
+										<div class="footer-big-contacts">
+											<span>Send an Email:</span>
+											GetDiagnosed@business.com
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="widget subscribe-widget mb-3" style="margin-top: 3%;">
+
+								<div class="row col-mb-30">
+									<div class="col-sm-6 col-md-12 col-lg-6">
+										<a href="#" class="social-icon bg-contrast-200 h-bg-facebook mb-0 me-3">
+											<i class="fa-brands fa-facebook-f"></i>
+											<i class="fa-brands fa-facebook-f"></i>
+										</a>
+										<a href="#"><small class="d-block"><strong>Like us</strong><br>on Facebook</small></a>
+									</div>
+									<div class="col-sm-6 col-md-12 col-lg-6">
+										<a href="#" class="social-icon bg-contrast-200 h-bg-rss mb-0 me-3">
+											<i class="fa-solid fa-rss"></i>
+											<i class="fa-solid fa-rss"></i>
+										</a>
+										<a href="#"><small class="d-block"><strong>Subscribe</strong><br>to RSS Feeds</small></a>
+									</div>
+								</div>
+
+							</div>
+
+					
+					
+					<!-- .footer-widgets-wrap end -->
+			</div>
+
+			<!-- Copyrights
+			============================================= -->
+			<div id="copyrights" class="bg-transparent">
+				<div class="container">
+
+					<div class="row col-mb-30">
+						<div class="col-md-6 text-center text-md-start">
+							Copyrights &copy; 2023 All Rights Reserved by GetDiagnosed.<br>
+							<div class="copyright-links"><a href="#">Terms of Use</a> / <a href="#">Privacy Policy</a></div>
+						</div>
+
+						<div class="col-md-6 text-center text-md-end">
+							<div class="copyrights-menu copyright-links">
+								<a href="index.html">Home</a>/<a href="#">About Us</a>/<a href="consult.html">Consult</a>/<a href="nearest.html">Nearest Clinic</a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div><!-- #copyrights end -->
+		</footer><!-- #footer end -->
+
+</div> <!-- wrapper ends here -->
+
+<script src="js/functions.bundle.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/header.js"></script>
+<script src="js/vue_custom.js"></script>
+<script src="js/client_consult.js"></script>
+
+</body>
+</html>

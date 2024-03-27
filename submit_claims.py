@@ -38,9 +38,12 @@ if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
 
 @app.route("/submit_claim", methods=['POST'])
 def submit_claims():
+    print('fuck ken')
     # Simple check of input format and data of the request are JSON
     if request.is_json:
         try:
+            print(request.get_json())
+            print('fuck')
             claim = request.get_json()
             print("\nSubmitted a claim in JSON:", claim)
 
@@ -158,8 +161,8 @@ def processSubmitClaim(claim):
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
-          " for creating a claim...")
-    app.run(host="0.0.0.0", port=5200, debug=True)
+        " for creating a claim...")
+    app.run(host="0.0.0.0", port=5300, debug=True)
     # Notes for the parameters:
     # - debug=True will reload the program automatically if a change is detected;
     #   -- it in fact starts two instances of the same flask program,

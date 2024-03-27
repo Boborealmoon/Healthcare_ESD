@@ -58,10 +58,10 @@
     
     <div id="app" class="container">
         <h1>Submit Claim</h1>
-        <form @submit.prevent="submitClaim" method="POST" action="http://localhost:5200/submit_claim">
+        <form @submit.prevent="submitClaim" method="POST" action="http://localhost:5300/submit_claim">
             <div class="mb-3">
-                <label for="EmployeeID" class="form-label">Employee ID</label>
-                <input type="text" class="form-control" id="EmployeeID" v-model="EmployeeID" required>
+                <label for="EmployeeID" class="form-label">Patient ID</label>
+                <input type="text" class="form-control" id="EmployeeID" v-model="PatientID" required>
             </div>
             <div class="mb-3">
                 <label for="AppointmentID" class="form-label">Appointment ID</label>
@@ -69,32 +69,32 @@
             </div>
             <div class="mb-3">
                 <label for="Claimstatus" class="form-label">Claim Status</label>
-                <input type="text" class="form-control" id="Claimstatus" v-model="Claimstatus" placeholder='Please Type in NEW for new claims'required>
+                <input type="text" class="form-control" id="Claimstatus" v-model="StatusOfClaims" placeholder='Please Type in NEW for new claims'required>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Claim</button>
+            <button type="submit"  class="btn btn-primary">Submit Claim</button>
         </form>
     </div>
-
+    <!-- v-on:click="submitClaim()" -->
     <script>
         const app = Vue.createApp({
             data() {
                 return {
-                    EmployeeID: "",
+                    PatientID: "",
                     AppointmentID: "",
-                    Claimstatus: ""
+                    StatusOfClaims: ""
                 };
             },
             methods: {
                 submitClaim() {
                     // Prepare data object
                     const data = {
-                        EmployeeID: this.EmployeeID,
+                        PatientID: this.PatientID,
                         AppointmentID: this.AppointmentID,
-                        Claimstatus: this.Claimstatus
+                        StatusOfClaims: this.StatusOfClaims
                     };
 
                     // Send POST request to the microservice
-                    fetch("http://localhost:5200/submit_claim", {
+                    fetch("http://localhost:5300/submit_claim", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"

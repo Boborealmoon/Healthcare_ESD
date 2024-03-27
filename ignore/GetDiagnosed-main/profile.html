@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+	<!-- Font Imports -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&Montserrat:wght@400;700&family=Crete+Round:ital@0;1&display=swap" rel="stylesheet">
+
+	<!-- Core Style -->
+	<link rel="stylesheet" href="css/profile_style.css">
+
+	<!-- Font Icons -->
+	<link rel="stylesheet" href="css/medical-icons.css">
+
+	<!-- css -->
+	<link rel="stylesheet" href="css/medical.css">
+
+	<link rel="stylesheet" href="css/general.css">
+
+	<!-- Menu-Link Font -->
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+	
+	<!-- Bootstrap Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+	<!-- Unicons Icons -->
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+	<!-- Fontawesome -->
+	<script src="https://kit.fontawesome.com/7fab40c677.js" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <!-- Bootstrap v5.3.2 (for profile) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+	<title>Profile - GetDiagnosed</title>
+
+</head>
+
+<body class="stretched">
+
+	<!-- Document Wrapper
+	============================================= -->
+	<div id="wrapper">
+		
+		<!-- Top Bar -->
+		<div class="container-fluid" id="topbar">
+            <div class="row">
+                <div class="col-3 border-bottom" id="top-link">
+                    <ul id="top-link-end">
+                        <li><i class="bi-telephone"></i> +65 98765432</li>
+                    </ul>
+                </div>
+                
+                <div class="col-6 border-start border-bottom" id="top-link">
+                    <ul id="top-link-start">
+                        <li><i class="bi-envelope"></i> GetDiagnosed@medical.com</li>
+                    </ul>
+                </div>
+    
+                <div class="col-3 border-bottom" id="top-link">
+                    <ul id="top-link-start">
+                        <li><a href="client_consultlogin.html">See a Doctor</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+		<!-- End of Top Bar -->
+		
+		<!-- Header -->
+        <header>
+			<div class="container-fluid">
+				<div class="row d-flex justify-content-center">
+					<div class="col-sm-12 col-lg-3">
+						<div class="row">
+							<div class="col-lg-3">
+							</div>
+							<div class="col-lg-9">
+								<div id="logo-container">
+									<a href="homelogin.html"><img src="images/logo.png" width="235px"></a>
+									<i class="bi bi-list" id="closemenu"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+		
+					<div class="col-3">  
+					</div>
+					
+					<div class="col-lg-6 d-flex justify-content-center">
+						<div class="text-center" id="menu-link">
+							<ul>
+								<li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
+								<li><a href="about-uslogin.html" class="menufont  linkhover" ><span>ABOUT US</span></a></li>
+								<li><a href="client_consultlogin.html" class="menufont linkhover"><span>CONSULT</span></a></li>
+								<li><a href="locatorlogin.html" class="menufont linkhover"><span>NEAREST CLINIC</span></a></li>
+								<li class="highlight menufont dropdown">
+                                    <a href="profile.html" style="color:white;">HYUNBINHUBBY</a>
+									<div class="dropdown-content">
+										<a href="index.html">Logout</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- End of Header -->
+
+		<!-- Content
+		============================================= -->
+        <section id="profile_content">
+
+            <div class="container-fluid py-3" style="width:60%;">
+
+                <div class="row border border-danger">
+
+                    <div class="col-md-3 col-12 mt-4 p-0">
+
+                        <div class="d-flex justify-content-center ">
+                            <img src="https://cdn.i-scmp.com/sites/default/files/d8/images/canvas/2022/02/16/599c166c-0170-42fd-a0e4-8fd01e68dc24_9e079a45.jpg" alt="hyunbin_img" class="img-fluid rounded-circle border border-danger-subtle border-4" style="border-radius: 50%; width:150px; height:150px;"> 
+                        </div>
+                        
+                        <div class="d-flex justify-content-center mt-1 p-2"> 
+                            <div class="btn-group-vertical pb-4">
+
+                                <div id="edit_profile_btn" class="d-flex align-items-center mt-3" style="width:auto;" onclick="profile()">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/4751/4751751.png" alt="personal_icon" class="img-fluid align-middle" style="height: 40px; width: 40px; margin-right: 10px;">
+                                    <button type="button" class="btn btn-danger border border-0 btn-block m-0 p-2" style="width:auto; font-size:18px; text-align: left;">Profile</button>
+                                </div>
+
+                                <div id="consults_btn" class="d-flex align-items-center mt-3" style="width:auto;" onclick="consults()">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/5351/5351119.png" alt="personal_icon" class="img-fluid align-middle" style="height: 40px; width: 40px; margin-right: 10px;">
+                                    <button type="button" class="btn btn-white border border-0 btn-block m-0 p-2" style="width:auto; font-size:18px; text-align: left;">Consults</button>
+                                </div>
+                                
+                                <div id="med_hist_btn" class="d-flex align-items-center mt-3" style="width:auto;" onclick="medical_history()">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/10299/10299454.png" alt="personal_icon" class="img-fluid align-middle" style="height: 40px; width: 40px; margin-right: 10px;">
+                                    <button type="button" class="btn btn-white border border-0 btn-block m-0 p-2" style="width:auto; font-size:18px; text-align: left;">Medical History</button>
+                                </div>
+
+                                <div id="past_prescriptions_btn" class="d-flex align-items-center mt-3" style="width:auto;" onclick="past_prescriptions()">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/6599/6599288.png" alt="personal_icon" class="img-fluid align-middle" style="height: 40px; width: 40px; margin-right: 10px;">
+                                    <button type="button" class="btn btn-white border border-0 btn-block m-0 p-2" style="width:auto; font-size:18px; text-align: left;">Past Prescriptions</button>
+                                </div>
+
+                            </div>
+                        </div>    
+
+                    </div>
+
+
+                    <div id="change_content" class="col-md-9 col-12 border-start border-danger justify-content-center">
+                        
+                        <div class="row g-3 mx-3 mt-3" style="font-size: 18px; padding: 0; margin: auto;">
+                            <h1 style="margin-bottom: 10px;">Profile</h1>
+
+								<div class="col-md-5">
+									<p>Username</p>
+									<p>Hyunbinhubby</p>
+								</div>
+								<div class="col-md-5">
+									<p>Email</p>
+									<p>taepyung@gmail.com</p>
+								</div>
+								<div class="col-md-2">
+									
+								</div>
+
+
+								<div class="col-md-5">
+									<p>Name</p>
+									<p>Kim Tae Pyung</p>
+								</div>
+								<div class="col-md-5">
+									<p>Gender</p>
+									<p>Male</p>
+								</div>
+								<div class="col-md-2">
+									
+								</div>
+
+
+								<div class="col-md-5">
+									<p>Nationality</p>
+									<p>South Korean</p>
+								</div>
+								<div class="col-md-5">
+									<p>Date of Birth</p>
+									<p>25 September 1982</p>
+								</div>
+								<div class="col-md-2">
+									
+								</div>
+
+
+								<div class="col-md-5">
+									<p>Country, City</p>
+									<p>South Korea, Seoul</p>
+								</div>
+								<div class="col-md-5">
+									<p>Phone Number</p>
+									<p>+82 1-910-2755</p>
+								</div>
+								<div class="col-md-2">
+									
+								</div>
+
+							
+								<div class="col-md-6">
+									<p>Address</p>
+									<p>288-8, Sajeong-dong</p>
+								</div>
+                    
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+        <!-- #content end -->
+		
+
+		<!-- Footer
+		============================================= -->
+		<footer id="footer" class="bg-contrast-100" style="border-top: 2px solid rgba(var(--GD-contrast-rgb),0.06);">
+			<div class="container" style="border-bottom: 1px solid rgba(var(--GD-contrast-rgb),0.06);">
+
+				<!-- Footer Widgets
+				============================================= -->
+
+
+							<div class="widget mt-3">
+
+								<div class="row">
+									<div class="col-lg-4">
+										<div class="footer-big-contacts">
+											<span>Call Us:</span>
+											+65 87654321
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="footer-big-contacts">
+											<span>Address:</span>
+											
+										</div>
+										<div class="footer-big-contacts">GetDiagnosed 81 Victoria Street, Singapore 188065</div>
+									</div>
+
+									<div class="col-lg-4">
+										<div class="footer-big-contacts">
+											<span>Send an Email:</span>
+											GetDiagnosed@business.com
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="widget subscribe-widget mb-3" style="margin-top: 3%;">
+
+								<div class="row col-mb-30">
+									<div class="col-sm-6 col-md-12 col-lg-6">
+										<a href="#" class="social-icon bg-contrast-200 h-bg-facebook mb-0 me-3">
+											<i class="fa-brands fa-facebook-f"></i>
+											<i class="fa-brands fa-facebook-f"></i>
+										</a>
+										<a href="#"><small class="d-block"><strong>Like us</strong><br>on Facebook</small></a>
+									</div>
+									<div class="col-sm-6 col-md-12 col-lg-6">
+										<a href="#" class="social-icon bg-contrast-200 h-bg-rss mb-0 me-3">
+											<i class="fa-solid fa-rss"></i>
+											<i class="fa-solid fa-rss"></i>
+										</a>
+										<a href="#"><small class="d-block"><strong>Subscribe</strong><br>to RSS Feeds</small></a>
+									</div>
+								</div>
+
+							</div>
+
+					
+					
+					<!-- .footer-widgets-wrap end -->
+			</div>
+
+			<!-- Copyrights
+			============================================= -->
+			<div id="copyrights" class="bg-transparent">
+				<div class="container">
+
+					<div class="row col-mb-30">
+						<div class="col-md-6 text-center text-md-start">
+							Copyrights &copy; 2023 All Rights Reserved by GetDiagnosed.<br>
+							<div class="copyright-links"><a href="#">Terms of Use</a> / <a href="#">Privacy Policy</a></div>
+						</div>
+
+						<div class="col-md-6 text-center text-md-end">
+							<div class="copyrights-menu copyright-links">
+								<a href="index.html">Home</a>/<a href="#">About Us</a>/<a href="consult.html">Consult</a>/<a href="nearest.html">Nearest Clinic</a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div><!-- #copyrights end -->
+		</footer><!-- #footer end -->
+
+	</div><!-- #wrapper end -->
+
+	<!-- Go To Top
+	============================================= -->
+	<div id="gotoTop" class="uil uil-angle-up rounded-circle"></div>
+
+	<!-- Chatbot -->
+	<div>
+        <img class="chatbotimg" id="chatbot" src="images/chatbot.png">
+        <button type="button" class="btn btn-light" id="chatbot" onclick="openForm()"> AI Symptoms Checker --> Click here to chat</button>
+    </div>
+    
+
+    <div id="chatbot-popup">
+        <div class="input-group text-center">
+            <button class="btn btn-light w-100" type="button" onclick="closeForm()">Get your symptoms checked out!</button>
+        </div>
+        <div class="input-group" style="Display:none" id="chatlog">
+            
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">Message</span>
+            <textarea class="form-control" aria-label="With textarea" name="textbox" id="usertext" rows="4" placeholder="Shift + Enter to create new line"></textarea>
+            <button type="button" class="btn btn-light " onclick="message()" id="send"> Send </button> 
+        </div>
+        
+    </div>
+
+	<!-- JavaScripts
+	============================================= -->
+	<script src="js/functions.bundle.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="js/custom.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/profile.js"></script>
+
+</body>
+</html>

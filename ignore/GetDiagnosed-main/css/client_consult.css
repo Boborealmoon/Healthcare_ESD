@@ -1,0 +1,86 @@
+
+body{
+    background:#0F2027;
+    background:-webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027) ;
+    background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+
+}
+
+label{
+    color: white;
+}
+
+
+input,label{
+    display: block;
+    width: 300px;
+    border-radius: 5px;
+}
+
+textarea{
+    display: block;
+    border-radius: 5px;
+}
+
+#submit-btn{
+    border:none;
+    position: absolute;
+    background-color: cadetblue;
+    color:#fff;
+    padding:20px 40px;
+    font-size:16px;
+    margin: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+    border-radius: 5px;
+    
+}
+
+
+#highlight{
+    border: 1px solid black;
+    background: linear-gradient(to right, yellow 50%, red 50%);
+    color: black;
+    border-radius: 25px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+#welcome{
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 50px;
+}
+
+
+#before{
+    position: relative;
+    animation: transitionIn 1s;
+    transition: 0.5s;
+    top: 30px;
+    padding-top: 30px;
+    height: 85vh;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1),rgba(255,255,255,0));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+}
+
+#reason{
+    width: 100%;
+    min-width: 300px;
+    height: 200px;
+    resize: none;
+}
+
+.select-box{
+    width: 80%;
+    height: 30px;
+    min-width: 300px;
+}
+
+/* Dropdown */

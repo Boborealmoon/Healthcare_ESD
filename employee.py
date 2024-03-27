@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from flask import Flask
+from flask_cors import CORS
 
 # from flasgger import Swagger
 
 #constructor
 app = Flask(__name__)
+CORS(app)
 
 #conncecting to SQLAlchemy: 
 #The SQLAlchemy Database URI format is: dialect+driver://username:password@host:port/database
