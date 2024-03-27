@@ -133,6 +133,9 @@
                 .then(data => {
                     console.log("Prescription refill successful:", data);
                     alert("Prescription refill successful!");
+                    // // Redirect to order.html upon successful refill
+                    // window.location.href = "/order.html";
+
                 })
                 .catch(error => {
                     console.error("Error refilling prescription:", error);
