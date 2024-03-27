@@ -14,23 +14,24 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return redirect(url_for('about'))
+    return redirect(url_for('home'))
     # file='index.html'
     # return render_template(file)
 
-@app.route('/home')
+@app.route('/')
 def home():
-    abs_path='/usr/src/app/Templates/index.html'
-    file='index.html'
-    return render_template(file)
-
-@app.route('/about')
-def about():
     return render_template('index.html')
 
-# @app.route('/contact')
-# def contact():
-#     return render_template('contact.html')
+# Claims route
+# @app.route('/claims')
+# def about():
+#     return render_template('claims.html')
+
+# Create_claims route
+# @app.route('/claims')
+# def about():
+#     return render_template('create_claims.html')
+
 
 # Fixed route function to correctly capture the input
 # @app.route("/<name>")
