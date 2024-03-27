@@ -15,7 +15,7 @@ services:
   ####################################
   webpage:
     build:
-      context: ./webpage/
+      context: ./
       dockerfile: webpage.Dockerfile
     image: boborealmoon/webpage:1.0
     restart: always
@@ -26,11 +26,9 @@ services:
       # 'mysql+mysqlconnector://is213@localhost:3306/employees'
     ports:
       - "5555:5555"
-    volumes: 
-      - ./templates:/etc/webpage/templates
-      # - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
-      # - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
-      # - rabbitmq_data:/var/lib/rabbitmq
+    # volumes: 
+    #   - ./templates:/templates
+
     
 
   ####################################

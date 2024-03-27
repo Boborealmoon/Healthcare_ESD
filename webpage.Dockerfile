@@ -3,13 +3,17 @@ FROM python:3-slim
 # ENV PYTHONDONTWRITEBYTECODE 1
 # ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
-WORKDIR /usr/src/app/webpage
+WORKDIR /usr/src/app/
 # Copy the dependencies file to the working directory
 COPY ./http.reqs.txt ./
 # Install any dependencies
 RUN python -m pip install --no-cache-dir  -r http.reqs.txt
 # Copy the content of the local src directory to the working directory
-COPY ./webpage.py .
+# Copy the content of the local directory to the working directory
+COPY ./webpage.py ./
+COPY ./templates ./templates
+# COPY ./templates .
+
 # # Expose the port that Flask runs on
 EXPOSE 5555
 # Define the command to run your Flask application

@@ -15,6 +15,8 @@ CORS(app)
 @app.route('/')
 def index():
     return redirect(url_for('about'))
+    # file='index.html'
+    # return render_template(file)
 
 @app.route('/home')
 def home():
@@ -24,7 +26,7 @@ def home():
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('index.html')
 
 # @app.route('/contact')
 # def contact():
