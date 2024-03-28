@@ -82,8 +82,7 @@ body {
                     
                     <div class="mb-3">
                         <label for="appointmentDate" class="form-label">Appointment Date</label>
-                        <input type="date" class="form-control" id="AppointmentDate" v-model="AppointmentDate"
-                            required>
+                        <input type="date" class="form-control" id="AppointmentDate" v-model="AppointmentDate" :min="minDate" required>
                     </div>
                     
                     <div class="mb-3">
@@ -105,6 +104,8 @@ body {
 
     <script>
         const book_appointment_URL = "http://localhost:5200/book_appointment";
+        
+
         const app = Vue.createApp({
             data() {
                 return {
@@ -172,6 +173,15 @@ body {
 
                     ]
                 };
+            },
+            computed: {
+                minDate() {
+                    // Get today's date
+                    const today = new Date();
+                    // Format it to YYYY-MM-DD for the input date field
+                    const minDate = today.toISOString().split('T')[0];
+                    return minDate;
+                }
             },
             methods: {
                 createAppointment() {
