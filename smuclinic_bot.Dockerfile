@@ -5,19 +5,19 @@ FROM python:3-slim
 # Set the working directory in the container
 WORKDIR /usr/src/app/
 # Copy the dependencies file to the working directory
-COPY ./http.reqs.txt ./
+COPY ./tele.reqs.txt ./
 # Install any dependencies
-RUN python -m pip install --no-cache-dir  -r http.reqs.txt
+RUN python -m pip install --no-cache-dir  -r tele.reqs.txt
 # Copy the content of the local src directory to the working directory
 # Copy the content of the local directory to the working directory
-COPY ./webpage.py ./
-COPY ./templates ./templates
+COPY ./smuclinic_bot.py ./
+# COPY ./templates ./templates
 # COPY ./templates .
 
 # # Expose the port that Flask runs on
-EXPOSE 5555
+# EXPOSE 5555
 # Define the command to run your Flask application
-CMD ["python", "./webpage.py"]
+CMD ["python", "./smuclinic_bot.py"]
 
 
 # FROM python:3-slim
@@ -30,4 +30,9 @@ CMD ["python", "./webpage.py"]
 # # Define environment variables
 # ENV FLASK_APP=app.py
 # ENV FLASK_RUN_HOST=0.0.0.0
-# EN
+# ENV FLASK_RUN_PORT=5555
+
+# CMD [ "python", "./app.py" ]
+
+# # Run the Flask application on container startup
+# CMD [ "flask", "run" ]

@@ -23,6 +23,7 @@ patients_url = "http://localhost:5006/patient"
 # activitylog_url = "http://localhost:5007/activity_log"
 # error_url = "http://localhost:5008/error"
 email_service_url = "http://localhost:5010/email_service"
+notification_url = "http://localhost:5012/send_message"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
@@ -111,13 +112,22 @@ def processAppointmentbooking(appointment):
     patient_email = patient_result["data"]["Email"]
     patient_name = appointment_result["data"]["PatientName"]
     appt_date = appointment_result["data"]["AppointmentDate"]
+    patient_number = patient_result["data"]["ContactNo"]
+    appt_location = "70 Stamford Rd, #B1-21 Li Ka Shing Library, Singapore 178901"
 
     email_data = {
         "recipient_email": patient_email,
         "subject": "Appointment Confirmation",
         "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date}.\n\nThank you!"
     }
-    
+
+    message_data = {
+        "contact": patient_number,
+        "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date}.\n\nThank you! "
+    }
+    message_result = invoke_http(notification_url, method='POST', json=message_data)
+    print(message_result)
+
     print('\n\n-----Invoking email microservice as order fails-----')
     email_result = invoke_http(email_service_url, method='POST', json=email_data)
     print(email_result)
