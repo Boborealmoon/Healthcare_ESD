@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 appointments_url = "http://localhost:5000/appointments"
-# calendar_url = "http://localhost:5001/Clinic_calendar"
+calendar_url = "http://localhost:5001/calendar"
 # claims_url = "http://localhost:5002/new_claim"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
@@ -78,8 +78,13 @@ def processAppointmentbooking(appointment):
 
     print('\n-----Invoking patients microservice-----')
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
-    print('appointment_result:', patient_result)
+    print('patient_result:', patient_result)
 
+    patient_timeslot = appointment_result["data"]["TimeslotID"]
+
+    print('\n-----Invoking clinic microservice-----')
+    calendar_result = invoke_http(calendar_url + f"/ID/{patient_timeslot}", method='GET')
+    print('calendar_result:', calendar_result)
     # print('\n-----Invoking activity_log microservice-----')
     # invoke_http(activitylog_url, method="POST", json=appointment_result)
     # print('\nOrder sent to activity log.\n')
@@ -111,11 +116,12 @@ def processAppointmentbooking(appointment):
     patient_email = patient_result["data"]["Email"]
     patient_name = appointment_result["data"]["PatientName"]
     appt_date = appointment_result["data"]["AppointmentDate"]
-
+    appt_time = calendar_result["data"]["TimeBegin"]
+    
     email_data = {
         "recipient_email": patient_email,
         "subject": "Appointment Confirmation",
-        "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date}.\n\nThank you!"
+        "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date} at {appt_time}.\n\nThank you!"
     }
     
     print('\n\n-----Invoking email microservice as order fails-----')

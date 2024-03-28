@@ -33,7 +33,14 @@ class appointments(db.Model):
         self.Claimed = Claimed
 
     def json(self):
-        return {"AppointmentID": self.AppointmentID, "AppointmentDate": self.AppointmentDate, "TimeslotID": self.TimeslotID, "EmployeeID": self.EmployeeID, "PatientID": self.PatientID, "PatientName":self.PatientName, "Claimed":self.Claimed}
+        return {
+            "AppointmentID": self.AppointmentID, 
+            "AppointmentDate": self.AppointmentDate.strftime('%A, %Y-%m-%d'), 
+            "TimeslotID": self.TimeslotID, 
+            "EmployeeID": self.EmployeeID, 
+            "PatientID": self.PatientID, 
+            "PatientName":self.PatientName, 
+            "Claimed":self.Claimed}
 
 @app.route('/appointments')
 def get_avail_appointment():
