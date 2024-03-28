@@ -15,7 +15,7 @@ CORS(app)
 
 appointments_url = "http://localhost:5000/appointments"
 # calendar_url = "http://localhost:5001/Clinic_calendar"
-claims_url = "http://localhost:5002/submit_claim"
+claims_url = "http://localhost:5002/claims"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
@@ -38,9 +38,12 @@ if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
 
 @app.route("/submit_claim", methods=['POST'])
 def submit_claims():
+    print('fuck ken')
     # Simple check of input format and data of the request are JSON
     if request.is_json:
         try:
+            print(request.get_json())
+            print('fuck')
             claim = request.get_json()
             print("\nSubmitted a claim in JSON:", claim)
 
