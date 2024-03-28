@@ -379,18 +379,4 @@ services:
       - appointments
       - activity_log
       - error
-      - rabbitmq
-      - email_service
-      - claims
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      email_service: "http://email_service:5010/email_service"
-      activitylog_url: "http://activity_log:5007/activity_log"
-      error_url: "http://error:5008/error"
-      patients_url: "http://patient:5006/patient"
-      appointments_url: "http://appointments:5000/appointments"
-      claims_url: "http://submit_claim:5002/submit_claim"
-      PYTHONUNBUFFERED: 1
-    ports:
-      - "5300:5300"
+      - r
