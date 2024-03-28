@@ -1,5 +1,0 @@
-Flask==3.0.1
-Flask-Cors==4.0.0
-Telegram == 0.0.1
-python-telegram-bot == 21.0.1
-pyTelegramBotAPI ==4.16.1

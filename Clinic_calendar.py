@@ -3,11 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 import calendar
 
-# from flasgger import Swagger
+from flasgger import Swagger
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/calendar')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/calendar

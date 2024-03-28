@@ -126,23 +126,6 @@ services:
   ########### Simple Microservices###############
   ###############################################
 
-  #################################
-  # notification - Simple microservice
-  #################################
-  notification:
-      image: notification
-      build:
-        context: ./   
-        dockerfile: notification.Dockerfile
-      restart: always
-      # environment:
-      #   dbURL: mysql+mysqlconnector://root@host.docker.internal:3306/bookings
-      #   PYTHONUNBUFFERED: 1
-      ports:
-        - "5011:5011"
-      # networks:
-      #   - scenario1
-
   ###################################
   # Patient: The Patient microservice
   ###################################
