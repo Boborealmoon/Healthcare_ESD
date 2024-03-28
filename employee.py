@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from flask import Flask
 from flask_cors import CORS
 
 # from flasgger import Swagger

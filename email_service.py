@@ -7,14 +7,15 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 mail = Mail(app)
+CORS(app)
 
 
 # Configure Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Update with your SMTP server
 app.config['MAIL_PORT'] = 465  # Update with your SMTP port
-app.config['MAIL_USERNAME'] = 'kevanteoty@gmail.com'  # Update with your email credentials
-app.config['MAIL_PASSWORD'] = 'fqtm blbt asgh yzce'  # Update with your email credentials
-app.config['MAIL_DEFAULT_SENDER'] = 'kevanteoty@gmail.com'  # Update with your email address
+app.config['MAIL_USERNAME'] = 'esdsmuclinic@gmail.com'  # Update with your email credentials
+app.config['MAIL_PASSWORD'] = 'zqhg tqvl tvfp ifiv'  # Update with your email credentials
+app.config['MAIL_DEFAULT_SENDER'] = 'esdsmuclinic@gmail.com'  # Update with your email address
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -37,4 +38,4 @@ def send_email():
         return jsonify({"message": "Error sending email", "error": str(e)}), 500
     
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5010)
+    app.run(host="0.0.0.0", port=5010,debug=True)
