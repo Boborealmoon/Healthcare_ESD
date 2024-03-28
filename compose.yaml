@@ -17,7 +17,7 @@ services:
     build:
       context: ./
       dockerfile: webpage.Dockerfile
-    image: boborealmoon/webpage:1.0
+    image: kevan1508/webpage:1.0
     restart: always
     environment:
       FLASK_APP: "webpage.py"
@@ -130,7 +130,7 @@ services:
     build:
       context: ./
       dockerfile: patient.Dockerfile
-    image: boborealmoon/patient:1.0
+    image: kevan1508/patient:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
@@ -149,7 +149,7 @@ services:
     build:
       context: ./
       dockerfile: employee.Dockerfile
-    image: boborealmoon/employee:1.0
+    image: kevan1508/employee:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
@@ -167,7 +167,7 @@ services:
     build:
       context: ./
       dockerfile: inventory.Dockerfile
-    image: boborealmoon/inventory:1.0
+    image: kevan1508/inventory:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
@@ -182,7 +182,7 @@ services:
     build:
       context: ./
       dockerfile: claims.Dockerfile
-    image: boborealmoon/claims:1.0
+    image: kevan1508/claims:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
@@ -197,7 +197,7 @@ services:
     build:
       context: ./
       dockerfile: appointments.Dockerfile
-    image: boborealmoon/appointments:1.0
+    image: kevan1508/appointments:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
@@ -212,7 +212,7 @@ services:
     build:
       context: ./
       dockerfile: order.Dockerfile
-    image: boborealmoon/order:1.0
+    image: kevan1508/order:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
@@ -227,7 +227,7 @@ services:
     build:
       context: ./
       dockerfile: calendar.Dockerfile
-    image: boborealmoon/calendar:1.0
+    image: kevan1508/calendar:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
@@ -242,7 +242,7 @@ services:
     build:
       context: ./
       dockerfile: email_service.Dockerfile
-    image: boborealmoon/email_service:1.0
+    image: kevan1508/email_service:1.0
     restart: always
     ports:
       - "5010:5010"
@@ -254,7 +254,7 @@ services:
     build:
       context: ./
       dockerfile: error.Dockerfile
-    image: boborealmoon/error:esd
+    image: kevan1508/error:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -271,7 +271,7 @@ services:
     build:
       context: ./
       dockerfile: activity_log.Dockerfile
-    image: boborealmoon/activity_log:esd
+    image: kevan1508/activity_log:esd
     restart: always
     depends_on:
       - rabbitmq
@@ -293,7 +293,7 @@ services:
     build:
       context: ./
       dockerfile: refill_prescription.Dockerfile
-    image: boborealmoon/refill_prescription:1.0
+    image: kevan1508/refill_prescription:1.0
     depends_on:
       - employee
       - inventory 
@@ -323,7 +323,7 @@ services:
     build:
       context: ./
       dockerfile: book_appointment.Dockerfile
-    image: boborealmoon/book_appointment:esd
+    image: kevan1508/book_appointment:esd
     restart: always
     depends_on:
       - patient
@@ -332,14 +332,16 @@ services:
       - error
       - rabbitmq
       - email_service
+      - calendar
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       email_service: "http://email_service:5010/email_service"
-      activitylog_url: "http://activity_log:5007/activity_log"
-      error_url: "http://error:5008/error"
+      # activitylog_url: "http://activity_log:5007/activity_log"
+      # error_url: "http://error:5008/error"
       patients_url: "http://patient:5006/patient"
       appointments_url: "http://appointments:5000/appointments"
+      calendar_url: "http://calendar:5001/calendar"
       PYTHONUNBUFFERED: 1
     ports:
       - "5200:5200"
@@ -352,7 +354,7 @@ services:
     build:
       context: ./
       dockerfile: submit_claims.Dockerfile
-    image: boborealmoon/submit_claims:esd
+    image: kevan1508/submit_claims:esd
     restart: always
     depends_on:
       - patient

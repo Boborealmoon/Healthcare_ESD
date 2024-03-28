@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
+from os import environ
 
 import requests
 from invokes import invoke_http
@@ -13,16 +14,16 @@ import amqp_connection
 app = Flask(__name__)
 CORS(app)
 
-appointments_url = "http://localhost:5000/appointments"
-calendar_url = "http://localhost:5001/calendar"
+appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
+calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
 # claims_url = "http://localhost:5002/new_claim"
 # employees_url = "http://localhost:5003/employee"
 # inventory_url = "http://localhost:5004/inventory"
 # order_url = "http://localhost:5005/order"
-patients_url = "http://localhost:5006/patient"
+patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
 # activitylog_url = "http://localhost:5007/activity_log"
 # error_url = "http://localhost:5008/error"
-email_service_url = "http://localhost:5010/email_service"
+email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
