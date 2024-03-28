@@ -10,7 +10,7 @@ CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-CORS(app)
+
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments
 
 db = SQLAlchemy(app)
@@ -35,14 +35,7 @@ class appointments(db.Model):
         self.Claimed = Claimed
 
     def json(self):
-        return {
-            "AppointmentID": self.AppointmentID, 
-            "AppointmentDate": self.AppointmentDate.strftime('%A, %Y-%m-%d'), 
-            "TimeslotID": self.TimeslotID, 
-            "EmployeeID": self.EmployeeID, 
-            "PatientID": self.PatientID, 
-            "PatientName":self.PatientName, 
-            "Claimed":self.Claimed}
+        return {"AppointmentID": self.AppointmentID, "AppointmentDate": self.AppointmentDate, "TimeslotID": self.TimeslotID, "EmployeeID": self.EmployeeID, "PatientID": self.PatientID, "PatientName":self.PatientName, "Claimed":self.Claimed}
 
 @app.route('/appointments')
 def get_avail_appointment():
@@ -143,7 +136,7 @@ def create_appointment():
         EmployeeID=data['EmployeeID'],
         PatientID=data['PatientID'], 
         PatientName=data['PatientName'],
-        Claimed=False)
+        Claimed=data['Claimed'])
 
     
     try:
@@ -167,6 +160,8 @@ def create_appointment():
             "data": new_appointment.json()
         }
     ), 201
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
