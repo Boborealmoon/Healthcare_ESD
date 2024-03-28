@@ -54,8 +54,8 @@
     </header>
     <!-- End of Header -->
     <div id="app" class="container">
-        <h1>Medicines</h1>
-        <table class="table">
+        <h1>Medicine Inventory</h1>
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">Product ID</th>
@@ -84,7 +84,7 @@
             </tbody>
         </table>
 
-        <button @click="refillPrescription" class="btn btn-primary">Refill Prescription</button>
+        <button @click="refillPrescription" class="btn btn-outline-primary">Refill Prescription</button>
     </div>
     <script>
     const inventory_URL = "http://localhost:5004/inventory"; // Update this URL
@@ -133,8 +133,8 @@
                 .then(data => {
                     console.log("Prescription refill successful:", data);
                     alert("Prescription refill successful!");
-                    // // Redirect to order.html upon successful refill
-                    // window.location.href = "/order.html";
+                    // Redirect to order.html upon successful refill
+                    window.location.href = "order.html";
 
                 })
                 .catch(error => {

@@ -53,13 +53,14 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">Order ID</th>
                     <th scope="col">Product ID</th>
                     <th scope="col">Product Name</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Unit of Measurement</th>
                     <th scope="col">Supplier ID</th>
                     <th scope="col">Supplier Contact Email</th>
-                    <th scope="col">Units To Order</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Units Orderered</th>
                 </tr>
             </thead>
             <tbody id="order-table-body">
@@ -70,7 +71,7 @@
 
     <script>
         // Fetch data from server and populate the table
-        fetch("http://localhost:5100/refill_prescription")
+        fetch("http://localhost:5005/orders")
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch order data.');
@@ -80,18 +81,19 @@
         .then(data => {
             console.log("Order data:", data);
             // Populate the table dynamically with data received from the server
-            const orderData = data.order; // Assuming the server returns the order data
+            const orderData = data.data.orders; // Assuming the server returns the order data
             const tableBody = document.getElementById('order-table-body');
             orderData.forEach(item => {
                 const row = `
                     <tr>
+                        <td>${item.OrderID}</td>
                         <td>${item.ProductID}</td>
                         <td>${item.ProductName}</td>
                         <td>${item.ProductQty}</td>
-                        <td>${item.UnitOfMeasurement}</td>
                         <td>${item.SupplierID}</td>
                         <td>${item.SupplierContactEmail}</td>
-                        <td>${item.UnitsToOrder}</td>
+                        <td>${item.OrderDate}</td>
+                        <td>${item.UnitsOrdered}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
