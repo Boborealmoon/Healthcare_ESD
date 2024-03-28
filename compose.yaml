@@ -335,14 +335,16 @@ services:
       - error
       - rabbitmq
       - email_service
+      - calendar
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       email_service: "http://email_service:5010/email_service"
-      activitylog_url: "http://activity_log:5007/activity_log"
-      error_url: "http://error:5008/error"
+      # activitylog_url: "http://activity_log:5007/activity_log"
+      # error_url: "http://error:5008/error"
       patients_url: "http://patient:5006/patient"
       appointments_url: "http://appointments:5000/appointments"
+      calendar_url: "http://calendar:5001/calendar"
       PYTHONUNBUFFERED: 1
     ports:
       - "5200:5200"

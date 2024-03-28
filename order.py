@@ -46,24 +46,24 @@ class Order(db.Model):
         }
 
 
-# @app.route('/orders')
-# def get_all_orders():
-#     orderlist = db.session.scalars(db.select(Order)).all()
-#     if len(orderlist):
-#         return jsonify(
-#             {
-#                 "code": 200,
-#                 "data": {
-#                     "inventory": [orders.json() for orders in orderlist]
-#                 }
-#             }
-#         )
-#     return jsonify(
-#         {
-#             "code": 404,
-#             "message": "Error nigga"
-#         }
-#     ), 404
+@app.route('/orders')
+def get_all_orders():
+    orderlist = db.session.scalars(db.select(Order)).all()
+    if len(orderlist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "orders": [orders.json() for orders in orderlist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Error nigga"
+        }
+    ), 404
 
 
 @app.route('/create_order', methods=['POST'])
