@@ -99,12 +99,13 @@ def get_avail_appointment():
                 }
             ), 404
     else:
-        return jsonify(
-            {
-                "code": 404,
-                "message": f"No appointments available for {selected_date}."
-            }
-        ), 404
+        # If there are no appointments for the selected date, return all timeslots
+        return jsonify({
+            "code": 200,
+            "data": {
+                "appointments": timeslots
+            },
+        })
 
 
 @app.route('/appointments/<string:PatientID>')

@@ -12,7 +12,6 @@ auth_token = "550aef6908f9fe30160d81fc1c935e76"
 
 print("Notification.py is now running------------------")
 
-
 # Define the client object with the Twilio account SID and auth token
 client = Client(account_sid, auth_token)
 
@@ -50,8 +49,6 @@ def send_message():
             "message": "Message failed to send ."
         }
     ), 404
-
-
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

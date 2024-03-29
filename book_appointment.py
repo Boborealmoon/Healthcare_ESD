@@ -104,14 +104,15 @@ def processAppointmentbooking(appointment):
         print('\n-----Invoking patients microservice-----')
         patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
         print('patient_result:', patient_result)
+        patient_email = patient_result["data"]["Email"]
 
         patient_timeslot = appointment_result["data"]["TimeslotID"]
 
         print('\n-----Invoking calendar microservice-----')
-        calendar_result = invoke_http(calendar_url + f"/ID/{patient_timeslot}", method='GET')
+        calendar_result = invoke_http(calendar_url + f"/{patient_timeslot}", method='GET')
         print('calendar_result:', calendar_result)
 
-        patient_email = patient_result["data"]["Email"]
+        
         patient_number = patient_result["data"]["ContactNo"]
         patient_name = appointment_result["data"]["PatientName"]
         appt_date = appointment_result["data"]["AppointmentDate"]

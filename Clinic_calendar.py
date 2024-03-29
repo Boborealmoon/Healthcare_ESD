@@ -33,7 +33,7 @@ class Calendar(db.Model):
             "TimeEnd": str(self.TimeEnd)
         }
 
-@app.route("/calendar/ID/<string:TimeslotID>")
+@app.route("/calendar/<string:TimeslotID>")
 def getTimeByID(TimeslotID):
     time = Calendar.query.filter_by(TimeslotID=TimeslotID).first()
 

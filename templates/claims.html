@@ -118,8 +118,7 @@ body {
                         // Check if response status is within the range of 200 to 299
                         if (!response.ok) {
                             throw new Error('Failed to fetch claims data. Please try again.');
-                        }
-                        print("fetch okay")
+                        }   
                         return response.json();
                     })
                     .then(data => {
