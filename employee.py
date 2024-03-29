@@ -44,7 +44,6 @@ def get_all():
     #retrive all records
     employeeList = Employee.query.all()
 
-
     if len(employeeList):
         return jsonify(
             {
@@ -61,24 +60,6 @@ def get_all():
         }
     ), 404
 
-
-@app.route("/employees/<string:EmployeeID>")
-def find_by_ID(EmployeeID):
-    employee = Employee.query.filter_by(EmployeeID=EmployeeID).first()
-
-    if employee:
-        return jsonify(
-            {
-                "code": 200,
-                "data": employee.json()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": " {EmployeeID} not found."
-        }
-    ), 404
 
 @app.route("/employees/email/<int:EmployeeID>")
 def getPatientEmail(EmployeeID):
