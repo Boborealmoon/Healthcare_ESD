@@ -86,10 +86,11 @@ def refill_prescription():
         # invoke_http(activitylog_url, method="POST", json=order_result)
         # print('\nOrder sent to activity log.\n')
 
+        message = json.dumps(order_result)
+
         if order_result.get("code") not in range(200, 300):
             #changes made#
-            print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
-            message = json.dumps(order_result)
+            print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')           
             channel.basic_publish(exchange=exchangename, routing_key="order.error",
                                   body=message, properties=pika.BasicProperties(delivery_mode=2))
             print("\nOrder Creation Failure ({:d}) published to the RabbitMQ Exchange:".format(
@@ -108,6 +109,13 @@ def refill_prescription():
                 "data": {"order_result": order_result},
                 "message": "Order creation failure sent for error handling."
             }
+        
+        else:
+            print('\n\n-----Publishing the (order info) message with routing_key=order.info-----')                 
+            channel.basic_publish(exchange=exchangename, routing_key="order.info", 
+            body=message)
+        
+        print("\nOrder published to RabbitMQ Exchange.\n")
         orders.append(order_data)
 
         vendor_email = item["SupplierContactEmail"]
