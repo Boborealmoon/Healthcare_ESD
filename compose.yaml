@@ -250,6 +250,18 @@ services:
     ports:
       - "5010:5010"
 
+  #################################
+  # Notification: The Notification microservice
+  #################################
+  notification:
+    build:
+      context: ./
+      dockerfile: notification.Dockerfile
+    image: boborealmoon/notification:1.0
+    restart: always
+    ports:
+      - "5011:5011"
+
   ###################################
   # Error: The Error microservice
   ###################################
