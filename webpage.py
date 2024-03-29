@@ -19,19 +19,24 @@ CORS(app)
 def home():
     return render_template('index.html')
 
-@app.route('/book_appointment')
-def book_appointment():
-    return redirect('book_appointments.html')
+# @app.route('/book_appointment')
+# def book_appointment():
+#     return redirect('book_appointments.html')
 
-@app.route('/claims')
-def claims():
-    # You can define logic here to render claims.html or another suitable template
-    return render_template('claims.html')
+@app.route('/order')
+def order():
+    return render_template('order.html')
 
-@app.route('/create_claims')
-def create_claims():
-    # You can define logic here to render create_claims.html or another suitable template
-    return render_template('create_claims.html')
+
+# @app.route('/refill_prescription')
+# def refill_prescription():
+#     return render_template('refill_prescription.html')
+
+
+@app.route('/appointment')
+def appointments():
+    return render_template('appointment.html')
+
 
 
 # # Fixed route function to correctly capture the input
