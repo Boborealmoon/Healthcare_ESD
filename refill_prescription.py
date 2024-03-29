@@ -21,7 +21,7 @@ CORS(app)
 appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
 calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
 claims_url = environ.get('claims_url') or "http://localhost:5002/new_claim"
-employees_url = environ.get('employees_url') or "http://localhost:5003/employee"
+employees_url = environ.get('employees_url') or "http://localhost:5003/employees"   
 inventory_url = environ.get('inventory_url') or "http://localhost:5004/inventory"
 order_url = environ.get('order_url') or "http://localhost:5005/order"
 patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
@@ -115,38 +115,37 @@ def refill_prescription():
             channel.basic_publish(exchange=exchangename, routing_key="order.info", 
             body=message)
         
-        print("\nOrder published to RabbitMQ Exchange.\n")
-        orders.append(order_data)
+            print("\nOrder published to RabbitMQ Exchange.\n")
+            orders.append(order_data)
 
-        vendor_email = item["SupplierContactEmail"]
+            vendor_email = item["SupplierContactEmail"]
 
-        email_data = {
-            "recipient_email": vendor_email,
-            "subject": "Order Confirmation",
-            "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order.\n\nThank you!"
-        }
+            email_data = {
+                "recipient_email": vendor_email,
+                "subject": "Order Confirmation",
+                "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order.\n\nThank you!"
+            }
 
-        print('\n\n-----Invoking email microservice-----')
-        email_result = invoke_http(email_service_url, method='POST', json=email_data)
-        print(email_result)
+            print('\n\n-----Invoking email microservice-----')
+            email_result = invoke_http(email_service_url, method='POST', json=email_data)
+            print(email_result)
 
-    
-    print('\n-----Invoking employee microservice-----')
-    employee_email = invoke_http(employees_url)
-    print('employee_email:', employee_email)
+            print('\n-----Invoking employee microservice-----')
+            employee_email = invoke_http(employees_url + f'/email/21')
+            print('employee_email:', employee_email)
 
-    
-    clinic_email = employee_email['data']['Email']
+            
+            clinic_email = employee_email['data']['Email']
 
-    email_data = {
-            "recipient_email": clinic_email,
-            "subject": "Order Confirmation",
-            "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order. \n\n\n\nThank you!"
-        }
+            email_data = {
+                    "recipient_email": clinic_email,
+                    "subject": "Order Confirmation",
+                    "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order. \n\n\n\nThank you!"
+                }
 
-    print('\n\n-----Invoking email microservice-----')
-    email_result = invoke_http(email_service_url, method='POST', json=email_data)
-    print(email_result)
+            print('\n\n-----Invoking email microservice-----')
+            email_result = invoke_http(email_service_url, method='POST', json=email_data)
+            print(email_result)
     
     return jsonify({"status": "success", "order": order_result})
 
