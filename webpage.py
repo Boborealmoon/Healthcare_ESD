@@ -15,6 +15,11 @@ def  home():
     index_page_load = render_template('index.html')
     return index_page_load
 
+@app.route('/<page>')
+def  routed(page):
+    index_page_load = f"{page}.html"
+    return render_template(index_page_load)
+
 # @app.route('/about')
 # def about():
 #     return render_template('about.html')
