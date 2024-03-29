@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Head content goes here -->
-    <title>Appointment Booking</title>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Appointment Booking</title>
     <!-- Bootstrap CSS -->
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
-        rel='stylesheet'
-        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
-        crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet'
+        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>
     <!-- Vue 3 -->
     <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
     <link rel="stylesheet" href="general.css">
 </head>
-</head>
+<style>
+body {
+    background-image: url('background.jpeg');
+    background-size: cover; /* Ensure the background image covers the entire viewport */
+    background-position: center; /* Center the background image */
+    background-attachment: fixed; /* Fix the background image so it doesn't scroll with the content */
+}
+</style>
 <body>
     <!-- Header content goes here -->
     <header>
@@ -56,38 +60,68 @@
         </div>
     </header>
     
-    <div id="app" class="container">
+    <div id="app" class="container col-8 shadow p-3 mt-5 mb-5 bg-white rounded">
         <div class="row">
             <div class="col-2"></div>
             <div class="col-8">
                 <h1>Submit Claim</h1>
                 <form @submit.prevent="submitClaim" method="POST" action="http://localhost:5300/submit_claim">
                     
-                <div class="mb-3">
-                    <label for="EmployeeID" class="form-label">Patient ID</label>
-                    <input type="text" class="form-control" id="EmployeeID" v-model="PatientID" required>
-                </div>
-                <div class="mb-3">
-                    <label for="AppointmentID" class="form-label">Appointment ID</label>
-                    <input type="text" class="form-control" id="AppointmentID" v-model="AppointmentID" required>
-                </div>
-                <button type="submit"  class="btn btn-primary">Submit Claim</button>
-        </form>
+                    <div class="mb-3">
+                        <label for="patientID" class="form-label">Patient ID</label>
+                        <p class="form-control-static">{{ PatientID }}</p>
+                    </div>
+                   
+                    <div class="mb-3">
+                        <label for="patientName" class="form-label">Patient Name</label>
+                        <p class="form-control-static">{{ PatientName }}</p>
+                    </div>
+    
+                    <!-- Dropdown menu for Appointment ID -->
+                    <div class="mb-3">
+                        <label for="AppointmentID" class="form-label">Appointment ID</label>
+                        <select class="form-select" v-model="AppointmentID" required>
+                            <option value="" disabled selected>Select an unclaimed appointment</option>
+                            <option v-for="appointment in appointments" :value="appointment.AppointmentID">{{ appointment.AppointmentID }}</option>
+                        </select>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary">Submit Claim</button>
+                </form>
             </div>
         </div>
-        
     </div>
-    <!-- v-on:click="submitClaim()" -->
+    
     <script>
         const app = Vue.createApp({
             data() {
                 return {
-                    PatientID: "",
+                    PatientID: 100,
+                    PatientName: 'John Doe',
                     AppointmentID: "",
-                    StatusOfClaims: ""
+                    StatusOfClaims: "Pending",
+                    appointments: [] // Array to store fetched appointments
                 };
             },
             methods: {
+                // Function to fetch appointments for the specified Patient ID
+                fetchAppointments() {
+                    // Make an API call to fetch appointments for the specified Patient ID
+                    fetch(`http://localhost:5000/appointments/${this.PatientID}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error fetching appointments");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        this.appointments = data.data.appointments; // Assign fetched appointments to data array
+                    })
+                    .catch(error => {
+                        console.error("Error fetching appointments:", error);
+                        // Handle error
+                    });
+                },
                 submitClaim() {
                     // Prepare data object
                     const data = {
@@ -95,7 +129,7 @@
                         AppointmentID: this.AppointmentID,
                         StatusOfClaims: this.StatusOfClaims
                     };
-
+    
                     // Send POST request to the microservice
                     fetch("http://localhost:5300/submit_claims", {
                         method: "POST",
@@ -113,15 +147,27 @@
                     .then(data => {
                         console.log("Claim submitted successfully:", data);
                         // Handle successful response
+                        alert("Claimed submitted successfully!");
+                        window.location.href = 'claims.html';
                     })
                     .catch(error => {
                         console.error("Error submitting claim:", error);
                         // Handle error
                     });
                 }
+            },
+            watch: {
+                // Watch for changes in PatientID and fetch appointments accordingly
+                PatientID(newVal) {
+                    this.fetchAppointments();
+                }
+            },
+            mounted() {
+                // Fetch appointments initially when the component is mounted
+                this.fetchAppointments();
             }
         });
-
+    
         app.mount('#app');
     </script>
 
