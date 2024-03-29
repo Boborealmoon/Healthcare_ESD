@@ -12,9 +12,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:3306/inventory
 
-
-
-
 db = SQLAlchemy(app)
 
 class Inventory(db.Model):
