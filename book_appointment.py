@@ -22,6 +22,7 @@ inventory_url = environ.get('inventory_url') or "http://localhost:5004/inventory
 order_url = environ.get('order_url') or "http://localhost:5005/order"
 patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
 email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
+notification_url = environ.get('notification_url') or "http://localhost:5012/send_message"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
@@ -111,6 +112,7 @@ def processAppointmentbooking(appointment):
         print('calendar_result:', calendar_result)
 
         patient_email = patient_result["data"]["Email"]
+        patient_number = patient_result["data"]["ContactNo"]
         patient_name = appointment_result["data"]["PatientName"]
         appt_date = appointment_result["data"]["AppointmentDate"]
         appt_time = calendar_result["data"]["TimeBegin"]
@@ -121,9 +123,18 @@ def processAppointmentbooking(appointment):
             "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date} at {appt_time}.\n\nThank you!"
         }
         
+        sms_data = {
+            "contact": patient_number,
+            "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date} at {appt_time}.\n\nThank you!"
+        }
+
         print('\n\n-----Invoking email microservice-----')
         email_result = invoke_http(email_service_url, method='POST', json=email_data)
         print(email_result)
+
+        print('\n\n-----Invoking notification microservice-----')
+        notification_result = invoke_http(notification_url, method='POST', json=sms_data)
+        print(notification_result)
         
         print('\n\n-----Publishing the (Appointment Info) message with routing_key=Appointment.info-----')        
             # invoke_http(activity_log_URL, method="POST", json=claim_result)            

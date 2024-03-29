@@ -7,8 +7,8 @@ import os
 app = Flask(__name__)
 
 # Define the Twilio account SID and auth token
-account_sid = "ACdfa8fa78d5ab51b5c64d08003378bc55"
-auth_token = "9bf9a09ca1d1777e16b088b3452c8c48"
+account_sid = "AC4b7413285dab6846b235ceff328da0a1"
+auth_token = "550aef6908f9fe30160d81fc1c935e76"
 
 print("Notification.py is now running------------------")
 
@@ -20,6 +20,8 @@ client = Client(account_sid, auth_token)
 @app.route('/send_message', methods=['POST'])
 def send_message():
     print("Now calling send_message function------------------")
+    data = request.get_json()
+    print(data)
     try:
         # Get the recipient's phone number and message from the request
         data = request.get_json()
@@ -30,7 +32,7 @@ def send_message():
         # Use the client object to send a message to the given phone number
         message = client.messages.create(
             to=to_number, # patient number
-            from_="+17607864276", # my nummber
+            from_="+12054984472", # my nummber
             body = message
         )
         print("Message is now sent--------------------------------")
