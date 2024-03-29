@@ -114,8 +114,18 @@ def processSubmitClaim(claim):
 
     else:
         patient_email = patient_result['data']['Email']
-        
-        print(patient_email)
+        patient_appointmentid = claim_result['data']['AppointmentID']
+
+        print('\n\n-----Invoking appointments microservice-----')
+        update_data = {
+            "AppointmentID": patient_appointmentid,  # Replace with the actual appointment ID
+            "Claimed": True  # Replace with the updated claim status
+        }
+
+        # Invoke the appointments microservice to update the appointment
+        update_result = invoke_http(appointments_url + f'/{patient_id}/{patient_appointmentid}', method='PUT', json=update_data)
+        print(update_result)
+
         # Send an email function
         email_data = {
             "recipient_email": patient_email,
@@ -123,7 +133,7 @@ def processSubmitClaim(claim):
             "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment.\n\nThank you!"
         }
 
-        print('\n\n-----Invoking email microservice as claim submission fails-----')
+        print('\n\n-----Invoking email microservice-----')
         email_result = invoke_http(email_service_url, method='POST', json=email_data)
         print(email_result)
         # Record new claim, record the activity log anyway

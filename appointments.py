@@ -173,8 +173,36 @@ def create_appointment():
         }
     ), 201
 
+@app.route("/appointments/<string:PatientID>/<int:AppointmentID>", methods=['PUT'])
+def update_appointment(PatientID, AppointmentID):
+    data = request.get_json()
+    
+    # Query the appointment with the specified PatientID and AppointmentID
+    appointment = appointments.query.filter_by(PatientID=PatientID, AppointmentID=AppointmentID).first()
 
+    print(appointment)
+    if appointment:
+        # Update the claim status if it's present in the request data
+        if 'Claimed' in data:
+            appointment.Claimed = data['Claimed']
 
+        try:
+            db.session.commit()
+            return jsonify({
+                "code": 200,
+                "data": appointment.json(),
+                "message": "Appointment updated successfully."
+            }), 200
+        except Exception as e:
+            return jsonify({
+                "code": 500,
+                "message": f"Failed to update appointment: {str(e)}"
+            }), 500
+    else:
+        return jsonify({
+            "code": 404,
+            "message": f"Appointment with PatientID {PatientID} and AppointmentID {AppointmentID} not found."
+        }), 404
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
