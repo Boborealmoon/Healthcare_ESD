@@ -19,6 +19,7 @@ exchangetype = "topic" # - use a 'topic' exchange to enable interaction
 def create_connection(max_retries=12, retry_interval=5):
     print('amqp_setup:create_connection')
     
+    
     retries = 0
     connection = None
     

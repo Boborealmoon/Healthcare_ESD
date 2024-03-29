@@ -247,6 +247,18 @@ services:
     ports:
       - "5010:5010"
 
+  #################################
+  # notification: The notification microservice
+  #################################
+  notification:
+    build:
+      context: ./
+      dockerfile: notification.Dockerfile
+    image: kevan1508/notification:1.0
+    restart: always
+    ports:
+      - "5011:5011"
+
   ###################################
   # Error: The Error microservice
   ###################################
@@ -301,6 +313,7 @@ services:
       - activity_log
       - error
       - rabbitmq
+      - notification
     environment:
       rabbit_host: rabbitmq 
       rabbit_port: 5672 
@@ -310,6 +323,7 @@ services:
       email_service: "http://email_service:5010/email_service"
       activitylog_url: "http://activity_log:5007/activity_log"
       error_url: "http://error:5008/error"
+      notification_url: "http://notification:5012/send_message"
       PYTHONUNBUFFERED: 1 
     ports: 
       - "5100:5100"
@@ -340,6 +354,7 @@ services:
       calendar_url: "http://calendar:5001/calendar"
       activitylog_url: "http://activity_log:5007/activity_log"
       error_url: "http://error:5008/error"
+      notification_url: "http://notification:5012/send_message"
       PYTHONUNBUFFERED: 1
     ports:
       - "5200:5200"
