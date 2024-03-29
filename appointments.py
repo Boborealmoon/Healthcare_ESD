@@ -41,33 +41,53 @@ class appointments(db.Model):
             "PatientName":self.PatientName, 
             "Claimed":self.Claimed}
 
+# Modify the Flask function to return timeslots as objects with ID and time
 @app.route('/appointments')
 def get_avail_appointment():
-    appointmentlist = db.session.scalars(db.select(appointments))
-    timeslots = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+    selected_date = request.args.get('selected_date')  # Get the selected date from the query parameters
+
+    if not selected_date:
+        return jsonify({"error": "No selected date provided"}), 400
+
+    appointmentlist = db.session.query(appointments).filter(appointments.AppointmentDate == selected_date).all()
+    
+    timeslots = [
+        {"id": 1, "time": "09:00 AM"},
+        {"id": 2, "time": "09:30 AM"},
+        {"id": 3, "time": "10:00 AM"},
+        {"id": 4, "time": "10:30 AM"},
+        {"id": 5, "time": "11:00 AM"},
+        {"id": 6, "time": "11:30 AM"},
+        {"id": 7, "time": "12:00 PM"},
+        {"id": 8, "time": "13:30 PM"},
+        {"id": 9, "time": "14:00 PM"},
+        {"id": 10, "time": "14:30 PM"},
+        {"id": 11, "time": "15:00 PM"},
+        {"id": 12, "time": "15:30 PM"},
+        {"id": 13, "time": "16:00 PM"},
+        {"id": 14, "time": "16:30 PM"},
+    ]
     if appointmentlist:
         appointments_data = [appointment.json() for appointment in appointmentlist]
-        today = date.today() #To get todays date
-        appointments_booked = [] #To consolidate all appointments booked on the date
-        timeslots_booked = [] #To consolidate all timeslots booked on the date
-        
+        appointments_booked = []
+        timeslots_booked = []
+
         for appointment in appointments_data:
-            if appointment["AppointmentDate"] == today:
-                appointments_booked.append(appointment)
+            appointments_booked.append(appointment)
 
         for appointment in appointments_booked:
             timeslots_booked.append(appointment["TimeslotID"])
 
-        for slot in timeslots_booked:
-            if slot in timeslots:
-                timeslots.remove(slot)
+        available_timeslots = [slot for slot in timeslots if slot["id"] not in timeslots_booked]
 
-        if len(timeslots) > 0:
+        print(available_timeslots)
+        
+        if len(available_timeslots) > 0:
             return jsonify(
                 {
                     "code": 200,
                     "data": {
-                        "appointments": timeslots
+                        "appointments": available_timeslots
                     },
                 }
             )
@@ -75,17 +95,17 @@ def get_avail_appointment():
             return jsonify(
                 {
                     "code": 404,
-                    "message": f"No appointments made today."
+                    "message": f"No appointments available for {selected_date}."
                 }
             ), 404
     else:
-        # Handle case where no appointments are available
         return jsonify(
             {
                 "code": 404,
-                "message": "No appointments available."
+                "message": f"No appointments available for {selected_date}."
             }
         ), 404
+
 
 @app.route('/appointments/<string:PatientID>')
 def get_appointment_by_ID(PatientID):

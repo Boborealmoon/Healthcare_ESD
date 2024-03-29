@@ -82,14 +82,14 @@ body {
                     
                     <div class="mb-3">
                         <label for="appointmentDate" class="form-label">Appointment Date</label>
-                        <input type="date" class="form-control" id="AppointmentDate" v-model="AppointmentDate" :min="minDate" required>
+                        <input type="date" class="form-control" id="AppointmentDate" @change="fetchAvailableTimeslots" v-model="selectedDate" :min="minDate" required>
                     </div>
                     
                     <div class="mb-3">
                         <label for="timeslotID" class="form-label">Choose your Timeslot</label>
                         <select class="form-select" id="TimeslotID" v-model="TimeslotID" required>
                             <option value="" disabled>Select a Timeslot</option>
-                            <option v-for="slot in timeslots" :value="slot.id">{{ slot.time }}</option>
+                            <option v-for="slot in availableTimeslots" :value="slot.id">{{ slot.time }}</option>
                         </select>
                     </div>
                    
@@ -108,68 +108,13 @@ body {
         const app = Vue.createApp({
             data() {
                 return {
+                    selectedDate: "",
                     AppointmentDate: "",
                     TimeslotID: "",
                     EmployeeID: 21,
                     PatientID: 100,
                     PatientName: "John Doe",
-                    timeslots: [{
-                            id: 1,
-                            time: "09:00 AM"
-                        },
-                        {
-                            id: 2,
-                            time: "09:30 AM"
-                        },
-                        {
-                            id: 3,
-                            time: "10:00 AM"
-                        },
-                        {
-                            id: 4,
-                            time: "10:30 AM"
-                        },
-                        {
-                            id: 5,
-                            time: "11:00 AM"
-                        },
-                        {
-                            id: 6,
-                            time: "11:30 AM"
-                        },
-                        {
-                            id: 7,
-                            time: "12:00 PM"
-                        },
-                        {
-                            id: 8,
-                            time: "13:30 PM"
-                        },
-                        {
-                            id: 9,
-                            time: "14:00 PM"
-                        },
-                        {
-                            id: 10,
-                            time: "14:30 PM"
-                        },
-                        {
-                            id: 11,
-                            time: "15:00 PM"
-                        },
-                        {
-                            id: 12,
-                            time: "15:30 PM"
-                        },
-                        {
-                            id: 13,
-                            time: "16:00 PM"
-                        },
-                        {
-                            id: 14,
-                            time: "16:30 PM"
-                        },
-                    ]
+                    availableTimeslots: []
                 };
             },
 
@@ -182,11 +127,32 @@ body {
                     return minDate;
                 }
             },
-            
+            mounted() {
+                this.fetchAvailableTimeslots();
+            },
             methods: {
+                fetchAvailableTimeslots() {
+                    fetch(`http://localhost:5000/appointments?selected_date=${this.selectedDate}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch available timeslots');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.code === 200) {
+                                this.availableTimeslots = data.data.appointments;
+                            } else {
+                                throw new Error(data.message || 'Failed to fetch available timeslots');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching available timeslots:', error);
+                        });
+                },
                 createAppointment() {
                     const data = {
-                        AppointmentDate: this.AppointmentDate,
+                        AppointmentDate: this.selectedDate,
                         TimeslotID: parseInt(this.TimeslotID),
                         EmployeeID: this.EmployeeID,
                         PatientID: this.PatientID,
