@@ -107,7 +107,7 @@ def processAppointmentbooking(appointment):
 
         patient_timeslot = appointment_result["data"]["TimeslotID"]
 
-        print('\n-----Invoking clinic microservice-----')
+        print('\n-----Invoking calendar microservice-----')
         calendar_result = invoke_http(calendar_url + f"/ID/{patient_timeslot}", method='GET')
         print('calendar_result:', calendar_result)
 
