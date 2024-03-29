@@ -11,7 +11,7 @@ def index():
     return redirect(url_for('home'))
 
 @app.route('/home')
-def home():
+def  home():
     index_page_load = render_template('index.html')
     return index_page_load
 

@@ -6,10 +6,9 @@ from datetime import date
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://root:root@localhost:8889/appointments')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/appointments'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
-# export dbURL=mysql+mysqlconnector://root:root@localhost:8889/appointments
 
 db = SQLAlchemy(app)
 
@@ -79,6 +78,14 @@ def get_avail_appointment():
                     "message": f"No appointments made today."
                 }
             ), 404
+    else:
+        # Handle case where no appointments are available
+        return jsonify(
+            {
+                "code": 404,
+                "message": "No appointments available."
+            }
+        ), 404
 
 @app.route('/appointments/<string:PatientID>')
 def get_appointment_by_ID(PatientID):

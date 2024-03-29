@@ -7,7 +7,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/inventory')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/inventory'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:3306/inventory
@@ -223,13 +223,6 @@ def create_inventory(ProductID):
             "data": inventory.json()
         }
     ), 201
-
-
-    
-
-
-
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5004, debug=True)

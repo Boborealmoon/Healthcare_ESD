@@ -7,6 +7,9 @@ from datetime import date
 import requests
 from invokes import invoke_http
 
+import os, sys
+from os import environ
+
 import pika
 import json
 import amqp_connection
@@ -15,12 +18,14 @@ import sys
 app = Flask(__name__)
 CORS(app)
 
-employees_url = "http://localhost:5003/employees/email/1"
-inventory_url = "http://localhost:5004/inventory"
-order_url = "http://localhost:5005/create_order"
-activitylog_url = "http://localhost:5007/activity_log"
-error_url = "http://localhost:5008/error"
-email_service_url = "http://localhost:5010/email_service"
+appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
+calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
+claims_url = environ.get('claims_url') or "http://localhost:5002/new_claim"
+employees_url = environ.get('employees_url') or "http://localhost:5003/employee"
+inventory_url = environ.get('inventory_url') or "http://localhost:5004/inventory"
+order_url = environ.get('order_url') or "http://localhost:5005/order"
+patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
+email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
 
 
 exchangename = "clinic_topic"  # exchange name
@@ -77,9 +82,9 @@ def refill_prescription():
         order_result = invoke_http(order_url, method='POST', json=order_data)
         print('order_result:', order_result)
 
-        print('\n-----Invoking activity_log microservice-----')
-        invoke_http(activitylog_url, method="POST", json=order_result)
-        print('\nOrder sent to activity log.\n')
+        # print('\n-----Invoking activity_log microservice-----')
+        # invoke_http(activitylog_url, method="POST", json=order_result)
+        # print('\nOrder sent to activity log.\n')
 
         message = json.dumps(order_result)
 
