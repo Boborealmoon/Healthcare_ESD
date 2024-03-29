@@ -16,7 +16,7 @@ CORS(app)
 
 appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
 calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
-claims_url = environ.get('claims_url') or "http://localhost:5002/new_claim"
+claims_url = environ.get('claims_url') or "http://localhost:5002/claims"
 employees_url = environ.get('employees_url') or "http://localhost:5003/employee"
 inventory_url = environ.get('inventory_url') or "http://localhost:5004/inventory"
 order_url = environ.get('order_url') or "http://localhost:5005/order"

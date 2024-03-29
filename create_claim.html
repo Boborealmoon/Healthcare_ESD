@@ -41,8 +41,8 @@
                     <div class="text-center" id="menu-link">
                         <ul>
                             <li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
-                            <li class="highlight"><a href="appointment.html"><span>BOOK APPOINTMENT</span></a></li>
-                            <li><a href="" class="menufont linkhover"><span>CLAIMS</span></a></li>
+                            <li class="menufont linkhover"><a href="appointment.html"><span>BOOK APPOINTMENT</span></a></li>
+                            <li><a href="claims.html" class="highlight linkhover"><span style="color:white">CLAIMS</span></a></li>
                             <li class="menufont linkhover dropdown">
                                 <a href="profile.html">JOHN DOE</a>
                                 <div class="dropdown-content">
@@ -57,31 +57,34 @@
     </header>
     
     <div id="app" class="container">
-        <h1>Submit Claim</h1>
-        <form @submit.prevent="submitClaim" method="POST" action="http://localhost:5300/submit_claim">
-            <div class="mb-3">
-                <label for="EmployeeID" class="form-label">Patient ID</label>
-                <input type="text" class="form-control" id="EmployeeID" v-model="PatientID" required>
-            </div>
-            <div class="mb-3">
-                <label for="AppointmentID" class="form-label">Appointment ID</label>
-                <input type="text" class="form-control" id="AppointmentID" v-model="AppointmentID" required>
-            </div>
-            <div class="mb-3">
-                <label for="Claimstatus" class="form-label">Claim Status</label>
-                <input type="text" class="form-control" id="Claimstatus" v-model="StatusOfClaims" placeholder='Please Type in NEW for new claims'required>
-            </div>
-            <button type="submit"  class="btn btn-primary">Submit Claim</button>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <h1>Submit Claim</h1>
+                <form @submit.prevent="submitClaim" method="POST" action="http://localhost:5300/submit_claim">
+                    
+                <div class="mb-3">
+                    <label for="EmployeeID" class="form-label">Patient ID</label>
+                    <input type="text" class="form-control" id="EmployeeID" v-model="PatientID" required>
+                </div>
+                <div class="mb-3">
+                    <label for="AppointmentID" class="form-label">Appointment ID</label>
+                    <input type="text" class="form-control" id="AppointmentID" v-model="AppointmentID" required>
+                </div>
+                <button type="submit"  class="btn btn-primary">Submit Claim</button>
         </form>
+            </div>
+        </div>
+        
     </div>
     <!-- v-on:click="submitClaim()" -->
     <script>
         const app = Vue.createApp({
             data() {
                 return {
-                    PatientID: "",
+                    PatientID: 100,
                     AppointmentID: "",
-                    StatusOfClaims: ""
+                    StatusOfClaims: "Pending"
                 };
             },
             methods: {

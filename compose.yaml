@@ -281,7 +281,6 @@ services:
       a_queue_name: Activity_Log
       PYTHONUNBUFFERED: 1
 
-
   ##############################################
   ##########Complex Microservices###############
   ##############################################
@@ -315,7 +314,6 @@ services:
     ports: 
       - "5100:5100"
 
-
   ###############################################
   # Book Appointment: The Book Appointment microservice
   ###############################################
@@ -337,15 +335,12 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       email_service: "http://email_service:5010/email_service"
-      # activitylog_url: "http://activity_log:5007/activity_log"
-      # error_url: "http://error:5008/error"
       patients_url: "http://patient:5006/patient"
       appointments_url: "http://appointments:5000/appointments"
       calendar_url: "http://calendar:5001/calendar"
       PYTHONUNBUFFERED: 1
     ports:
       - "5200:5200"
-
 
   ###############################################
   # Submit Claims: The Submit Claims microservice
@@ -368,11 +363,11 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       email_service: "http://email_service:5010/email_service"
-      activitylog_url: "http://activity_log:5007/activity_log"
-      error_url: "http://error:5008/error"
+      # activitylog_url: "http://activity_log:5007/activity_log"
+      # error_url: "http://error:5008/error"
       patients_url: "http://patient:5006/patient"
       appointments_url: "http://appointments:5000/appointments"
-      claims_url: "http://submit_claim:5002/submit_claim"
+      claims_url: "http://claims:5002/new_claim"
       PYTHONUNBUFFERED: 1
     ports:
       - "5300:5300"

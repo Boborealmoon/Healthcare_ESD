@@ -150,13 +150,6 @@ def getInventorybySupplierContactEmail(SupplierContactEmail):
         }
     ), 404
 
-
-
-
-
-
-
-
 @app.route("/inventory/threshold/<string:Threshold>")
 def getInventorybyThreshold(Threshold):
     inventory = Inventory.query.filter_by(Threshold=Threshold).all()

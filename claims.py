@@ -5,9 +5,6 @@ from os import environ
 from flask import Flask
 from flask_cors import CORS
 
-
-
-
 # from flasgger import Swagger
 
 app = Flask(__name__)
@@ -15,7 +12,6 @@ CORS(app)
     
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:8889/claims'
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/claims'
-# 'mysql+mysqlconnector://root:root@localhost:8889/claims'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -63,25 +59,6 @@ def get_all():
         }
     )
 
-# # Find claims by ClaimID
-# @app.route("/claims/<string:ClaimID>")
-# def find_by_ID(ClaimID):
-#     claim = Claim.query.filter_by(ClaimID = ClaimID).first()
-    
-#     if claim:
-#         return jsonify(
-#             {
-#                 "code": 200,
-#                 "data": claim.json()
-#             }
-#         )
-#     return jsonify(
-#         {
-#             "code": 404,
-#             "message": "Claim {ClaimID} does not exist."
-#         }
-#     ), 404
-
 # Create a new claim
 @app.route("/new_claim", methods=['POST'])
 def new_claim():
@@ -98,13 +75,6 @@ def new_claim():
         )
         db.session.add(claim)
         db.session.commit()
-        
-        # response_data = {
-        #     "AppointmentID": claim.AppointmentID,
-        #     "ClaimID": new_claim_id,
-        #     "StatusOfClaims": claim.StatusOfClaims,
-        #     "PatientID": claim.PatientID
-        # }
         
         response = {
             "code": 201,
