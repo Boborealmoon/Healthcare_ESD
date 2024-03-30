@@ -5,6 +5,9 @@ volumes:
 networks:
   kong-net:
     driver: bridge
+  rabbitmq:
+  internal:
+  
     
 version: "3.8"
 
@@ -33,7 +36,6 @@ services:
   ####################################
   rabbitmq:
     image: rabbitmq:3-management
-    hostname: esd-rabbit
     restart: always
     ports:
       - "5672:5672"
@@ -42,6 +44,8 @@ services:
       - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
       - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq
 
 
   #######################################
@@ -136,9 +140,9 @@ services:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
       # 'mysql+mysqlconnector://is213@localhost:3306/patients'
       PYTHONUNBUFFERED: 1
-    # networks:
-    #   - kong-net
-    # port map for those exposed 
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5006:5006"
 
@@ -154,8 +158,9 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
       # 'mysql+mysqlconnector://is213@localhost:3306/employees'
-    # networks:
-    #   - kong-net
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5003:5003"
     
@@ -172,6 +177,9 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
       # 'mysql+mysqlconnector://is213@localhost:3306/inventory'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5004:5004"
 
@@ -187,6 +195,9 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
       # 'mysql+mysqlconnector://is213@localhost:3306/claims'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5002:5002"
 
@@ -202,6 +213,9 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
       # 'mysql+mysqlconnector://is213@localhost:3306/appointments'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5000:5000"
 
@@ -217,6 +231,9 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
       # 'mysql+mysqlconnector://is213@localhost:3306/orders'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5005:5005"
 
@@ -232,6 +249,9 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
       # 'mysql+mysqlconnector://is213@localhost:3306/calendar'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5001:5001"
 
@@ -244,6 +264,9 @@ services:
       dockerfile: email_service.Dockerfile
     image: kevan1508/email_service:1.0
     restart: always
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5010:5010"
 
@@ -256,6 +279,9 @@ services:
       dockerfile: notification.Dockerfile
     image: kevan1508/notification:1.0
     restart: always
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5012:5012"
 
@@ -268,6 +294,8 @@ services:
       dockerfile: error.Dockerfile
     image: kevan1508/error:esd
     restart: always
+    networks: 
+      - rabbitmq
     depends_on:
       - rabbitmq
     environment:
@@ -287,6 +315,8 @@ services:
     restart: always
     depends_on:
       - rabbitmq
+    networks:
+      - rabbitmq
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
@@ -305,6 +335,11 @@ services:
       context: ./
       dockerfile: refill_prescription.Dockerfile
     image: kevan1508/refill_prescription:1.0
+    restart: always
+    networks:  
+      - internal
+      - rabbitmq
+      - kong-net
     depends_on:
       - employees
       - inventory 
@@ -337,6 +372,10 @@ services:
       dockerfile: book_appointment.Dockerfile
     image: kevan1508/book_appointment:esd
     restart: always
+    networks:  
+      - internal
+      - rabbitmq
+      - kong-net
     depends_on:
       - patient
       - appointments
@@ -368,6 +407,10 @@ services:
       dockerfile: submit_claims.Dockerfile
     image: kevan1508/submit_claims:esd
     restart: always
+    networks:  
+      - internal
+      - rabbitmq
+      - kong-net
     depends_on:
       - patient
       - appointments
