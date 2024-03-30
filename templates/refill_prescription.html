@@ -85,7 +85,7 @@
         <button @click="refillPrescription" class="btn btn-outline-primary">Refill Prescription</button>
     </div>
     <script>
-    const inventory_URL = "http://localhost:5004/inventory"; // Update this URL
+    const inventory_URL = "http://localhost:8000/api/v1/inventory"; // Update this URL
     const app = Vue.createApp({
         data() {
             return {

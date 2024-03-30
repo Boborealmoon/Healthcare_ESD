@@ -54,9 +54,9 @@ upstreams:
         weight: 100
   - name: orders.v1.service
     targets:
-      - target: orders1:5005
+      - target: order1:5005
         weight: 100
-      - target: orders1:5005
+      - target: order2:5005
         weight: 100
   - name: claims.v1.service
     targets:

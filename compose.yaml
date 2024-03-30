@@ -217,7 +217,7 @@ services:
   #################################
   # Claims: The Claims microservice
   #################################
-  claims1:
+  claims:
     build:
       context: ./
       dockerfile: claims.Dockerfile
@@ -228,18 +228,8 @@ services:
     networks:
       - internal
       - kong-net
-
-  claims2:
-    build:
-      context: ./
-      dockerfile: claims.Dockerfile
-    image: kevan1508/claims:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
-    networks:
-      - internal
-      - kong-net
+    ports:
+      - "5002:5002"
 
   #################################
   # Appointments: The Appointments microservice
@@ -261,7 +251,7 @@ services:
   #################################
   # Order: The Order microservice
   #################################
-  order1:
+  order:
     build:
       context: ./
       dockerfile: order.Dockerfile
@@ -272,18 +262,8 @@ services:
     networks:
       - internal
       - kong-net
-  
-  order2:
-    build:
-      context: ./
-      dockerfile: order.Dockerfile
-    image: kevan1508/order:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
-    networks:
-      - internal
-      - kong-net
+    ports:
+      - "5005:5005"
 
 
   #################################
@@ -404,7 +384,7 @@ services:
       - employees2
       - inventory1
       - inventory2 
-      - order1
+      - order
       - email_service
       - activity_log
       - error
@@ -482,7 +462,7 @@ services:
       - error
       - rabbitmq
       - email_service
-      - claims1
+      - claims
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672

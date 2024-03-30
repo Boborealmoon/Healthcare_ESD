@@ -70,8 +70,7 @@
 
     <script>
         // Fetch data from server and populate the table
-        // fetch("http://localhost:5005/orders")
-        fetch("http://kong:8000/api/v1/orders")
+        fetch("http://localhost:5005/orders")
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch order data.');
