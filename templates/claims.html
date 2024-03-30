@@ -99,8 +99,9 @@ body {
     </div>
 
     <script>
-        const claims_URL = "http://localhost:5002/claims"; // Update this URL
-
+        // const claims_URL = "http://localhost:5002/claims"; // Update this URL
+        const claims_URL = "http://kong:8000/api/v1/claims";   
+        
         const app = Vue.createApp({
             data() {
                 return {

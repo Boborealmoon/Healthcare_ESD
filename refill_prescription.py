@@ -18,13 +18,9 @@ import sys
 app = Flask(__name__)
 CORS(app)
 
-appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
-calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
-claims_url = environ.get('claims_url') or "http://localhost:5002/new_claim"
 employees_url = "http://kong:8000/api/v1/employees"   
-inventory_url = environ.get('inventory_url') or "http://localhost:5004/inventory"
+inventory_url = "http://kong:8000/api/v1/inventory"   
 order_url = environ.get('order_url') or "http://localhost:5005/create_order"
-patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
 email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
 
 
