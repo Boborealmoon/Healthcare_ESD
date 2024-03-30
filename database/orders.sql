@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS orders (
 
 INSERT INTO Orders (OrderID, ProductID, ProductName, ProductQty, UnitsOrdered, OrderDate, SupplierID, SupplierContactEmail) VALUES 
 
-(1, 701, 'Aspirin', 50, 300, '2023-10-15', 81, 'shizer@gmail.com'),
+(1, 701, 'Aspirin', 50, 300, '2023-10-15', 81, 'fooseejae@gmail.com'),
 (2, 702, 'Amoxicillin', 40, 200, '2023-11-20', 82, 'jackson&jackson@gmail.com');
 COMMIT;
 

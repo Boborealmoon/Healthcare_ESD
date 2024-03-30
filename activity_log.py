@@ -24,7 +24,7 @@ def receiveOrderLog(channel):
 
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
-    print("\nactivity_log: Received an appointment log by " + __file__)
+    print("\nactivity_log: Received an action by " + __file__)
     processOrderLog(json.loads(body))
     print()
 

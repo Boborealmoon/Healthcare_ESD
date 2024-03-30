@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS inventory (
 
 INSERT INTO inventory (ProductID, ProductName, ProductQty, UnitOfMeasurement, UnitCost, SupplierID, SupplierContactEmail, Threshold, UnitsToOrder) VALUES
 
-(701, 'Aspirin', 0, 'Bottle', 5.99, 81, 'shizer@gmail.com', 100, 400),
+(701, 'Aspirin', 0, 'Bottle', 5.99, 81, 'fooseejae@gmail.com', 100, 400),
 (702, 'Amoxicillin', 300, 'Box', 24.50, 82, 'jackson&jackson@gmail.com', 50, 200),
 (703, 'Lisinopril', 200, 'Each', 0.25, 82, 'jackson&jackson@gmail.com', 30, 200),
 (704, 'Simvastatin', 400, 'Bottle', 12.75, 82, 'jackson&jackson@gmail.com', 80, 300),

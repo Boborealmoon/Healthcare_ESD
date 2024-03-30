@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS patients (
 
 INSERT INTO patients (PatientID, PatientName, ContactNo, Email, NRIC) VALUES
 
-(100, 'John Doe', '91234567', 'johndoe@gmail.com', 'S9812345W'),
+(100, 'John Doe', '91234567', 'fooseejae@gmail.com', 'S9812345W'),
 (101, 'Jane Smith', '87654321', 'janesmith@outlook.com', 'T0753829R'),
 (102, 'Alice Johnson', '93691470', 'alicejohnson@hotmail.com', 'T0203619F');
 COMMIT;

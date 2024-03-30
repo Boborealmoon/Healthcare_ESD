@@ -257,7 +257,7 @@ services:
     image: kevan1508/notification:1.0
     restart: always
     ports:
-      - "5011:5011"
+      - "5012:5012"
 
   ###################################
   # Error: The Error microservice

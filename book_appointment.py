@@ -42,7 +42,7 @@ def book_appointment():
     if request.is_json:
         try:
             appointment = request.get_json()
-            print("\nReceived an order in JSON:", appointment)
+            print("\nReceived an appointment in JSON:", appointment)
 
             # do the actual work
             # 1. Send appointment info
@@ -58,7 +58,7 @@ def book_appointment():
 
             return jsonify({
                 "code": 500,
-                "message": "complexappt.py internal error: " + ex_str
+                "message": "book_appointment.py internal error: " + ex_str
             }), 500
 
     # if reached here, not a JSON request.
@@ -80,8 +80,6 @@ def processAppointmentbooking(appointment):
     if code not in range(200, 300):
 
         print('\n\n-----Publishing the (claim error) message with routing_key=claim.error-----')
-
-        # invoke_http(error_URL, method="POST", json=claim_result)
         channel.basic_publish(exchange=exchangename, routing_key="appointment.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         # make message persistent within the matching queues until it is received by some receiver 
@@ -111,7 +109,6 @@ def processAppointmentbooking(appointment):
         print('\n-----Invoking calendar microservice-----')
         calendar_result = invoke_http(calendar_url + f"/{patient_timeslot}", method='GET')
         print('calendar_result:', calendar_result)
-
         
         patient_number = patient_result["data"]["ContactNo"]
         patient_name = appointment_result["data"]["PatientName"]

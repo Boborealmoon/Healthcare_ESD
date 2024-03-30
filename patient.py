@@ -96,46 +96,6 @@ def getPatientEmail(PatientID):
         "message": "Patient not found."
     }), 404
 
-
-# @app.route("/patient/new_patient", methods=['POST'])
-# def new_patient():
-#     data = request.get_json()
-
-#     # Check if the Patient with the given ID already exists
-#     existing_patient = Patient.query.filter_by(PatientID=data.get('PatientID')).first()
-
-#     if existing_patient:
-#         return jsonify({
-#             "code": 400,
-#             "data": {"PatientID": data.get('PatientID')},
-#             "message": "Patient already exists."
-#         }), 400
-
-#     # Create a new Patient object
-#     new_patient = Patient(
-#         PatientID=data.get('PatientID'),
-#         PatientName=data.get('PatientName'),
-#         ContactNo=data.get('ContactNo'),
-#         Email=data.get('Email'),
-#         NRIC=data.get('NRIC')
-#     )
-
-#     try:
-#         # Add the new patient to the database
-#         db.session.add(new_patient)
-#         db.session.commit()
-
-#         return jsonify({
-#             "code": 201,
-#             "data": new_patient.json()
-#         }), 201
-#     except Exception as e:
-#         return jsonify({
-#             "code": 500,
-#             "data": {"PatientID": data.get('PatientID')},
-#             "message": "An error occurred creating the patient."
-#         }), 500
-
 #run
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5006, debug=True)

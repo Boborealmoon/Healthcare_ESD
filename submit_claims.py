@@ -87,7 +87,6 @@ def processSubmitClaim(claim):
  
     if code not in range(200, 300):
         # Inform the error microservice
-        #print('\n\n-----Invoking error microservice as claim submission fails-----')
         print('\n\n-----Publishing the (claim error) message with routing_key=claim.error-----')
 
         # invoke_http(error_URL, method="POST", json=claim_result)
@@ -143,17 +142,17 @@ def processSubmitClaim(claim):
         # invoke_http(activity_log_URL, method="POST", json=claim_result)            
         channel.basic_publish(exchange=exchangename, routing_key="claim.info", body=message)
     
-    print("\nClaim submission published to RabbitMQ Exchange.\n")
-    # - reply from the invocation is not used;
-    # continue even if this invocation fails
+        print("\nClaim submission published to RabbitMQ Exchange.\n")
+        # - reply from the invocation is not used;
+        # continue even if this invocation fails
 
-    # 7. Return created claim
-    return {
-        "code": 201,
-        "data": {
-            "claim_result": claim_result,
+        # 7. Return created claim
+        return {
+            "code": 201,
+            "data": {
+                "claim_result": claim_result,
+            }
         }
-    }
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

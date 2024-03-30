@@ -193,3 +193,7 @@ header {
 }
 /* END HEADER CSS */
 
+.swiper-container {
+    height: 300px; /* Adjust the height as needed */
+}
+

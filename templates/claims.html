@@ -15,7 +15,7 @@
 </head>
 <style>
 body {
-    background-image: url('background.jpeg');
+    background-image: url('../background.jpeg');
     background-size: cover; /* Ensure the background image covers the entire viewport */
     background-position: center; /* Center the background image */
     background-attachment: fixed; /* Fix the background image so it doesn't scroll with the content */
@@ -78,17 +78,17 @@ body {
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Appointment ID</th>
                         <th>Claim ID</th>
                         <th>Patient ID</th>
+                        <th>Appointment ID</th>
                         <th>Status of Claims</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="claim in claims" :key="claim.ClaimID">
-                        <td>{{ claim.AppointmentID }}</td>
                         <td>{{ claim.ClaimID }}</td>
                         <td>{{ claim.PatientID }}</td>
+                        <td>{{ claim.AppointmentID }}</td>
                         <td>{{ claim.StatusOfClaims }}</td>
                     </tr>
                 </tbody>
@@ -96,8 +96,9 @@ body {
         </div>
 
         <!-- <li v-for="claim in claims" :key="claim.ClaimID">{{ claim.ClaimID }}</li> -->
-
-        <button class="btn btn-primary" onclick="redirectToCreateClaim()">Submit New Claim</button>
+        <div class="text-end">
+            <button class="btn btn-primary" onclick="redirectToCreateClaim()">Submit New Claim</button>
+        </div>
     </div>
 
     <script>

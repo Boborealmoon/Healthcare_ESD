@@ -61,7 +61,7 @@ def get_all_orders():
     return jsonify(
         {
             "code": 404,
-            "message": "Error nigga"
+            "message": "No Orders Created"
         }
     ), 404
 

@@ -23,7 +23,7 @@ calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
 claims_url = environ.get('claims_url') or "http://localhost:5002/new_claim"
 employees_url = environ.get('employees_url') or "http://localhost:5003/employees"   
 inventory_url = environ.get('inventory_url') or "http://localhost:5004/inventory"
-order_url = environ.get('order_url') or "http://localhost:5005/order"
+order_url = environ.get('order_url') or "http://localhost:5005/create_order"
 patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
 email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
 
@@ -39,7 +39,6 @@ channel = connection.channel()
 if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
     print("\nCreate the 'Exchange' before running this microservice. \nExiting the program.")
     sys.exit(0)  # Exit with a success status
-
 
 # -----------------
 @app.route("/refill_prescription", methods=['GET'])
@@ -134,7 +133,6 @@ def refill_prescription():
             employee_email = invoke_http(employees_url + f'/email/21')
             print('employee_email:', employee_email)
 
-            
             clinic_email = employee_email['data']['Email']
 
             email_data = {
@@ -147,7 +145,7 @@ def refill_prescription():
             email_result = invoke_http(email_service_url, method='POST', json=email_data)
             print(email_result)
     
-    return jsonify({"status": "success", "order": order_result})
+    return jsonify({"status": "success", "order": order_result},201)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5100, debug=True)
