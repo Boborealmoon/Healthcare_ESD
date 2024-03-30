@@ -8,6 +8,36 @@ services:
       - name: employees-v1-route
         paths:
           - /api/v1/employees
+  - name: inventory
+    url: http://inventory.v1.service:5004/inventory
+    routes:
+      - name: inventory-v1-route
+        paths:
+          - /api/v1/inventory
+  - name: orders
+    url: http://orders.v1.service:5005/orders
+    routes:
+      - name: orders-v1-route
+        paths:
+          - /api/v1/orders
+  - name: claims
+    url: http://claims.v1.service:5002/claims
+    routes:
+      - name: claims-v1-route
+        paths:
+          - /api/v1/claims
+  - name: patient
+    url: http://patient.v1.service:5006/patient
+    routes:
+      - name: patient-v1-route
+        paths:
+          - /api/v1/patient
+  - name: calendar
+    url: http://calendar.v1.service:5001/calendar
+    routes:
+      - name: calendar-v1-route
+        paths:
+          - /api/v1/calendar
 
 upstreams:
   - name: employees.v1.service
@@ -16,3 +46,34 @@ upstreams:
         weight: 100
       - target: employees2:5003
         weight: 100
+  - name: inventory.v1.service
+    targets:
+      - target: inventory1:5004
+        weight: 100
+      - target: inventory2:5004
+        weight: 100
+  - name: orders.v1.service
+    targets:
+      - target: orders1:5005
+        weight: 100
+      - target: orders1:5005
+        weight: 100
+  - name: claims.v1.service
+    targets:
+      - target: claims1:5002
+        weight: 100
+      - target: claims2:5002
+        weight: 100
+  - name: patient.v1.service
+    targets:
+      - target: patient1:5006
+        weight: 100
+      - target: patient2:5006
+        weight: 100
+  - name: calendar.v1.service
+    targets:
+      - target: calendar1:5001
+        weight: 100
+      - target: calendar2:5001
+        weight: 100
+
