@@ -149,7 +149,7 @@ services:
   #################################
   # Employee: The Employees microservice
   #################################
-  employees:
+  employees1:
     build:
       context: ./
       dockerfile: employee.Dockerfile
@@ -163,7 +163,21 @@ services:
       - kong-net
     ports:
       - "5003:5003"
-    
+  
+  employees2:
+    build:
+      context: ./
+      dockerfile: employee.Dockerfile
+    image: kevan1508/employee:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
+      # 'mysql+mysqlconnector://is213@localhost:3306/employees'
+    networks:
+      - internal
+      - kong-net
+    ports:
+      - "5013:5003"
 
   #################################
   # Inventory: The Inventory microservice
@@ -341,7 +355,8 @@ services:
       - rabbitmq
       - kong-net
     depends_on:
-      - employees
+      - employees1
+      - employees2
       - inventory 
       - order
       - email_service
