@@ -56,7 +56,7 @@ To view and access RabbitMQ, go to [http://127.0.0.1:15672](http://127.0.0.1:156
 
 ## Kong API Gateway
 
-To view and access Kong API Gateway, go to [http://127.0.0.1:1337](http://127.0.0.1:1337) and enter the following credentials.
+To view and access Kong API Gateway, go to [http://127.0.0.1:8002](http://127.0.0.1:8002) and enter the following credentials.
 
 - Username: admin
 - Password: adminadmin
@@ -67,37 +67,22 @@ To view the frontend application, go to [http://127.0.0.1:5173](http://127.0.0.1
 
 ## Microservices
 
-The following are the addresses for the microservices. The respective API endpoints can be found in the Postman Collection.
+The following are the addresses for the microservices. The respective API endpoints can be found here.
 
-- Verification: [http://127.0.0.1:6001](http://127.0.0.1:6001)
-- Notification: [http://127.0.0.1:6002](http://127.0.0.1:6002)
-- Account: [http://127.0.0.1:6003](http://127.0.0.1:6003)
-- Icebreaker: [http://127.0.0.1:6101](http://127.0.0.1:6101)
-- Broadcast: [http://127.0.0.1:6102](http://127.0.0.1:6102)
-- Group: [http://127.0.0.1:6103](http://127.0.0.1:6103)
-- HandleGroup: [http://127.0.0.1:6104](http://127.0.0.1:6104)
-- Order: [http://127.0.0.1:6201](http://127.0.0.1:6201)
-- QueueTicket: [http://127.0.0.1:6202](http://127.0.0.1:6202)
-- Payment: [http://127.0.0.1:6203](http://127.0.0.1:6203)
-- Promo: [http://127.0.0.1:6204](http://127.0.0.1:6204)
-- Mission: [http://127.0.0.1:6300](http://127.0.0.1:6300)
-- Loyalty: [http://127.0.0.1:6301](http://127.0.0.1:6301)
-- Challenge: [http://127.0.0.1:6302](http://127.0.0.1:6302)
-- Reward: [http://127.0.0.1:6303](http://127.0.0.1:6303)
-- Redemption: [http://127.0.0.1:6304](http://127.0.0.1:6304)
+- Employees: [http://localhost:8000/api/v1/employees](http://localhost:8000/api/v1/employees)
+- Inventory: [http://localhost:8000/api/v1/inventory](http://localhost:8000/api/v1/inventory)
+- Patient: [http://localhost:8000/api/v1/patient](http://localhost:8000/api/v1/patient)
+- Calendar: [http://localhost:8000/api/v1/calendar](localhost:8000/api/v1/calendar)
+- Orders: [http://localhost:8000/api/v1/orders](http://localhost:8000/api/v1/orders)
+- Appointments: [http://localhost:8000/api/v1/appointments](http://localhost:8000/api/v1/appointments)
+- Emails: [http://localhost:8000/api/v1/emailservice](http://localhost:8000/api/v1/emailservice)
+- Notification: [http://localhost:8000/api/v1/notification](http://localhost:8000/api/v1/notification)
+- Claims: [http://localhost:8000/api/v1/claims](http://localhost:8000/api/v1/claims)
 
 ## External Microservices
 
 - [Stripe](https://stripe.com/docs/api)
 - [NotificationAPI](https://docs.notificationapi.com/)
-
-## Postman Environment + Collections
-
-To test the API endpoints of the microservices, import the following to Postman.
-
-- [ESDeezknee Environment](/ESDeezknee.postman_environment.json)
-- [ESDeezknee Collection](/ESDeezknee.postman_collection.json)
-- [ESDeezknee API Gateway Collection](/ESDeezkneeAPIGateway.postman_collection.json)
 
 ## User Scenarios (Diagrams)
 
