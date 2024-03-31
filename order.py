@@ -66,7 +66,7 @@ def get_all_orders():
     ), 404
 
 
-@app.route('/create_order', methods=['POST'])
+@app.route('/orders', methods=['POST'])
 def create_order():
     data = request.get_json()
     lastOrderID = db.session.query(func.max(Order.OrderID)).scalar()

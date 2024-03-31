@@ -90,6 +90,7 @@ body {
     </div>
     
     <script>
+        const appointments_URL = "http://localhost:8000/api/v1/appointments"
         const app = Vue.createApp({
             data() {
                 return {
@@ -104,7 +105,7 @@ body {
                 // Function to fetch appointments for the specified Patient ID
                 fetchAppointments() {
                     // Make an API call to fetch appointments for the specified Patient ID
-                    fetch(`http://localhost:5000/appointments/${this.PatientID}`)
+                    fetch(appointments_URL+`/${this.PatientID}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error("Error fetching appointments");

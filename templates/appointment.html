@@ -101,7 +101,7 @@ body {
 
     <script>
         const book_appointment_URL = "http://localhost:5200/book_appointment";
-
+        const appointments_URL = "http://localhost:8000/api/v1/appointments"
         const app = Vue.createApp({
             data() {
                 return {
@@ -129,7 +129,9 @@ body {
             },
             methods: {
                 fetchAvailableTimeslots() {
-                    fetch(`http://localhost:5000/appointments?selected_date=${this.selectedDate}`)
+                    
+
+                    fetch(appointments_URL + `?selected_date=${this.selectedDate}`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Failed to fetch available timeslots');

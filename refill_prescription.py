@@ -20,8 +20,8 @@ CORS(app)
 
 employees_url = "http://kong:8000/api/v1/employees"   
 inventory_url = "http://kong:8000/api/v1/inventory"   
-order_url = environ.get('order_url') or "http://localhost:5005/create_order"
-email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
+order_url = "http://kong:8000/api/v1/orders"   
+email_service_url = "http://kong:8000/api/v1/emailservice"
 
 
 exchangename = "clinic_topic"  # exchange name

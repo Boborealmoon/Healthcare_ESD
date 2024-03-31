@@ -14,11 +14,11 @@ import amqp_connection
 app = Flask(__name__)
 CORS(app)
 
-appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
+appointments_url = "http://kong:8000/api/v1/appointments"  
 calendar_url = "http://kong:8000/api/v1/calendar"   
 patients_url = "http://kong:8000/api/v1/patient"   
-email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
-notification_url = environ.get('notification_url') or "http://localhost:5012/send_message"
+email_service_url = "http://kong:8000/api/v1/emailservice"
+notification_url = "http://kong:8000/api/v1/notification"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction

@@ -15,17 +15,35 @@ services:
         paths:
           - /api/v1/inventory
   - name: orders
-    url: http://orders.v1.service:5005/orders
+    url: http://order:5005/orders
     routes:
       - name: orders-v1-route
         paths:
           - /api/v1/orders
   - name: claims
-    url: http://claims.v1.service:5002/claims
+    url: http://claims:5002/claims
     routes:
       - name: claims-v1-route
         paths:
           - /api/v1/claims
+  - name: appointments
+    url: http://appointments:5000/appointments
+    routes:
+      - name: appointments-v1-route
+        paths:
+          - /api/v1/appointments
+  - name: emails
+    url: http://email_service:5010/email_service
+    routes:
+      - name: emailservice-v1-route
+        paths:
+          - /api/v1/emailservice
+  - name: notification
+    url: http://notification:5012/send_message
+    routes:
+      - name: notification-v1-route
+        paths:
+          - /api/v1/notification
   - name: patient
     url: http://patient.v1.service:5006/patient
     routes:
@@ -51,18 +69,6 @@ upstreams:
       - target: inventory1:5004
         weight: 100
       - target: inventory2:5004
-        weight: 100
-  - name: orders.v1.service
-    targets:
-      - target: order1:5005
-        weight: 100
-      - target: order2:5005
-        weight: 100
-  - name: claims.v1.service
-    targets:
-      - target: claims1:5002
-        weight: 100
-      - target: claims2:5002
         weight: 100
   - name: patient.v1.service
     targets:

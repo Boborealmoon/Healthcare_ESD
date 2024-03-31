@@ -70,7 +70,9 @@
 
     <script>
         // Fetch data from server and populate the table
-        fetch("http://localhost:5005/orders")
+        const orders_URL = "http://localhost:8000/api/v1/orders"; // Update this URL
+
+        fetch(orders_URL)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch order data.');

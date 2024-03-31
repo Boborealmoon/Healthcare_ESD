@@ -60,7 +60,7 @@ def get_all():
     )
 
 # Create a new claim
-@app.route("/new_claim", methods=['POST'])
+@app.route("/claims", methods=['POST'])
 def new_claim():
     try:
         data = request.get_json()
