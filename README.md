@@ -16,13 +16,9 @@
 - [Kenneth Lim](https://www.linkedin.com/in/kennethlimhg/)
 - [Shawn Sin](https://www.linkedin.com/in/shawn-sin/)
 
-## Application Preview
-
-![Application](https://user-images.githubusercontent.com/45414933/230269633-7ec3527b-85c3-4d05-822e-bc74c6fdbf35.gif)
-
 ## Requirements
 
-- Docker v4.17.0
+- Docker Desktop v4.26.1
 
 ## Project Setup
 
