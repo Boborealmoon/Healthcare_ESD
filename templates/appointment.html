@@ -174,8 +174,8 @@ body {
                         })
                         .then(data => {
                             console.log("Appointment booked successfully:", data);
-                            alert("Appointment booked successfully!");
-                            window.location.href = 'appointment.html';
+                            alert("Appointment booked successfully! Please check your email/sms for confirmation.");
+                            window.location.href = 'index.html';
                         })
                         .catch(error => {
                             console.error("Error booking appointment:", error);
