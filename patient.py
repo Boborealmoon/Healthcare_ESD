@@ -2,19 +2,14 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS
-
 # from flasgger import Swagger
 
 #constructor
 app = Flask(__name__)
 CORS(app)
-
 #conncecting to SQLAlchemy: 
 #The SQLAlchemy Database URI format is: dialect+driver://username:password@host:port/database
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/patients'
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://is213@localhost:8889/patients')
-
-# mysql+mysqlconnector://is213@host.docker.internal:8889/patients
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/patients'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #assigning connection to db -> Storing it in variable db
@@ -100,46 +95,6 @@ def getPatientEmail(PatientID):
         "code": 404,
         "message": "Patient not found."
     }), 404
-
-
-# @app.route("/patient/new_patient", methods=['POST'])
-# def new_patient():
-#     data = request.get_json()
-
-#     # Check if the Patient with the given ID already exists
-#     existing_patient = Patient.query.filter_by(PatientID=data.get('PatientID')).first()
-
-#     if existing_patient:
-#         return jsonify({
-#             "code": 400,
-#             "data": {"PatientID": data.get('PatientID')},
-#             "message": "Patient already exists."
-#         }), 400
-
-#     # Create a new Patient object
-#     new_patient = Patient(
-#         PatientID=data.get('PatientID'),
-#         PatientName=data.get('PatientName'),
-#         ContactNo=data.get('ContactNo'),
-#         Email=data.get('Email'),
-#         NRIC=data.get('NRIC')
-#     )
-
-#     try:
-#         # Add the new patient to the database
-#         db.session.add(new_patient)
-#         db.session.commit()
-
-#         return jsonify({
-#             "code": 201,
-#             "data": new_patient.json()
-#         }), 201
-#     except Exception as e:
-#         return jsonify({
-#             "code": 500,
-#             "data": {"PatientID": data.get('PatientID')},
-#             "message": "An error occurred creating the patient."
-#         }), 500
 
 #run
 if __name__ == '__main__':

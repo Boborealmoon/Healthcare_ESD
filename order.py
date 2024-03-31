@@ -2,12 +2,12 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from sqlalchemy import func
+from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/orders')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/orders'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -61,12 +61,12 @@ def get_all_orders():
     return jsonify(
         {
             "code": 404,
-            "message": "Error nigga"
+            "message": "No Orders Created"
         }
     ), 404
 
 
-@app.route('/create_order', methods=['POST'])
+@app.route('/orders', methods=['POST'])
 def create_order():
     data = request.get_json()
     lastOrderID = db.session.query(func.max(Order.OrderID)).scalar()

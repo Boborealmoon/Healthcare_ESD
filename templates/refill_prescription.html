@@ -12,7 +12,7 @@
         crossorigin='anonymous'>
     <!-- Vue 3 -->
     <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
-    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="../general.css">
 </head>
 <body>
     <!-- Header -->
@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-lg-9">
                             <div id="logo-container">
-                                <a href="index.html"><img src="logo.png" width="235px"></a>
+                                <a href="indexstaff.html"><img src="../logo.png" width="130px" height="100px"></a>
                                 <i class="bi bi-list" id="closemenu"></i>
                             </div>
                         </div>
@@ -38,13 +38,11 @@
                 <div class="col-lg-6 d-flex justify-content-center">
                     <div class="text-center" id="menu-link">
                         <ul>
-                            <li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
-                            <li class="highlight"><a href="refill_prescription.html"><span>REFILL PRESCRIPTION</span></a></li>
+                            <li><a href="indexstaff.html" class="menufont linkhover" ><span>HOME</span></a></li>
+                            <li class="highlight linkhover"><a href="refill_prescription.html"><span style="color:white">REFILL PRESCRIPTION</span></a></li>
+                            <li><a href="order.html" class="menufont linkhover" ><span>ORDERS</span></a></li>
                             <li class="menufont linkhover dropdown">
-                                <a href="profile.html">JOHN DOE</a>
-                                <div class="dropdown-content">
-                                    <a href="index.html">Logout</a>
-                                </div>
+                                <a href="indexstaff.html">BRUCE WAYNE</a>
                             </li>
                         </ul>
                     </div>
@@ -87,7 +85,7 @@
         <button @click="refillPrescription" class="btn btn-outline-primary">Refill Prescription</button>
     </div>
     <script>
-    const inventory_URL = "http://localhost:5004/inventory"; // Update this URL
+    const inventory_URL = "http://localhost:8000/api/v1/inventory"; // Update this URL
     const app = Vue.createApp({
         data() {
             return {

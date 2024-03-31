@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
+from os import environ
 
 import requests
 from invokes import invoke_http
@@ -13,16 +14,10 @@ import amqp_connection
 app = Flask(__name__)
 CORS(app)
 
-appointments_url = "http://localhost:5000/appointments"
-# calendar_url = "http://localhost:5001/Clinic_calendar"
-claims_url = "http://localhost:5002/submit_claim"
-# employees_url = "http://localhost:5003/employee"
-# inventory_url = "http://localhost:5004/inventory"
-# order_url = "http://localhost:5005/order"
-patients_url = "http://localhost:5006/patient"
-activitylog_url = "http://localhost:5007/activity_log"
-error_url = "http://localhost:5008/error"
-email_service_url = "http://localhost:5010/email_service"
+appointments_url = "http://kong:8000/api/v1/appointments"   
+claims_url = "http://kong:8000/api/v1/claims"   
+patients_url = "http://kong:8000/api/v1/patient"
+email_service_url = "http://kong:8000/api/v1/emailservice"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
@@ -36,14 +31,15 @@ if not amqp_connection.check_exchange(channel, exchangename, exchangetype):
     print("\nCreate the 'Exchange' before running this microservice. \nExiting the program.")
     sys.exit(0)  # Exit with a success status
 
-@app.route("/submit_claim", methods=['POST'])
+@app.route("/submit_claims", methods=['POST'])
 def submit_claims():
     # Simple check of input format and data of the request are JSON
     if request.is_json:
         try:
+            print(request.get_json())
             claim = request.get_json()
             print("\nSubmitted a claim in JSON:", claim)
-
+            
             # Send claim info {claim items}
             result = processSubmitClaim(claim)
             return jsonify(result), result["code"]
@@ -73,20 +69,11 @@ def processSubmitClaim(claim):
     claim_result = invoke_http(claims_url, method='POST', json=claim)
     print('claim_result:', claim_result)
     
-    # Print out the structure of the claim_result object
-    print('Structure of claim_result:', json.dumps(claim_result, indent=4))
-
     # Check the claim submission result; if a failure, send it to the error microservice.
     code = claim_result["code"]
 
+    patient_id = claim_result["data"]["PatientID"]
     # Ensure that 'data' key exists in claim_result before accessing 'PatientID'
-    if 'data' in claim_result and 'PatientID' in claim_result['data']:
-        patient_id = claim_result['data']['PatientID']
-        print(patient_id)
-    else:
-        print("PatientID not found in claim_result['data']")
-        # Handle the case where PatientID is not present in the response
-        # patient_id = claim_result['data']['PatientID']
 
     print('\n-----Invoking patients microservice-----')
     patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
@@ -96,7 +83,6 @@ def processSubmitClaim(claim):
  
     if code not in range(200, 300):
         # Inform the error microservice
-        #print('\n\n-----Invoking error microservice as claim submission fails-----')
         print('\n\n-----Publishing the (claim error) message with routing_key=claim.error-----')
 
         # invoke_http(error_URL, method="POST", json=claim_result)
@@ -123,8 +109,18 @@ def processSubmitClaim(claim):
 
     else:
         patient_email = patient_result['data']['Email']
-        
-        print(patient_email)
+        patient_appointmentid = claim_result['data']['AppointmentID']
+
+        print('\n\n-----Invoking appointments microservice-----')
+        update_data = {
+            "AppointmentID": patient_appointmentid,  # Replace with the actual appointment ID
+            "Claimed": True  # Replace with the updated claim status
+        }
+
+        # Invoke the appointments microservice to update the appointment
+        update_result = invoke_http(appointments_url + f'/{patient_id}/{patient_appointmentid}', method='PUT', json=update_data)
+        print(update_result)
+
         # Send an email function
         email_data = {
             "recipient_email": patient_email,
@@ -132,7 +128,7 @@ def processSubmitClaim(claim):
             "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment.\n\nThank you!"
         }
 
-        print('\n\n-----Invoking email microservice as claim submission fails-----')
+        print('\n\n-----Invoking email microservice-----')
         email_result = invoke_http(email_service_url, method='POST', json=email_data)
         print(email_result)
         # Record new claim, record the activity log anyway
@@ -142,29 +138,20 @@ def processSubmitClaim(claim):
         # invoke_http(activity_log_URL, method="POST", json=claim_result)            
         channel.basic_publish(exchange=exchangename, routing_key="claim.info", body=message)
     
-    print("\nClaim submission published to RabbitMQ Exchange.\n")
-    # - reply from the invocation is not used;
-    # continue even if this invocation fails
+        print("\nClaim submission published to RabbitMQ Exchange.\n")
+        # - reply from the invocation is not used;
+        # continue even if this invocation fails
 
-    # 7. Return created claim
-    return {
-        "code": 201,
-        "data": {
-            "claim_result": claim_result,
+        # 7. Return created claim
+        return {
+            "code": 201,
+            "data": {
+                "claim_result": claim_result,
+            }
         }
-    }
-
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
         " for creating a claim...")
     app.run(host="0.0.0.0", port=5300, debug=True)
-    # Notes for the parameters:
-    # - debug=True will reload the program automatically if a change is detected;
-    #   -- it in fact starts two instances of the same flask program,
-    #       and uses one of the instances to monitor the program changes;
-    # - host="0.0.0.0" allows the flask program to accept requests sent from any IP/host (in addition to localhost),
-    #   -- i.e., it gives permissions to hosts with any IP to access the flask program,
-    #   -- as long as the hosts can already reach the machine running the flask program along the network;
-    #   -- it doesn't mean to use http://0.0.0.0 to access the flask program.

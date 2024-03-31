@@ -11,7 +11,7 @@ CORS(app)
 
 #conncecting to SQLAlchemy: 
 #The SQLAlchemy Database URI format is: dialect+driver://username:password@host:port/database
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL', 'mysql+mysqlconnector://root@localhost:3306/employees')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/employees'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/employees
@@ -43,7 +43,6 @@ def get_all():
     #retrive all records
     employeeList = Employee.query.all()
 
-
     if len(employeeList):
         return jsonify(
             {
@@ -60,24 +59,6 @@ def get_all():
         }
     ), 404
 
-
-@app.route("/employees/<string:EmployeeID>")
-def find_by_ID(EmployeeID):
-    employee = Employee.query.filter_by(EmployeeID=EmployeeID).first()
-
-    if employee:
-        return jsonify(
-            {
-                "code": 200,
-                "data": employee.json()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": " {EmployeeID} not found."
-        }
-    ), 404
 
 @app.route("/employees/email/<int:EmployeeID>")
 def getPatientEmail(EmployeeID):

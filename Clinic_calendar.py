@@ -3,11 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 import calendar
 
-from flasgger import Swagger
+# from flasgger import Swagger
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL','mysql+mysqlconnector://is213@localhost:8889/appointments')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://is213@localhost:8889/calendar'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # export dbURL=mysql+mysqlconnector://root:root@localhost:8889/calendar
@@ -33,7 +33,7 @@ class Calendar(db.Model):
             "TimeEnd": str(self.TimeEnd)
         }
 
-@app.route("/calendar/ID/<string:TimeslotID>")
+@app.route("/calendar/<string:TimeslotID>")
 def getTimeByID(TimeslotID):
     time = Calendar.query.filter_by(TimeslotID=TimeslotID).first()
 

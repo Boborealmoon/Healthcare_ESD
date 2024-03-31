@@ -8,7 +8,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 mail = Mail(app)
 
-
 # Configure Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Update with your SMTP server
 app.config['MAIL_PORT'] = 465  # Update with your SMTP port

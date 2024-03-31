@@ -14,16 +14,11 @@ import amqp_connection
 app = Flask(__name__)
 CORS(app)
 
-appointments_url = environ.get('appointments_url') or "http://localhost:5000/appointments"
-calendar_url = environ.get('calendar_url') or "http://localhost:5001/calendar"
-# claims_url = "http://localhost:5002/new_claim"
-# employees_url = "http://localhost:5003/employee"
-# inventory_url = "http://localhost:5004/inventory"
-# order_url = "http://localhost:5005/order"
-patients_url = environ.get('patients_url') or "http://localhost:5006/patient"
-# activitylog_url = "http://localhost:5007/activity_log"
-# error_url = "http://localhost:5008/error"
-email_service_url = environ.get('email_service') or "http://localhost:5010/email_service"
+appointments_url = "http://kong:8000/api/v1/appointments"  
+calendar_url = "http://kong:8000/api/v1/calendar"   
+patients_url = "http://kong:8000/api/v1/patient"   
+email_service_url = "http://kong:8000/api/v1/emailservice"
+notification_url = "http://kong:8000/api/v1/notification"
 
 exchangename = "clinic_topic" # exchange name
 exchangetype="topic" # use a 'topic' exchange to enable interaction
@@ -43,7 +38,7 @@ def book_appointment():
     if request.is_json:
         try:
             appointment = request.get_json()
-            print("\nReceived an order in JSON:", appointment)
+            print("\nReceived an appointment in JSON:", appointment)
 
             # do the actual work
             # 1. Send appointment info
@@ -59,7 +54,7 @@ def book_appointment():
 
             return jsonify({
                 "code": 500,
-                "message": "complexappt.py internal error: " + ex_str
+                "message": "book_appointment.py internal error: " + ex_str
             }), 500
 
     # if reached here, not a JSON request.
@@ -81,8 +76,6 @@ def processAppointmentbooking(appointment):
     if code not in range(200, 300):
 
         print('\n\n-----Publishing the (claim error) message with routing_key=claim.error-----')
-
-        # invoke_http(error_URL, method="POST", json=claim_result)
         channel.basic_publish(exchange=exchangename, routing_key="appointment.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         # make message persistent within the matching queues until it is received by some receiver 
@@ -105,14 +98,15 @@ def processAppointmentbooking(appointment):
         print('\n-----Invoking patients microservice-----')
         patient_result = invoke_http(patients_url + f"/ID/{patient_id}", method='GET')
         print('patient_result:', patient_result)
+        patient_email = patient_result["data"]["Email"]
 
         patient_timeslot = appointment_result["data"]["TimeslotID"]
 
-        print('\n-----Invoking clinic microservice-----')
-        calendar_result = invoke_http(calendar_url + f"/ID/{patient_timeslot}", method='GET')
+        print('\n-----Invoking calendar microservice-----')
+        calendar_result = invoke_http(calendar_url + f"/{patient_timeslot}", method='GET')
         print('calendar_result:', calendar_result)
-
-        patient_email = patient_result["data"]["Email"]
+        
+        patient_number = patient_result["data"]["ContactNo"]
         patient_name = appointment_result["data"]["PatientName"]
         appt_date = appointment_result["data"]["AppointmentDate"]
         appt_time = calendar_result["data"]["TimeBegin"]
@@ -123,9 +117,18 @@ def processAppointmentbooking(appointment):
             "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date} at {appt_time}.\n\nThank you!"
         }
         
+        sms_data = {
+            "contact": patient_number,
+            "message_body": f"Dear {patient_name},\n\nYour appointment has been successfully booked for {appt_date} at {appt_time}.\n\nThank you!"
+        }
+
         print('\n\n-----Invoking email microservice-----')
         email_result = invoke_http(email_service_url, method='POST', json=email_data)
         print(email_result)
+
+        print('\n\n-----Invoking notification microservice-----')
+        notification_result = invoke_http(notification_url, method='POST', json=sms_data)
+        print(notification_result)
         
         print('\n\n-----Publishing the (Appointment Info) message with routing_key=Appointment.info-----')        
             # invoke_http(activity_log_URL, method="POST", json=claim_result)            
@@ -140,8 +143,6 @@ def processAppointmentbooking(appointment):
                 "patient":patient_result
             }
         }
-
-    
 
 # Execute this program if it is run as a main script (not by 'import')
 if __name__ == "__main__":

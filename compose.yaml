@@ -5,6 +5,9 @@ volumes:
 networks:
   kong-net:
     driver: bridge
+  rabbitmq:
+  internal:
+  
     
 version: "3.8"
 
@@ -17,7 +20,7 @@ services:
     build:
       context: ./
       dockerfile: webpage.Dockerfile
-    image: boborealmoon/webpage:1.0
+    image: kevan1508/webpage:1.0
     restart: always
     environment:
       FLASK_APP: "webpage.py"
@@ -26,9 +29,6 @@ services:
       # 'mysql+mysqlconnector://is213@localhost:3306/employees'
     ports:
       - "5555:5555"
-    # volumes: 
-    #   - ./templates:/templates
-
     
 
   ####################################
@@ -36,7 +36,6 @@ services:
   ####################################
   rabbitmq:
     image: rabbitmq:3-management
-    hostname: esd-rabbit
     restart: always
     ports:
       - "5672:5672"
@@ -45,6 +44,8 @@ services:
       - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
       - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq
 
 
   #######################################
@@ -98,7 +99,7 @@ services:
     networks:
       - kong-net
     environment:
-      KONG_DATABASE: postgres
+      KONG_DATABASE: off
       KONG_PG_HOST: kong-database
       KONG_PG_USER: kong
       KONG_PG_PASSWORD: password
@@ -108,6 +109,9 @@ services:
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
       KONG_ADMIN_GUI_URL: http://localhost:8002
+      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yaml
+    volumes:
+      - ./kong.yaml:/etc/kong/kong.yaml
     depends_on:
       - kong-migration
     ports: # https://docs.konghq.com/gateway/latest/production/networking/default-ports/
@@ -129,54 +133,86 @@ services:
   ###################################
   # Patient: The Patient microservice
   ###################################
-  patient:
+  patient1:
     build:
       context: ./
       dockerfile: patient.Dockerfile
-    image: boborealmoon/patient:1.0
+    image: kevan1508/patient:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
-      # 'mysql+mysqlconnector://is213@localhost:3306/patients'
       PYTHONUNBUFFERED: 1
-    # networks:
-    #   - kong-net
-    # port map for those exposed 
-    ports:
-      - "5006:5006"
+    networks:
+      - internal
+      - kong-net
+  
+  patient2:
+    build:
+      context: ./
+      dockerfile: patient.Dockerfile
+    image: kevan1508/patient:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/patients
+      PYTHONUNBUFFERED: 1
+    networks:
+      - internal
+      - kong-net
 
   #################################
   # Employee: The Employees microservice
   #################################
-  employee:
+  employees1:
     build:
       context: ./
       dockerfile: employee.Dockerfile
-    image: boborealmoon/employee:1.0
+    image: kevan1508/employee:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
-      # 'mysql+mysqlconnector://is213@localhost:3306/employees'
-    # networks:
-    #   - kong-net
-    ports:
-      - "5003:5003"
-    
+    networks:
+      - internal
+      - kong-net
+  
+  employees2:
+    build:
+      context: ./
+      dockerfile: employee.Dockerfile
+    image: kevan1508/employee:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
+    networks:
+      - internal
+      - kong-net
 
   #################################
   # Inventory: The Inventory microservice
   #################################
-  inventory:
+  inventory1:
     build:
       context: ./
       dockerfile: inventory.Dockerfile
-    image: boborealmoon/inventory:1.0
+    image: kevan1508/inventory:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
-      # 'mysql+mysqlconnector://is213@localhost:3306/inventory'
-    ports:
-      - "5004:5004"
+    networks:
+      - internal
+      - kong-net
+  
+  inventory2:
+    build:
+      context: ./
+      dockerfile: inventory.Dockerfile
+    image: kevan1508/inventory:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
+    networks:
+      - internal
+      - kong-net
+
 
   #################################
   # Claims: The Claims microservice
@@ -185,11 +221,13 @@ services:
     build:
       context: ./
       dockerfile: claims.Dockerfile
-    image: boborealmoon/claims:1.0
+    image: kevan1508/claims:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/claims
-      # 'mysql+mysqlconnector://is213@localhost:3306/claims'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5002:5002"
 
@@ -200,11 +238,13 @@ services:
     build:
       context: ./
       dockerfile: appointments.Dockerfile
-    image: boborealmoon/appointments:1.0
+    image: kevan1508/appointments:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/appointments
-      # 'mysql+mysqlconnector://is213@localhost:3306/appointments'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5000:5000"
 
@@ -215,28 +255,44 @@ services:
     build:
       context: ./
       dockerfile: order.Dockerfile
-    image: boborealmoon/order:1.0
+    image: kevan1508/order:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/orders
-      # 'mysql+mysqlconnector://is213@localhost:3306/orders'
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5005:5005"
+
 
   #################################
   # Calendar: The Calendar microservice
   #################################
-  calendar:
+  calendar1:
     build:
       context: ./
       dockerfile: calendar.Dockerfile
-    image: boborealmoon/calendar:1.0
+    image: kevan1508/calendar:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar    
+    networks:
+      - internal
+      - kong-net
+
+  calendar2:
+    build:
+      context: ./
+      dockerfile: calendar.Dockerfile
+    image: kevan1508/calendar:1.0
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/calendar
-      # 'mysql+mysqlconnector://is213@localhost:3306/calendar'
-    ports:
-      - "5001:5001"
+    networks:
+      - internal
+      - kong-net
+
 
   #################################
   # Email: The Email microservice
@@ -245,23 +301,28 @@ services:
     build:
       context: ./
       dockerfile: email_service.Dockerfile
-    image: boborealmoon/email_service:1.0
+    image: kevan1508/email_service:1.0
     restart: always
+    networks:
+      - internal
+      - kong-net
     ports:
       - "5010:5010"
 
-
   #################################
-  # Notification: The Notification microservice
+  # notification: The notification microservice
   #################################
   notification:
     build:
       context: ./
       dockerfile: notification.Dockerfile
-    image: boborealmoon/notification:1.0
+    image: kevan1508/notification:1.0
     restart: always
+    networks:
+      - internal
+      - kong-net
     ports:
-      - "5011:5011"
+      - "5012:5012"
 
   ###################################
   # Error: The Error microservice
@@ -270,8 +331,10 @@ services:
     build:
       context: ./
       dockerfile: error.Dockerfile
-    image: boborealmoon/error:esd
+    image: kevan1508/error:esd
     restart: always
+    networks: 
+      - rabbitmq
     depends_on:
       - rabbitmq
     environment:
@@ -287,16 +350,17 @@ services:
     build:
       context: ./
       dockerfile: activity_log.Dockerfile
-    image: boborealmoon/activity_log:esd
+    image: kevan1508/activity_log:esd
     restart: always
     depends_on:
+      - rabbitmq
+    networks:
       - rabbitmq
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       a_queue_name: Activity_Log
       PYTHONUNBUFFERED: 1
-
 
   ##############################################
   ##########Complex Microservices###############
@@ -309,28 +373,30 @@ services:
     build:
       context: ./
       dockerfile: refill_prescription.Dockerfile
-    image: boborealmoon/refill_prescription:1.0
+    image: kevan1508/refill_prescription:1.0
+    restart: always
+    networks:  
+      - internal
+      - rabbitmq
+      - kong-net
     depends_on:
-      - employee
-      - inventory 
+      - employees1
+      - employees2
+      - inventory1
+      - inventory2 
       - order
       - email_service
       - activity_log
       - error
       - rabbitmq
+      - notification
     environment:
       rabbit_host: rabbitmq 
       rabbit_port: 5672 
-      employees_url: "http://appointments:5000/appointments"
-      inventory_url: "http://inventory:5004/inventory"
-      order_url: "http://order:5005/create_order"
-      email_service_url: "http://email_service:5010/email_service"
-      activitylog_url: "http://activity_log:5007/activity_log"
-      error_url: "http://error:5008/error"
+      email_service: "http://email_service:5010/email_service"
       PYTHONUNBUFFERED: 1 
     ports: 
       - "5100:5100"
-
 
   ###############################################
   # Book Appointment: The Book Appointment microservice
@@ -339,29 +405,30 @@ services:
     build:
       context: ./
       dockerfile: book_appointment.Dockerfile
-    image: boborealmoon/book_appointment:esd
+    image: kevan1508/book_appointment:esd
     restart: always
+    networks:  
+      - internal
+      - rabbitmq
+      - kong-net
     depends_on:
-      - patient
+      - patient1
+      - patient2
       - appointments
       - activity_log
       - error
       - rabbitmq
       - email_service
-      - calendar
+      - calendar1
+      - calendar2
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       email_service: "http://email_service:5010/email_service"
-      # activitylog_url: "http://activity_log:5007/activity_log"
-      # error_url: "http://error:5008/error"
-      patients_url: "http://patient:5006/patient"
-      appointments_url: "http://appointments:5000/appointments"
-      calendar_url: "http://calendar:5001/calendar"
+      notification_url: "http://notification:5012/send_message"
       PYTHONUNBUFFERED: 1
     ports:
       - "5200:5200"
-
 
   ###############################################
   # Submit Claims: The Submit Claims microservice
@@ -370,10 +437,15 @@ services:
     build:
       context: ./
       dockerfile: submit_claims.Dockerfile
-    image: boborealmoon/submit_claims:esd
+    image: kevan1508/submit_claims:esd
     restart: always
+    networks:  
+      - internal
+      - rabbitmq
+      - kong-net
     depends_on:
-      - patient
+      - patient1
+      - patient2
       - appointments
       - activity_log
       - error
@@ -384,11 +456,6 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       email_service: "http://email_service:5010/email_service"
-      activitylog_url: "http://activity_log:5007/activity_log"
-      error_url: "http://error:5008/error"
-      patients_url: "http://patient:5006/patient"
-      appointments_url: "http://appointments:5000/appointments"
-      claims_url: "http://submit_claim:5002/submit_claim"
       PYTHONUNBUFFERED: 1
     ports:
       - "5300:5300"

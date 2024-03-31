@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Appointment Booking</title>
+    <!-- Bootstrap CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet'
+        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+
+    <link rel="stylesheet" href="../general.css">
+</head>
+<style>
+body {
+    background-image: url('../background.jpeg');
+    background-size: cover; /* Ensure the background image covers the entire viewport */
+    background-position: center; /* Center the background image */
+    background-attachment: fixed; /* Fix the background image so it doesn't scroll with the content */
+}
+</style>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-center">
+                <div class="col-sm-12 col-lg-3">
+                    <div class="row">
+                        <div class="col-lg-3">
+                        </div>
+                        <div class="col-lg-9">
+                            <div id="logo-container">
+                                <a href="index.html"><img src="../logo.png" width="130px" height="100px"></a>
+                                <i class="bi bi-list" id="closemenu"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                </div>
+
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div class="text-center" id="menu-link">
+                        <ul>
+                            <li><a href="index.html" class="menufont linkhover"><span>HOME</span></a></li>
+                            <li class="menufont linkhover"><a href="appointment.html"><span>BOOK APPOINTMENT</span></a></li>
+                            <li><a href="claims.html" class=" highlight linkhover"><span style="color:white">CLAIMS</span></a></li>
+                            <li class="menufont linkhover dropdown">
+                                <a href="index.html">JOHN DOE</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End of Header -->
+
+    <div id="app" class="container col-8 shadow p-3 mt-5 mb-5 bg-white rounded">
+        <h1>Claims History</h1>
+        <div v-if="error">
+            <p>{{ error }}</p>
+        </div>
+        <div v-else-if="loading">
+            <p>Loading...</p>
+        </div>
+        <div v-else-if="claims.length === 0">
+            <p>No claims found.</p>
+        </div>
+        <div v-else>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Patient ID</th>
+                        <th>Appointment ID</th>
+                        <th>Status of Claims</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="claim in claims" :key="claim.ClaimID">
+                        <td>{{ claim.ClaimID }}</td>
+                        <td>{{ claim.PatientID }}</td>
+                        <td>{{ claim.AppointmentID }}</td>
+                        <td>{{ claim.StatusOfClaims }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- <li v-for="claim in claims" :key="claim.ClaimID">{{ claim.ClaimID }}</li> -->
+        <div class="text-end">
+            <button class="btn btn-primary" onclick="redirectToCreateClaim()">Submit New Claim</button>
+        </div>
+    </div>
+
+    <script>
+        const claims_URL = "http://localhost:8000/api/v1/claims"; // Update this URL
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    loading: true,
+                    error: null,
+                    claims: []
+                };
+            },
+            mounted() {
+                // Fetch data from claims URL
+                fetch(claims_URL)
+                    .then(response => {
+                        // Check if response status is within the range of 200 to 299
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch claims data. Please try again.');
+                        }   
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update claims data
+                        this.claims = data.data;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching claims data:", error);
+                        this.error = error.message;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            }
+        });
+
+        app.mount('#app');
+
+        function redirectToCreateClaim() {
+            window.location.href = 'create_claim.html';
+        }
+    </script>
+
+    <!-- Bootstrap Javascript -->
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
+        integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
+        crossorigin='anonymous'></script>
+
+</body>
+
+</html>

@@ -8,7 +8,8 @@
         rel='stylesheet'
         integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
         crossorigin='anonymous'>
-    <link rel="stylesheet" href="general.css">
+        
+    <link rel="stylesheet" href="../general.css">
 </head>
 <body>
     <!-- Header -->
@@ -21,7 +22,7 @@
                         </div>
                         <div class="col-lg-9">
                             <div id="logo-container">
-                                <a href="index.html"><img src="logo.png" width="235px"></a>
+                                <a href="indexstaff.html"><img src="../logo.png" width="130px" height="100px"></a>
                                 <i class="bi bi-list" id="closemenu"></i>
                             </div>
                         </div>
@@ -33,13 +34,11 @@
                 <div class="col-lg-6 d-flex justify-content-center">
                     <div class="text-center" id="menu-link">
                         <ul>
-                            <li><a href="homelogin.html" class="menufont linkhover" ><span>HOME</span></a></li>
-                            <li><a href="refill_prescription.html"><span>REFILL PRESCRIPTION</span></a></li>
+                            <li><a href="indexstaff.html" class="menufont linkhover" ><span>HOME</span></a></li>
+                            <li class="linkhover"><a href="refill_prescription.html"><span>REFILL PRESCRIPTION</span></a></li>
+                            <li class="highlight linkhover"><a href="order.html"><span style="color:white">ORDERS</span></a></li>
                             <li class="menufont linkhover dropdown">
-                                <a href="profile.html">JOHN DOE</a>
-                                <div class="dropdown-content">
-                                    <a href="index.html">Logout</a>
-                                </div>
+                                <a href="indexstaff.html">BRUCE WAYNE</a>
                             </li>
                         </ul>
                     </div>
@@ -50,7 +49,7 @@
     <!-- End of Header -->
     <div class="container">
         <h1>Order Summary</h1>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">Order ID</th>
@@ -60,7 +59,7 @@
                     <th scope="col">Supplier ID</th>
                     <th scope="col">Supplier Contact Email</th>
                     <th scope="col">Order Date</th>
-                    <th scope="col">Units Orderered</th>
+                    <th scope="col">Units Ordered</th>
                 </tr>
             </thead>
             <tbody id="order-table-body">
@@ -71,7 +70,9 @@
 
     <script>
         // Fetch data from server and populate the table
-        fetch("http://localhost:5005/orders")
+        const orders_URL = "http://localhost:8000/api/v1/orders"; // Update this URL
+
+        fetch(orders_URL)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch order data.');

@@ -1,75 +1,85 @@
-# _format_version: "3.0"
-# _transform: true
+_format_version: "1.1"
+_transform: true
 
-# services:
-#   - name: user-storage-service
-#     host: user-storage-service
-#     port: 50051
-#     protocol: grpc
-#     tags:
-#       - user-storage-service
-#     routes:
-#       - name: user-storage
-#         protocols:
-#           - http
-#         paths:
-#           - /api/v1/user
-#           - /api/v1/auth
-#         plugins:
-#           - name: grpc-gateway
-#             config:
-#               proto: /usr/local/share/lua/5.1/kong/protos/user_storage.proto
-    
-# plugins:
-#   - name: file-log
-#     service: user-storage-service
-#     config:
-#       path: /usr/local/share/lua/5.1/kong/plugins/authn-kong/user-storage.log
-#   - name: cors
-#     config: 
-#       origins:
-#         - "http://localhost:3001"
-#       methods:
-#         - HEAD
-#         - GET
-#         - POST
-#         - PUT
-#         - PATCH
-#         - DELETE
-#       headers:
-#         - Access-Control-Allow-Origin
-#         - Accept
-#         - Accept-Version
-#         - Content-Length
-#         - Content-MD5
-#         - Content-Type
-#         - Date
-#         - Authorization
-#       exposed_headers:
-#         - Authorization
-#         - X-Myinfo-Unique-Id
-#         - X-Access-Token
-#         - X-Sgid-Unique-Id
-#       credentials: true
-#       max_age: 3600
-#       preflight_continue: false
+services:
+  - name: employees
+    url: http://employees.v1.service:5003/employees
+    routes:
+      - name: employees-v1-route
+        paths:
+          - /api/v1/employees
+  - name: inventory
+    url: http://inventory.v1.service:5004/inventory
+    routes:
+      - name: inventory-v1-route
+        paths:
+          - /api/v1/inventory
+  - name: orders
+    url: http://order:5005/orders
+    routes:
+      - name: orders-v1-route
+        paths:
+          - /api/v1/orders
+  - name: claims
+    url: http://claims:5002/claims
+    routes:
+      - name: claims-v1-route
+        paths:
+          - /api/v1/claims
+  - name: appointments
+    url: http://appointments:5000/appointments
+    routes:
+      - name: appointments-v1-route
+        paths:
+          - /api/v1/appointments
+  - name: emails
+    url: http://email_service:5010/email_service
+    routes:
+      - name: emailservice-v1-route
+        paths:
+          - /api/v1/emailservice
+  - name: notification
+    url: http://notification:5012/send_message
+    routes:
+      - name: notification-v1-route
+        paths:
+          - /api/v1/notification
+  - name: patient
+    url: http://patient.v1.service:5006/patient
+    routes:
+      - name: patient-v1-route
+        paths:
+          - /api/v1/patient
+  - name: calendar
+    url: http://calendar.v1.service:5001/calendar
+    routes:
+      - name: calendar-v1-route
+        paths:
+          - /api/v1/calendar
 
-#   - name: correlation-id
-#     config:
-#       header_name: Kong-Request-ID
-#       generator: uuid
-#       echo_downstream: false
+upstreams:
+  - name: employees.v1.service
+    targets:
+      - target: employees1:5003
+        weight: 100
+      - target: employees2:5003
+        weight: 100
+  - name: inventory.v1.service
+    targets:
+      - target: inventory1:5004
+        weight: 100
+      - target: inventory2:5004
+        weight: 100
+  - name: patient.v1.service
+    targets:
+      - target: patient1:5006
+        weight: 100
+      - target: patient2:5006
+        weight: 100
+  - name: calendar.v1.service
+    targets:
+      - target: calendar1:5001
+        weight: 100
+      - target: calendar2:5001
+        weight: 100
 
-#   - name: rate-limiting
-#     config: 
-#       minute: 100
-#       policy: local
-
-#   - name: authn-kong
-#     config:
-#       public_paths:
-#         - /api/v1/auth/google/callback
-#         - /api/v1/auth/apple/callback
-#         - /api/v1/auth/myInfo/generateCodeChallenge
-#         - /api/v1/auth/myInfo/callback
-#         - /api/v1/auth/logout

@@ -10,11 +10,11 @@
         integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>
     <!-- Vue 3 -->
     <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
-    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="../general.css">
 </head>
 <style>
 body {
-    background-image: url('background.jpeg');
+    background-image: url('../background.jpeg');
     background-size: cover; /* Ensure the background image covers the entire viewport */
     background-position: center; /* Center the background image */
     background-attachment: fixed; /* Fix the background image so it doesn't scroll with the content */
@@ -32,7 +32,7 @@ body {
                         </div>
                         <div class="col-lg-9">
                             <div id="logo-container">
-                                <a href="index.html"><img src="logo.png" width="130px" height="100px"></a>
+                                <a href="index.html"><img src="../logo.png" width="130px" height="100px"></a>
                                 <i class="bi bi-list" id="closemenu"></i>
                             </div>
                         </div>
@@ -45,14 +45,11 @@ body {
                 <div class="col-lg-6 d-flex justify-content-center">
                     <div class="text-center" id="menu-link">
                         <ul>
-                            <li><a href="homelogin.html" class="menufont linkhover"><span>HOME</span></a></li>
+                            <li><a href="index.html" class="menufont linkhover"><span>HOME</span></a></li>
                             <li class="highlight linkhover"><a href="appointment.html"><span style="color:white">BOOK APPOINTMENT</span></a></li>
-                            <li><a href="" class="menufont linkhover"><span>CLAIMS</span></a></li>
+                            <li><a href="claims.html" class="menufont linkhover"><span>CLAIMS</span></a></li>
                             <li class="menufont linkhover dropdown">
-                                <a href="profile.html">JOHN DOE</a>
-                                <div class="dropdown-content">
-                                    <a href="index.html">Logout</a>
-                                </div>
+                                <a href="index.html">JOHN DOE</a>
                             </li>
                         </ul>
                     </div>
@@ -82,14 +79,14 @@ body {
                     
                     <div class="mb-3">
                         <label for="appointmentDate" class="form-label">Appointment Date</label>
-                        <input type="date" class="form-control" id="AppointmentDate" v-model="AppointmentDate" :min="minDate" required>
+                        <input type="date" class="form-control" id="AppointmentDate" @change="fetchAvailableTimeslots" v-model="selectedDate" :min="minDate" required>
                     </div>
                     
                     <div class="mb-3">
                         <label for="timeslotID" class="form-label">Choose your Timeslot</label>
                         <select class="form-select" id="TimeslotID" v-model="TimeslotID" required>
                             <option value="" disabled>Select a Timeslot</option>
-                            <option v-for="slot in timeslots" :value="slot.id">{{ slot.time }}</option>
+                            <option v-for="slot in availableTimeslots" :value="slot.id">{{ slot.time }}</option>
                         </select>
                     </div>
                    
@@ -104,72 +101,17 @@ body {
 
     <script>
         const book_appointment_URL = "http://localhost:5200/book_appointment";
-
+        const appointments_URL = "http://localhost:8000/api/v1/appointments"
         const app = Vue.createApp({
             data() {
                 return {
+                    selectedDate: "",
                     AppointmentDate: "",
                     TimeslotID: "",
                     EmployeeID: 21,
                     PatientID: 100,
                     PatientName: "John Doe",
-                    timeslots: [{
-                            id: 1,
-                            time: "09:00 AM"
-                        },
-                        {
-                            id: 2,
-                            time: "09:30 AM"
-                        },
-                        {
-                            id: 3,
-                            time: "10:00 AM"
-                        },
-                        {
-                            id: 4,
-                            time: "10:30 AM"
-                        },
-                        {
-                            id: 5,
-                            time: "11:00 AM"
-                        },
-                        {
-                            id: 6,
-                            time: "11:30 AM"
-                        },
-                        {
-                            id: 7,
-                            time: "12:00 PM"
-                        },
-                        {
-                            id: 8,
-                            time: "13:30 PM"
-                        },
-                        {
-                            id: 9,
-                            time: "14:00 PM"
-                        },
-                        {
-                            id: 10,
-                            time: "14:30 PM"
-                        },
-                        {
-                            id: 11,
-                            time: "15:00 PM"
-                        },
-                        {
-                            id: 12,
-                            time: "15:30 PM"
-                        },
-                        {
-                            id: 13,
-                            time: "16:00 PM"
-                        },
-                        {
-                            id: 14,
-                            time: "16:30 PM"
-                        },
-                    ]
+                    availableTimeslots: []
                 };
             },
 
@@ -182,11 +124,35 @@ body {
                     return minDate;
                 }
             },
-            
+            mounted() {
+                this.fetchAvailableTimeslots();
+            },
             methods: {
+                fetchAvailableTimeslots() {
+                    
+
+                    fetch(appointments_URL + `?selected_date=${this.selectedDate}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch available timeslots');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.code === 200) {
+                                this.availableTimeslots = data.data.appointments;
+                            } else {
+                                throw new Error(data.message || 'Failed to fetch available timeslots');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching available timeslots:', error);
+                        });
+                },
                 createAppointment() {
+
                     const data = {
-                        AppointmentDate: this.AppointmentDate,
+                        AppointmentDate: this.selectedDate,
                         TimeslotID: parseInt(this.TimeslotID),
                         EmployeeID: this.EmployeeID,
                         PatientID: this.PatientID,
