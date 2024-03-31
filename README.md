@@ -1,11 +1,11 @@
 
 # UMS Clinic
 
-
+An enterprise solution that utilises a wide range of functions through the application for clinics to utilise and engage with their patients and suppliers.
 
 ## Problem Statement
 
-
+Enhancing patients' and suppliers' experiences by reducing the pains that they undergo in Clinics through providing a convenient and seamless solution.
 
 ## Team Members
 
