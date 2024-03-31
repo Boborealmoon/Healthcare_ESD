@@ -1,28 +1,20 @@
-```
-    ___________ ____                  __ __
-   / ____/ ___// __ \___  ___  ____  / //_/____  ___  ___
-  / __/  \__ \/ / / / _ \/ _ \/_  / / ,<  / __ \/ _ \/ _ \
- / /___ ___/ / /_/ /  __/  __/ / /_/ /| |/ / / /  __/  __/
-/_____//____/_____/\___/\___/ /___/_/ |_/_/ /_/\___/\___/
 
-```
+# UMS Clinic
 
-# ESDeezknee
 
-An immersive enterprise solution that offers a wide range of functions through the application for theme parks to utilise and engage with their visitors.
 
 ## Problem Statement
 
-Enhancing visitors' experiences by reducing the pains that visitors undergo in theme parks through providing a convenient and seamless solution.
+
 
 ## Team Members
 
-- [Ng Kang Ting](https://www.linkedin.com/in/ngkangting/)
-- [Teo Wei Lun](https://www.linkedin.com/in/weilunteo/)
-- [Keith Law](https://www.linkedin.com/in/keithlawzk/)
-- [Joel Tan](https://www.linkedin.com/in/joeltanec/)
-- [Zachary Lian](https://www.linkedin.com/in/zacharylian/)
-- [Vanessa Lee](https://www.linkedin.com/in/vanessaleexn/)
+- [Kevan Teo](https://www.linkedin.com/in/kevanteo/)
+- [Foo See Jae](https://www.linkedin.com/in/seejaefoo/)
+- [Ang Zhen Yue](https://www.linkedin.com/in/angzhenyue/)
+- [Cheong Zhou Ming](https://www.linkedin.com/in/cheong-zhouming/)
+- [Kenneth Lim](https://www.linkedin.com/in/kennethlimhg/)
+- [Shawn Sin](https://www.linkedin.com/in/shawn-sin/)
 
 ## Application Preview
 
