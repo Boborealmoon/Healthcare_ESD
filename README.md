@@ -22,13 +22,13 @@ Enhancing patients' and suppliers' experiences by reducing the pains that they u
 
 ## Project Setup
 
-The application has been dockerised to include MySQL, phpMyAdmin, RabbitMQ, Kong API Gateway, Frontend application and the Microservices to provide seamless set up with Docker Compose. Please ensure that your MAMP/WAMP or any MySQL database is turned **OFF**. Additionally, please ensure that port 3306 is unused.
+The application has been dockerised to include MySQL, phpMyAdmin, RabbitMQ, Kong API Gateway, Frontend application and the Microservices to provide seamless set up with Docker Compose. Please ensure that your MAMP/WAMP or any MySQL database is turned **OFF**. Additionally, please ensure that port 8889 is unused.
 
 To run the project in development environment, access the parent folder directory and run docker compose.
 
 ```sh
-cd ESDeezknee
-docker-compose up
+cd Healthcare_ESD
+docker compose up
 ```
 
 The application will take a few minutes to get everything set up. If the application is not working as expected, stop the terminal and run docker compose again.
