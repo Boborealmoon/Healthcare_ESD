@@ -77,10 +77,6 @@ def refill_prescription():
         order_result = invoke_http(order_url, method='POST', json=order_data)
         print('order_result:', order_result)
 
-        # print('\n-----Invoking activity_log microservice-----')
-        # invoke_http(activitylog_url, method="POST", json=order_result)
-        # print('\nOrder sent to activity log.\n')
-
         message = json.dumps(order_result)
 
         if order_result.get("code") not in range(200, 300):
@@ -90,13 +86,6 @@ def refill_prescription():
                                   body=message, properties=pika.BasicProperties(delivery_mode=2))
             print("\nOrder Creation Failure ({:d}) published to the RabbitMQ Exchange:".format(
                 order_result.get("code")), order_result)
-
-            # print('\n\n-----Invoking error microservice as order fails-----')
-            # invoke_http(error_url, method="POST", json=order_result)
-            # # - reply from the invocation is not used; 
-            # # continue even if this invocation fails
-            # print("Order Creation status sent to the error microservice:".format(
-            #     order_result.get("code")), order_result)
 
             # Return error
             return {
