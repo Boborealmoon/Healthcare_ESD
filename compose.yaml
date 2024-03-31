@@ -7,29 +7,10 @@ networks:
     driver: bridge
   rabbitmq:
   internal:
-  
     
 version: "3.8"
 
 services:
-
-  ####################################
-  # Webpage: The Frontend App Service   
-  ####################################
-  webpage:
-    build:
-      context: ./
-      dockerfile: webpage.Dockerfile
-    image: kevan1508/webpage:1.0
-    restart: always
-    environment:
-      FLASK_APP: "webpage.py"
-      FLASK_ENV: "production"
-    #   dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/employees
-      # 'mysql+mysqlconnector://is213@localhost:3306/employees'
-    ports:
-      - "5555:5555"
-    
 
   ####################################
   # RabbitMQ: The messaging broker   
