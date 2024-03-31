@@ -1,89 +1,131 @@
-# Healthcare_ESD
+ESDeezknee
+An immersive enterprise solution that offers a wide range of functions through the application for theme parks to utilise and engage with their visitors.
 
-This application will focus on 3 scenarios: 
-1) Refill Prescription
-2) Book an Appointment
-3) Submit Claims
+Problem Statement
+Enhancing visitors' experiences by reducing the pains that visitors undergo in theme parks through providing a convenient and seamless solution.
 
-Whenever you wanna run the microservice: 
-type this into command line to set DB URL:
-1) [For Mac]
-    export dbURL=mysql+mysqlconnector://root:root@localhost:yourMAMPSQLPort/Path
-
-2) [For Windows]
-    set dbURL=mysql://root:root@localhost/path 
-
-<!-- to check list of dependencies -->
-python -m pip freeze
-
-<!-- Docker Build Image -->
-docker build -t <your_dockerid>/filename:version ./
-<!-- example -->
-docker build -t <dockerid>/book:1.0 ./
-<!-- Need to build 1 image for each microservice -->
-
-<!-- View Images on Docker -->
-docker images
-
-<!-- Remove Images -->
-docker rmi <image id>
+Team Members
+Ng Kang Ting
+Teo Wei Lun
+Keith Law
+Joel Tan
+Zachary Lian
+Vanessa Lee
+Application Preview
+Application
 
 
-[Docker Network]
-<!-- Create a Internal Docker Network called my-net (For communication inside the network) -->
-docker network create my-net
+Requirements
+Docker v4.17.0
+Project Setup
+The application has been dockerised to include MySQL, phpMyAdmin, RabbitMQ, Kong API Gateway, Frontend application and the Microservices to provide seamless set up with Docker Compose. Please ensure that your MAMP/WAMP or any MySQL database is turned OFF. Additionally, please ensure that port 3306 is unused.
 
-<!-- View available networks -->
-docker network ls
+To run the project in development environment, access the parent folder directory and run docker compose.
 
-<!-- Running the service on the network (port routing + running) -->
-docker run --name book --network my-net -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/book <dockerid>/book:1.0
-<!-- compare with docker run -p 5000:5000 -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/book <dockerid>/book:1.0 . Difference is that We no longer publish the container’s port to the host by removing the -p option. If you attempt to access the book service via http://localhost:5000/book, it will no longer work. -->
-<!-- Type http://book:5000/book for the Book service URL and press Enter -to access the items inside -->
+cd ESDeezknee
+docker-compose up
+The application will take a few minutes to get everything set up. If the application is not working as expected, stop the terminal and run docker compose again.
 
-[Docker Compose]
-1) Create compose.yaml file 
-<!-- version: "3.8"
+docker-compose up
+However, our microservices are still exposed publicly for ease of use in testing all the endpoints of the microservices.
 
-services:
+MySQL + phpMyAdmin
+To view and access the database, go to http://127.0.0.1:5013 and enter the following credentials.
 
-  #################################
-  # Book: The Book microservice
-  #################################
-  book:
-    image: <dockerid>/book:1.0
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/book
+Server Name: mysql-database
+Username: root
+Password: root
+RabbitMQ
+To view and access RabbitMQ, go to http://127.0.0.1:15672 and enter the following credentials.
 
+Username: guest
+Password: guest
+Kong API Gateway
+To view and access Kong API Gateway, go to http://127.0.0.1:1337 and enter the following credentials.
 
-  ###############################################
-  # callbook: The test_invoke_http.py program
-  ###############################################
-  callbook:
-    image: <dockerid>/callbook:1.0
-    depends_on:
-      - book
-    environment:
-      bookURL: http://book:5000/book -->
+Username: admin
+Password: adminadmin
+Frontend Application
+To view the frontend application, go to http://127.0.0.1:5173.
 
+Microservices
+The following are the addresses for the microservices. The respective API endpoints can be found in the Postman Collection.
 
-2) Running application with Compose 
-docker compose up 
-<!-- By default, docker compose looks for the compose file named compose.yaml in the current folder. Use -f, --file FILE to specify an alternate compose file
- -->
- <!-- A container named docker-book-1 is created. It joins the docker_default network under the name book. 
-The postfix 1 indicates the instance of the container. 
- -->
+Verification: http://127.0.0.1:6001
+Notification: http://127.0.0.1:6002
+Account: http://127.0.0.1:6003
+Icebreaker: http://127.0.0.1:6101
+Broadcast: http://127.0.0.1:6102
+Group: http://127.0.0.1:6103
+HandleGroup: http://127.0.0.1:6104
+Order: http://127.0.0.1:6201
+QueueTicket: http://127.0.0.1:6202
+Payment: http://127.0.0.1:6203
+Promo: http://127.0.0.1:6204
+Mission: http://127.0.0.1:6300
+Loyalty: http://127.0.0.1:6301
+Challenge: http://127.0.0.1:6302
+Reward: http://127.0.0.1:6303
+Redemption: http://127.0.0.1:6304
+External Microservices
+Stripe
+NotificationAPI
+Postman Environment + Collections
+To test the API endpoints of the microservices, import the following to Postman.
 
-3) docker compose ps -a 
-<!-- You will see the state of the 2 containers. In this case, book is still running while callbook has stopped.
- -->
+ESDeezknee Environment
+ESDeezknee Collection
+ESDeezknee API Gateway Collection
+User Scenarios (Diagrams)
+Scenario 1 - Visitor Participates in Challenges
+User Scenario 1 Diagram-Scenario 1A
 
-4) Stopping the services 
-docker compose down
+Description: When the visitor comes to the theme park, they can view active missions and participate in a challenge to earn loyalty points.
 
+User Scenario 1 Diagram-Scenario 1B
 
+Description: When the visitor completes a challenge, they will then be rewarded with and notifed of additional loyalty points.
 
-To run the service, type in cmd line: 
-python service_name.py
+User Scenario 1 Diagram-Scenario 1C
+
+Description: If the visitor decides to redeem their loyalty points, they will be able to view possible rewards available and redeem a reward or redeem it through the purchase of a jump queue ticket.
+
+Scenario 2 - Visitor wants to create a group and search for more Theme-park goers to join his group
+User Scenario 2 Interaction Diagram-Scenario 2A
+
+Description: This Scenario shows the Visitor creating a group and thereafter creates a Broadcast Message that everyone is able to view.
+
+User Scenario 2 Interaction Diagram-Scenario 2B
+
+Description: This Scenario shows the Visitor creating a group and then joins an already Broadcasted Message.
+
+Scenario 3 - Visitor wants to Purchase a Jump Queue Ticket
+User Scenario 3 Diagram-Scenario 3A
+
+Description: If the visitor does not want to wait in line for too long, they can opt to purchase a jump queue ticket through three payment methods. Once both loyalty and promo redemption is successful, the user will be notified of it through SMS.
+
+User Scenario 3 Diagram-Scenario 3B
+
+Description: Once payment is successful, a new jump queue ticket will be generated and notified to the visitor through SMS and on the UI.
+
+User Scenario 3 Diagram-Scenario 3C
+
+Description: At the point in time before the user enters the ride through queue jumping, the user will redeem their ticket and be notified that the queue ticket is redeemed through SMS and on the UI.
+
+Troubleshooting
+Docker-compose build fails
+Delete all containers, images and volumes on Docker or Purge/Delete data on Docker
+Enter the following into your terminal:
+docker-compose build
+docker-compose up
+Login Error
+Please use the following account to navigate through the system:
+
+Email: kangting.ng.2021@scis.smu.edu.sg
+Password: IS213ESDeezKnee
+MySQL issue when using docker compose
+On your MAMP/WAMP with your mySQL
+Ensure that root account password is 'root'
+Enter the following into your terminal:
+docker-compose -f docker-compose.local.yml build
+docker-compose -f docker-compose.local.yml up
