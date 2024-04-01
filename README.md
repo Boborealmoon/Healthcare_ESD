@@ -22,7 +22,7 @@ Enhancing patients' and suppliers' experiences by reducing the pains that they u
 
 ## Project Setup
 
-The application has been dockerised to include MySQL, phpMyAdmin, RabbitMQ, Kong API Gateway, Frontend application and the Microservices to provide seamless set up with Docker Compose. Please ensure that your MAMP/WAMP or any MySQL database is turned **OFF**. Additionally, please ensure that port 8889 is unused.
+The application has been dockerised to include RabbitMQ, Kong API Gateway, Frontend application and the Microservices to provide seamless set up with Docker Compose. Please ensure that your MAMP/WAMP or any MySQL database is turned **OFF**. Additionally, please ensure that port 8889 is unused.
 
 To run the project in development environment, access the parent folder directory and run docker compose.
 
@@ -34,7 +34,7 @@ docker compose up
 The application will take a few minutes to get everything set up. If the application is not working as expected, stop the terminal and run docker compose again.
 
 ```sh
-docker-compose up
+docker compose up
 ```
 
 However, our microservices are still exposed publicly for ease of use in testing all the endpoints of the microservices.
@@ -64,7 +64,7 @@ The following are the addresses for the microservices. The respective API endpoi
 - Employees: [http://localhost:8000/api/v1/employees](http://localhost:8000/api/v1/employees)
 - Inventory: [http://localhost:8000/api/v1/inventory](http://localhost:8000/api/v1/inventory)
 - Patient: [http://localhost:8000/api/v1/patient](http://localhost:8000/api/v1/patient)
-- Calendar: [http://localhost:8000/api/v1/calendar](localhost:8000/api/v1/calendar)
+- Calendar: [http://localhost:8000/api/v1/calendar](http://localhost:8000/api/v1/calendar)
 - Orders: [http://localhost:8000/api/v1/orders](http://localhost:8000/api/v1/orders)
 - Appointments: [http://localhost:8000/api/v1/appointments](http://localhost:8000/api/v1/appointments)
 - Emails: [http://localhost:8000/api/v1/emailservice](http://localhost:8000/api/v1/emailservice)
@@ -78,12 +78,12 @@ The following are the addresses for the microservices. The respective API endpoi
 
 ## Troubleshooting
 
-### Docker-compose build fails
+### Docker compose build fails
 
 1. Delete all containers, images and volumes on Docker or Purge/Delete data on Docker
 2. Enter the following into your terminal:
 
 ```sh
-docker-compose build
-docker-compose up
+docker compose build
+docker compose up
 ```
