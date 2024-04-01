@@ -39,14 +39,6 @@ docker-compose up
 
 However, our microservices are still exposed publicly for ease of use in testing all the endpoints of the microservices.
 
-## MySQL + phpMyAdmin
-
-To view and access the database, go to [http://127.0.0.1:5013](http://127.0.0.1:5013) and enter the following credentials.
-
-- Server Name: mysql-database
-- Username: root
-- Password: root
-
 ## RabbitMQ
 
 To view and access RabbitMQ, go to [http://127.0.0.1:15672](http://127.0.0.1:15672) and enter the following credentials.
