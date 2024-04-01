@@ -141,21 +141,3 @@ Description: At the point in time before the user enters the ride through queue 
 docker-compose build
 docker-compose up
 ```
-
-### Login Error
-
-Please use the following account to navigate through the system:
-
-- Email: kangting.ng.2021@scis.smu.edu.sg
-- Password: IS213ESDeezKnee
-
-### MySQL issue when using docker compose
-
-1. On your MAMP/WAMP with your mySQL
-2. Ensure that root account password is 'root'
-3. Enter the following into your terminal:
-
-```sh
-docker-compose -f docker-compose.local.yml build
-docker-compose -f docker-compose.local.yml up
-```
