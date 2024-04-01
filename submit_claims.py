@@ -121,11 +121,15 @@ def processSubmitClaim(claim):
         update_result = invoke_http(appointments_url + f'/{patient_id}/{patient_appointmentid}', method='PUT', json=update_data)
         print(update_result)
 
+        appointmentid = claim_result["data"]["AppointmentID"]
+        claimstatus = claim_result["data"]["StatusOfClaims"]
+
+
         # Send an email function
         email_data = {
             "recipient_email": patient_email,
             "subject": "Claim Submission Confirmation",
-            "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment.\n\nThank you!"
+            "message_body": f"Dear patient,\n\nYou have successfully submitted a claim for your appointment (ID:{appointmentid}) and the status is {claimstatus}.\n\nThank you!"
         }
 
         print('\n\n-----Invoking email microservice-----')

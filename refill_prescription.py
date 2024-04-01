@@ -118,8 +118,8 @@ def refill_prescription():
             email_data = {
                     "recipient_email": clinic_email,
                     "subject": "Order Confirmation",
-                    "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order. \n\n\n\nThank you!"
-                }
+                    "message_body": f"Dear Sir/Mdm,\n\nClinic has placed an order for {order_data['ProductName']}:{order_data['UnitsOrdered']}units. \n\n\n\nThank you!"
+            }
 
             print('\n\n-----Invoking email microservice-----')
             email_result = invoke_http(email_service_url, method='POST', json=email_data)
