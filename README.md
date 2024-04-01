@@ -61,6 +61,10 @@ To view and access Kong API Gateway, go to [http://127.0.0.1:8002](http://127.0.
 - Username: admin
 - Password: adminadmin
 
+## Front End Application
+
+To view the front end, go to https://boborealmoon.github.io/Healthcare_ESD/templates/index.html.
+
 ## Microservices
 
 The following are the addresses for the microservices. The respective API endpoints can be found here.
@@ -77,7 +81,7 @@ The following are the addresses for the microservices. The respective API endpoi
 
 ## External Microservices
 
-- [Stripe](https://stripe.com/docs/api)
+- [Twilio](https://www.twilio.com/docs)
 - [NotificationAPI](https://docs.notificationapi.com/)
 
 ## User Scenarios (Diagrams)
