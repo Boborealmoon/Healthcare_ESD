@@ -95,11 +95,6 @@ def refill_prescription():
             }
         
         else:
-            print('\n\n-----Publishing the (order info) message with routing_key=order.info-----')                 
-            channel.basic_publish(exchange=exchangename, routing_key="order.info", 
-            body=message)
-        
-            print("\nOrder published to RabbitMQ Exchange.\n")
             orders.append(order_data)
 
             vendor_email = item["SupplierContactEmail"]
@@ -129,6 +124,12 @@ def refill_prescription():
             print('\n\n-----Invoking email microservice-----')
             email_result = invoke_http(email_service_url, method='POST', json=email_data)
             print(email_result)
+
+            print('\n\n-----Publishing the (order info) message with routing_key=order.info-----')                 
+            channel.basic_publish(exchange=exchangename, routing_key="order.info", 
+            body=message)
+        
+            print("\nOrder published to RabbitMQ Exchange.\n")
     
     return jsonify({"status": "success", "order": order_result},201)
 
