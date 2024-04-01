@@ -61,10 +61,6 @@ To view and access Kong API Gateway, go to [http://127.0.0.1:8002](http://127.0.
 - Username: admin
 - Password: adminadmin
 
-## Frontend Application
-
-To view the frontend application, go to [http://127.0.0.1:5173](http://127.0.0.1:5173).
-
 ## Microservices
 
 The following are the addresses for the microservices. The respective API endpoints can be found here.
