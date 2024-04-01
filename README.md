@@ -82,7 +82,7 @@ The following are the addresses for the microservices. The respective API endpoi
 ## External Microservices
 
 - [Twilio](https://www.twilio.com/docs)
-- [NotificationAPI](https://docs.notificationapi.com/)
+- [Kong](https://docs.konghq.com/)
 
 ## Troubleshooting
 
